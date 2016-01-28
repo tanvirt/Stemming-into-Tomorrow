@@ -9,36 +9,19 @@
 		removing objects from the drawable list --Memory management?????
 */
 
-
-var c = new WebGLCanvas("div_container");
-
 function DrawableList() {
+	if(arguments.length != 0) return;
+	
 	this._graphicList = [];
-
-	/*
-		Object methods are listed under the class definition
-	*/
-
-} 
-
-
-/*
-	Convention:
-
-		_classMethod --> indicates a private method that should not be used.
-
-		classMethod  --> indicates a public method that is part of the object interface.
-*/
+}
 
 DrawableList.prototype.add = function(drawableObject) {
 	this._graphicList.push(drawableObject);
 } 
 
-
 /*
 	TODO: proper loading of graphics -- How are multiple graphics add?? Ordered???
 */
-
 
 DrawableList.prototype.getDrawable = function() {
 	return this._graphicList[0];

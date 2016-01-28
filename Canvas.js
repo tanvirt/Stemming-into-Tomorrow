@@ -1,33 +1,31 @@
-function Canvas(InputDevice) {
-   this._inputDevice = InputDevice;
-   this._hand = new Hand(self);
-   this._drawableList = new DrawableList();
+function Canvas(elementId, InputDevice) {
+   if(arguments.length != 2) return;
+   
    var self = this;
 
-   c.onSetup = function() {
-      c.setBackgroundColor(0,0,0);
-      c.setLoadingStatus(false);
+   this._webGLCanvas = new WebGLCanvas(elementId);
+   this._inputDevice = InputDevice;
+   this._drawableList = new DrawableList();
 
+   this._webGLCanvas.onSetup = function() {
+      self._webGLCanvas.setBackgroundColor(0, 0, 0);
+      self._webGLCanvas.setLoadingStatus(false);
    }
-   c.onDraw = function() {
-      var gl=c.getGL();
+
+   this._webGLCanvas.onDraw = function() {
+      var gl = self._webGLCanvas.getGL();
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       if(self.getCurrentInputData().length != 0) {
          self._drawableList.draw();
       }
    }
 
-   c.start();
+   this._webGLCanvas.start();
 }
 
-/*
-   Convention:
-
-      _classMethod --> indicates a private method that should not be used.
-
-      classMethod  --> indicates a public method that is part of the object interface.
-*/
-
+Canvas.prototype.getWebGLCanvas = function() {
+   return this._webGLCanvas;
+}
 
 Canvas.prototype.addDrawableObject = function(drawableObject) {
    this._drawableList.add(drawableObject);

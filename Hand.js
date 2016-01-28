@@ -2,19 +2,13 @@
       calling super methods in hand construction does not function properly.
 */
 
-function Hand(Canvas) {
-	this._handPoints;
+function Hand(Canvas) { 
+      if(arguments.length != 1) return;
+      
       DrawableObject.apply(this, arguments);
-      /*
-            Object methods are listed under the class definition
-            Convention:
-                  _classMethod --> indicates a private method that should not be used.
-                  classMethod  --> indicates a public method that is part of the object interface.
-      */
+      this._handPoints;
       this._makeHand();
 } Hand.prototype = new DrawableObject();
-
-
 
 Hand.prototype.draw = function() {
       this._updateHandPoints();
@@ -24,7 +18,7 @@ Hand.prototype.draw = function() {
 
 Hand.prototype._makeHand = function() {
       var lines = [];
-      this._makeBase(lines)
+      this._makeBase(lines);
       this._makeKnuckles(lines);
       this._makeWrist(lines);
       this.graphic.setLines(lines);
@@ -37,16 +31,16 @@ Hand.prototype._makeBase = function(lines) {
 }
 
 Hand.prototype._makeKnuckles = function(lines) {
-      for(var i = 8; i < 32; i+=8) {
+      for(var i = 8; i < 32; i += 8) {
             lines.push(i);
-            lines.push(i+8);  
+            lines.push(i + 8);  
       }
 }
 
 Hand.prototype._makeWrist = function(lines) {
-      for(var i = 1; i<33; i+=8) {
+      for(var i = 1; i < 33; i += 8) {
             lines.push(i);
-            lines.push(i+8);
+            lines.push(i + 8);
       }
 }
 
@@ -54,4 +48,3 @@ Hand.prototype._updateHandPoints = function() {
       this._handPoints = this._canvas.getCurrentInputData();
       this.graphic.setXYZ(this._handPoints);
 }
-

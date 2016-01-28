@@ -1,30 +1,9 @@
 function LeapMotionInputDevice() {
-  var self = this;
+  if(arguments.length != 0) return;
+
   this._leapPoints = [];
-
-  var options = { enableGestures: true };
-
-  //Main Leap loop 60fps
-  Leap.loop(options, function(frame) {
-    self.resetLeapPoints();
-        if(frame.hands != null) {
-          self._publishHandData(frame);
-        }
-        else {
-          console.log("No hand Available");
-        }
-      });
-
-} LeapMotionInputDevice.prototype= new WebGLObject(c);
-
-
-/*
-  Convention:
-
-    _classMethod --> indicates a private method that should not be used.
-
-    classMethod  --> indicates a public method that is part of the object interface.
-*/
+  this._startLeapLoop();
+}
 
 LeapMotionInputDevice.prototype.getPoints = function() {
   return this._leapPoints;
@@ -34,10 +13,28 @@ LeapMotionInputDevice.prototype.resetLeapPoints = function() {
   this._leapPoints = [];
 }
 
+LeapMotionInputDevice.prototype._startLeapLoop = function() {
+  var self = this;
+  var options = { enableGestures: true };
+
+  // runs at 60fps
+  Leap.loop(options, function(frame) { self._onFrame(frame); });
+}
+
+LeapMotionInputDevice.prototype._onFrame = function(frame) {
+  this.resetLeapPoints();
+  if(frame.hands != null) {
+    this._publishHandData(frame);
+  }
+  else {
+    console.log("No hands available");
+  }
+}
+
 LeapMotionInputDevice.prototype._publishHandData = function(frame) {
   var hand = frame.hands[0];
-  if(hand == null){
-    console.log('LeapMotion _publishHandData Error');
+  if(hand == null) {
+    console.log('No hands detected');
     return;
   }
   this._setHandPoints(hand);
@@ -64,4 +61,3 @@ LeapMotionInputDevice.prototype._setLeapPoints = function(XYZ) {
    this._leapPoints.push(-0.350110952+0.0042503121*XYZ[1]);
    this._leapPoints.push(0.4993973239+0.0067629654*XYZ[2]);
 }
-
