@@ -4,9 +4,9 @@
 
 function Hand(Canvas) { 
     if(arguments.length != 1) return;
-
     DrawableObject.apply(this, arguments);
-    this._handPoints;
+    
+    this._handPoints = [];
     this._makeHand();
 } Hand.prototype = new DrawableObject();
 
@@ -25,9 +25,8 @@ Hand.prototype._makeHand = function() {
 }
 
 Hand.prototype._makeBase = function(lines) {
-    for(var i = 39; i >= 0; i--) {
+    for(var i = 39; i >= 0; i--)
         lines.push(i);
-    }
 }
 
 Hand.prototype._makeKnuckles = function(lines) {

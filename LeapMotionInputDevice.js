@@ -23,12 +23,10 @@ LeapMotionInputDevice.prototype._startLeapLoop = function() {
 
 LeapMotionInputDevice.prototype._onFrame = function(frame) {
     this.resetLeapPoints();
-    if(frame.hands != null) {
+    if(frame.hands != null)
         this._publishHandData(frame);
-    }
-    else {
+    else
         console.log("No hands available");
-    }
 }
 
 LeapMotionInputDevice.prototype._publishHandData = function(frame) {

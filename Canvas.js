@@ -7,20 +7,7 @@ function Canvas(elementId, InputDevice) {
     this._inputDevice = InputDevice;
     this._drawableList = new DrawableList();
 
-    this._webGLCanvas.onSetup = function() {
-        self._webGLCanvas.setBackgroundColor(0, 0, 0);
-        self._webGLCanvas.setLoadingStatus(false);
-    }
-
-    this._webGLCanvas.onDraw = function() {
-        var gl = self._webGLCanvas.getGL();
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        if(self.getCurrentInputData().length != 0) {
-            self._drawableList.draw();
-        }
-    }
-
-    this._webGLCanvas.start();
+    this._start();
 }
 
 Canvas.prototype.getWebGLCanvas = function() {
@@ -33,4 +20,23 @@ Canvas.prototype.addDrawableObject = function(drawableObject) {
 
 Canvas.prototype.getCurrentInputData = function() {
     return this._inputDevice.getPoints();
+}
+
+Canvas.prototype._start = function() {
+    var self = this;
+    this._webGLCanvas.onSetup = function() { self._onSetup() }
+    this._webGLCanvas.onDraw = function() { self._onDraw() }
+    this._webGLCanvas.start();
+}
+
+Canvas.prototype._onSetup = function() {
+    this._webGLCanvas.setBackgroundColor(0, 0, 0);
+    this._webGLCanvas.setLoadingStatus(false);
+}
+
+Canvas.prototype._onDraw = function() {
+    var gl = this._webGLCanvas.getGL();
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    if(this.getCurrentInputData().length != 0)
+        this._drawableList.draw();
 }

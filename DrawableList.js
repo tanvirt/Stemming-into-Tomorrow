@@ -40,7 +40,6 @@ DrawableList.prototype.resetDrawableList = function() {
 }
 
 DrawableList.prototype.draw = function() {
-	for(var i = 0; i < this._graphicList.length; i++) {
+	for(var i = 0; i < this._graphicList.length; i++)
 		this._graphicList[i].draw();
-	}
 }

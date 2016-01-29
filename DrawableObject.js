@@ -1,8 +1,8 @@
 function DrawableObject(Canvas) {
 	if(arguments.length != 1) return;
 
-	this.graphic = new WebGLObject(Canvas.getWebGLCanvas());
 	this._canvas = Canvas;
+	this.graphic = new WebGLObject(this._canvas.getWebGLCanvas());
 }
 
 DrawableObject.prototype.addToCanvas = function() {
