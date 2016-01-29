@@ -3,6 +3,10 @@ var canvas = new Canvas("div_container", inputDevice);
 var hand = new Hand(canvas);
 hand.addToCanvas();
 
+
+
+// Testing text class
+//-------------------------------------------------------
 var text = new Text(canvas, "Hello World!");
 var textCube = new DrawableObject(canvas);
 
@@ -17,3 +21,30 @@ textCube.draw = function() {
 }
 
 textCube.addToCanvas();
+//-------------------------------------------------------
+
+
+
+// Testing pinch recognition
+//-------------------------------------------------------
+WebGLObject.prototype.translate = function(x, y, z) {
+	var xyz = this.buffers["aXYZ"].data;
+	for(var i = 0; i < xyz.length; i++) {
+		if(i%3 == 0)
+			xyz[i] = xyz[i] + x;
+		else if(i%3 == 1)
+			xyz[i] = xyz[i] + y;
+		else
+			xyz[i] = xyz[i] + z;
+	}
+	this.setXYZ(xyz);
+	this.canvas.updatePickingMap();
+}
+
+var listener = new GestureListener();
+listener.onPinch = function(pinchCenter) {
+	console.log(pinchCenter);
+}
+
+inputDevice.addGestureListener(listener);
+//-------------------------------------------------------

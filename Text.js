@@ -151,8 +151,8 @@ Text.prototype._createMultilineText = function(context, textToWrite, maxWidth, t
 	var maxLineWidth = 0;
 	
 	var wordArray = textToWrite.split(" ");
-	var wordsInCurrent, wordArrayLength;
-	wordsInCurrent = wordArrayLength = wordArray.length;
+	var wordArrayLength = wordArray.length
+	var wordsInCurrent = wordArrayLength;
 	
 	while(this._measureText(context, currentText) > maxWidth && wordsInCurrent > 1) {
 		wordsInCurrent--;
