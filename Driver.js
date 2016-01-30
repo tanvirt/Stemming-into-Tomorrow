@@ -1,20 +1,23 @@
 var inputDevice = new LeapMotionInputDevice();
 var canvas = new Canvas("div_container", inputDevice);
 canvas.getWebGLCanvas().onDrag = function(event) {
-	console.log('Hereeee');
 	canvas.getWebGLCanvas().camera.oneFingerRotate(event);
 }
 //var hand = new Hand(canvas);
 //hand.addToCanvas();
 
+//Testing Rectangle
+var center = new Point(0,0,0);
+var rectangle = new Rectangle(canvas, center, 0.3, 0.8, 0.5);
+rectangle.addToCanvas();
 
 //Testing Cube Class
-
+/*
 var center = new Point(0.25,-0.1,0.3);
 
 var cube = new Cube(canvas, center, 0.5);
 cube.addToCanvas();
-
+*/
 
 /*
 // Testing text class
