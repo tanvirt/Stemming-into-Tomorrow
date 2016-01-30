@@ -11,6 +11,8 @@ function Hand(Canvas) {
 
 Hand.prototype.draw = function() {
     this._updateHandPoints();
+    if(this._handPoints.length == 0)
+    	return;
     this.graphic.updateShader();
     this.graphic.draw();
 }
