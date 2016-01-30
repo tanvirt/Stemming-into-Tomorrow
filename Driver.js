@@ -1,16 +1,16 @@
 var inputDevice = new LeapMotionInputDevice();
 var canvas = new Canvas("div_container", inputDevice);
-//var hand = new Hand(canvas);
-//hand.addToCanvas();
+var hand = new Hand(canvas);
+hand.addToCanvas();
 
 
 //Testing Cube Class
-
+/*
 var center = new Point(0,0,0);
 
 var cube = new Cube(canvas, center, 0.5);
 cube.addToCanvas();
-
+*/
 
 /*
 // Testing text class
