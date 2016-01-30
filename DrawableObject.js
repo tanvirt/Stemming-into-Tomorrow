@@ -16,6 +16,7 @@ DrawableObject.prototype.addToCanvas = function() {
 }
 
 DrawableObject.prototype.draw = function() {
+	//TODO
 	this.graphic.updateShader();
     this.graphic.draw();
 }
