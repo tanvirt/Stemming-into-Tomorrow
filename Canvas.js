@@ -37,6 +37,5 @@ Canvas.prototype._onSetup = function() {
 Canvas.prototype._onDraw = function() {
     var gl = this._webGLCanvas.getGL();
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    if(this.getCurrentInputData().length != 0)
-        this._drawableList.draw();
+    this._drawableList.draw();
 }
