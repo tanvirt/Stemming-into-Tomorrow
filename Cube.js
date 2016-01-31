@@ -15,7 +15,7 @@ Cube.prototype._makeCube = function() {
 }
 
 Cube.prototype._generateXYZs = function() {
-	var XYZ = [ 
+	var xyz = [ 
 	    //Front Face starting from top left and going clockwise
 		this._center.getX()-(this._height/2), this._center.getY()+(this._height/2), this._center.getZ()+(this._height/2),  
 		this._center.getX()+(this._height/2), this._center.getY()+(this._height/2), this._center.getZ()+(this._height/2),
@@ -28,7 +28,8 @@ Cube.prototype._generateXYZs = function() {
 		this._center.getX()-(this._height/2), this._center.getY()-(this._height/2), this._center.getZ()-(this._height/2),
 		this._center.getX()+(this._height/2), this._center.getY()-(this._height/2), this._center.getZ()-(this._height/2)
 	];
-	return XYZ;
+
+	return xyz;
 }
 
 Cube.prototype._generateTriangles = function() {

@@ -15,7 +15,7 @@ Rectangle.prototype._makeRectangle = function() {
 }
 
 Rectangle.prototype._generateXYZs = function() {
-	var XYZ = [ 
+	var xyz = [ 
 	    //Front Face starting from top left and going clockwise
 		this._center.getX()-(this._width/2), this._center.getY()+(this._height/2), this._center.getZ()+(this._depth/2),  
 		this._center.getX()+(this._width/2), this._center.getY()+(this._height/2), this._center.getZ()+(this._depth/2),
@@ -28,7 +28,7 @@ Rectangle.prototype._generateXYZs = function() {
 		this._center.getX()-(this._width/2), this._center.getY()-(this._height/2), this._center.getZ()-(this._depth/2),
 		this._center.getX()+(this._width/2), this._center.getY()-(this._height/2), this._center.getZ()-(this._depth/2)
 	];
-	return XYZ;
+	return xyz;
 }
 
 Rectangle.prototype._generateTriangles = function() {
