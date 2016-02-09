@@ -1,4 +1,4 @@
-function Canvas(InputDevice, elementId) {
+function Canvas(inputDevice, elementId) {
     if(arguments.length < 1) return;
     
     this._elementId = elementId;
@@ -7,7 +7,7 @@ function Canvas(InputDevice, elementId) {
     	this._elementId = this._createCanvasContainerElement().id;
     
     this._webGLCanvas = new WebGLCanvas(this._elementId);
-    this._inputDevice = InputDevice;
+    this._inputDevice = inputDevice;
     this._drawableList = new DrawableList();
     this._room = null;
 

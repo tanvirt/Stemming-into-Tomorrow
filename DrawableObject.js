@@ -1,12 +1,12 @@
-function DrawableObject(Canvas) {
+function DrawableObject(canvas) {
 	if(arguments.length < 1) return;
-	this._canvas = Canvas;
+	this._canvas = canvas;
 	this.graphic = new WebGLObject(this._canvas.getWebGLCanvas());
 	this._center = null;
 }
 
-DrawableObject.prototype.setCenter = function(Point3d) {
-	this._center = Point3d;
+DrawableObject.prototype.setCenter = function(xyz) {
+	this._center = xyz;
 }
 
 DrawableObject.prototype.addToCanvas = function() {
@@ -22,9 +22,9 @@ DrawableObject.prototype.draw = function() {
 
 DrawableObject.prototype.translate = function(x, y, z) {
 	if(this._center != null) {
-		this._center.setX(this._center.getX() + x);
-		this._center.setY(this._center.getY() + y);
-		this._center.setZ(this._center.getZ() + z);
+		this._center[0] = this._center[0] + x;
+		this._center[1] = this._center[1] + y;
+		this._center[2] = this._center[2] + z;
 	}
 	var xyz = this.graphic.buffers["aXYZ"].data;
 	for(var i = 0; i < xyz.length; i++) {
@@ -39,23 +39,23 @@ DrawableObject.prototype.translate = function(x, y, z) {
 	this._canvas.getWebGLCanvas().updatePickingMap();
 }
 
-DrawableObject.prototype.placeAt = function(Point3d) {
+DrawableObject.prototype.placeAt = function(xyz) {
 	if(this._center == null)
 		return;
 	
-	var dx = Point3d.getX() - this._center.getX();
-	var dy = Point3d.getY() - this._center.getY();
-	var dz = Point3d.getZ() - this._center.getZ();
+	var dx = xyz[0] - this._center[0];
+	var dy = xyz[1] - this._center[1];
+	var dz = xyz[2] - this._center[2];
 	
 	this.translate(dx, dy, dz);
 }
 /*
-DrawableObject.prototype.translateTo = function(Point3d, timeToTarget) {
+DrawableObject.prototype.translateTo = function(xyz, timeToTarget) {
 	if(this._center == null)
 		return;
 	
 	if(timeToTarget == 0) {
-		this.placeAt(Point3d);
+		this.placeAt(xyz);
 		return;
 	}
 	
@@ -71,9 +71,9 @@ DrawableObject.prototype.translateTo = function(Point3d, timeToTarget) {
 	while(timePassed <= timeToTarget) {
 		var distanceRatio = timePassed/timeToTarget;
 		this.placeAt(
-			startLocation[0] + distanceInX*distanceRatio,
+			[startLocation[0] + distanceInX*distanceRatio,
 			startLocation[1] + distanceInY*distanceRatio,
-			startLocation[2] + distanceInZ*distanceRatio
+			startLocation[2] + distanceInZ*distanceRatio]
 		);
 		
 		var currTime = new Date().getTime();

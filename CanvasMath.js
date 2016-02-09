@@ -35,34 +35,33 @@ CanvasMath.distanceFromPointToLine = function(px, py, ax, ay, bx, by) {
 	return distanceFromPointToPoint(px, py, x, y);
 }
 
-CanvasMath.getProjectedPixelPoint = function(Canvas, Point) {
-	var webGLCanvas = Canvas.getWebGLCanvas();
+CanvasMath.getProjectedPixelPoint = function(canvas, xyz) {
+	var webGLCanvas = canvas.getWebGLCanvas();
 	var mvMatrix = webGLCanvas.getCamera().mvMatrix;
 	var fieldOfView = CanvasMath.degreesToRadians(webGLCanvas.getCamera().getFOV());
 	var height = webGLCanvas.gl.viewportHeight;
 	
-	var point3d = [Point.getX(), Point.getY(), Point.getZ(), 1];
-	var vector = CanvasMath.multiplyMat4Vec4(mvMatrix, point3d);
-	var transformedPoint3d = new Point3d(vector[0], vector[1], vector[2]);
+	var point = [xyz[0], xyz[1], xyz[2], 1];
+	var vector = CanvasMath.multiplyMat4Vec4(mvMatrix, point);
 	
-	var projectedPoint2d = CanvasMath._projectionFrom3dTo2d(transformedPoint3d, fieldOfView, height);
-	var pixelX = (webGLCanvas.gl.viewportWidth / 2) + projectedPoint2d.getX();
-	var pixelY = (webGLCanvas.gl.viewportHeight / 2) + projectedPoint2d.getY();
+	var projectedPoint = CanvasMath._projectionFrom3dTo2d(vector, fieldOfView, height);
+	var pixelX = (webGLCanvas.gl.viewportWidth / 2) + projectedPoint[0];
+	var pixelY = (webGLCanvas.gl.viewportHeight / 2) + projectedPoint[1];
 	
-	return new Point2d(pixelX, pixelY);
+	return [pixelX, pixelY];
 }
 
 // field of view must be in radians
-CanvasMath._projectionFrom3dTo2d = function(Point3d, fieldOfView, height) {
-	var x = Point3d.getX();
-	var y = Point3d.getY();
-	var z = Point3d.getZ();
+CanvasMath._projectionFrom3dTo2d = function(xyz, fieldOfView, height) {
+	var x = xyz[0];
+	var y = xyz[1];
+	var z = xyz[2];
 	var f = CanvasMath._focalLength(fieldOfView, height);
 	
 	var projX = ((-x*f) / z);
 	var projY = ((y*f) / z);
 	
-	return new Point2d(projX, projY);
+	return [projX, projY];
 }
 
 //angle must be in radians

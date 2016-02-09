@@ -5,6 +5,7 @@
 function Hand(Canvas) { 
     if(arguments.length < 1) return;
     DrawableObject.apply(this, arguments);
+    
     this._handPoints = [];
     this._makeHand();
 } Hand.prototype = new DrawableObject();

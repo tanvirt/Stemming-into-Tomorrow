@@ -1,10 +1,17 @@
-function Rectangle(Canvas, Point, height, width, depth) {
-	if(arguments < 4) { return; }
+function Rectangle(canvas, centerXYZ, height, width, depth) {
+	if(arguments < 3) return;
 	DrawableObject.apply(this, arguments);
-	this._center = Point;
+	
+	this._center = centerXYZ;
 	this._height = height;
 	this._width = width;
 	this._depth = depth;
+	
+	if(this._width == undefined)
+		this._width = height;
+	if(this._depth == undefined)
+		this._depth = height;
+	
 	this._makeRectangle();
 } Rectangle.prototype = new DrawableObject();
 
@@ -17,16 +24,16 @@ Rectangle.prototype._makeRectangle = function() {
 Rectangle.prototype._generateXYZs = function() {
 	var xyz = [ 
 	    //Front Face starting from top left and going clockwise
-		this._center.getX()-(this._width/2), this._center.getY()+(this._height/2), this._center.getZ()+(this._depth/2),  
-		this._center.getX()+(this._width/2), this._center.getY()+(this._height/2), this._center.getZ()+(this._depth/2),
-		this._center.getX()+(this._width/2), this._center.getY()-(this._height/2), this._center.getZ()+(this._depth/2),
-		this._center.getX()-(this._width/2), this._center.getY()-(this._height/2), this._center.getZ()+(this._depth/2),
+		this._center[0]-(this._width/2), this._center[1]+(this._height/2), this._center[2]+(this._depth/2),  
+		this._center[0]+(this._width/2), this._center[1]+(this._height/2), this._center[2]+(this._depth/2),
+		this._center[0]+(this._width/2), this._center[1]-(this._height/2), this._center[2]+(this._depth/2),
+		this._center[0]-(this._width/2), this._center[1]-(this._height/2), this._center[2]+(this._depth/2),
 		
 		//Rear Face starting from its top left and going clockwise --- As if you are looking at the 
-		this._center.getX()+(this._width/2), this._center.getY()+(this._height/2), this._center.getZ()-(this._depth/2),
-		this._center.getX()-(this._width/2), this._center.getY()+(this._height/2), this._center.getZ()-(this._depth/2),
-		this._center.getX()-(this._width/2), this._center.getY()-(this._height/2), this._center.getZ()-(this._depth/2),
-		this._center.getX()+(this._width/2), this._center.getY()-(this._height/2), this._center.getZ()-(this._depth/2)
+		this._center[0]+(this._width/2), this._center[1]+(this._height/2), this._center[2]-(this._depth/2),
+		this._center[0]-(this._width/2), this._center[1]+(this._height/2), this._center[2]-(this._depth/2),
+		this._center[0]-(this._width/2), this._center[1]-(this._height/2), this._center[2]-(this._depth/2),
+		this._center[0]+(this._width/2), this._center[1]-(this._height/2), this._center[2]-(this._depth/2)
 	];
 	return xyz;
 }

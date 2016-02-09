@@ -1,5 +1,5 @@
-function Text(Canvas, string) {
-	this._gl = Canvas.getWebGLCanvas().gl;
+function Text(canvas, string) {
+	this._gl = canvas.getWebGLCanvas().gl;
 	this._string = string;
 
 	this._canvas = null;
