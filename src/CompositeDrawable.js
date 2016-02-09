@@ -1,65 +1,33 @@
-function CompositeDrawable (Canvas) {
-	if(arguments < 1) { return; }
-	DrawableObject.apply(this, arguments);
+function CompositeDrawable(canvas) {
+	if(arguments < 1) return;
+	DrawableObject.call(this, canvas);
+	
 	this._drawableComponents = [];
-	this._buffers = [];
-	this._indices = []; 
 } CompositeDrawable.prototype = new DrawableObject();
 
 CompositeDrawable.prototype.add = function(drawableObject) {
 	this._drawableComponents.push(drawableObject);
-	this._getBuffers(drawableObject);
-	this._setValues();
-	//if(this._indices[0]["Lines"] == undefined) console.log('hello');
-	//this.graphic.setXYZ(this._getXYZs());
-	//TODO someShit --XYZs,lines,triangles,points,normals,UVs,colors
+	if(this._center == null && this._drawableComponents.length == 1)
+		this._center = this._drawableComponents[0].getCenter();
+	else
+		this._center = this._calculateCenter();
 }
 
-CompositeDrawable.prototype._getBuffers = function(drawableObject) {
-	this._buffers.push(drawableObject.graphic.buffers);
-	this._indices.push(drawableObject.graphic.indices);
+// Dev: the calculated center can be skewed if there are many objects in one area
+CompositeDrawable.prototype._calculateCenter = function() {
+	var total = [0, 0, 0];
+	var length = this._drawableComponents.length;
+	for(var i = 0; i < length; i++) {
+		if(this._drawableComponents[i].getCenter() == null)
+			return null;
+		total[0] += this._drawableComponents[i].getCenter[0];
+		total[1] += this._drawableComponents[i].getCenter[1];
+		total[2] += this._drawableComponents[i].getCenter[2];
+	}
+	var center = [
+		total[0]/length,
+		total[1]/length,
+		total[2]/length
+	];
+	return center;
 }
-
-CompositeDrawable.prototype._setValues = function() {
-	this._setXYZs();
-	//this._setPoints();
-	//this._setTriangles();
-	//this._setLines();
-	//this._setNormals();
-	//this._setUVs();
-	//this._setColors();
-}
-
-CompositeDrawable.prototype._setXYZs = function() {
-	var xyz = this._getXYZs();
-	if(xyz.length != 0)
-		this.graphic.setXYZ(xyz);
-}
-
-CompositeDrawable.prototype._getXYZs = function() {
-	var xyz = [];
-	for(var i = 0; i < this._buffers.length; i++)
-		if(this._buffers[i]["aXYZ"] != undefined)
-			Array.prototype.push.apply(xyz,this._buffers[i]["aXYZ"].data);
-	
-	return xyz;
-}
-
-CompositeDrawable.prototype._setTriangles = function() {
-	
-}
-
-CompositeDrawable.prototype._getTriangles = function() {
-	var triangles = [];
-	for(var i = 0; i < this._indices.length; i++)
-		if(this._indices[i]["Triangles"] != undefined)
-			triangles.concat(this._indices[i]["Triangles"].data);
-	
-	return triangles;
-}
-//other methods elided
-
-/*
-	Composite should get all XYZs,triangles,lines,..whatever else from its components..
-	User updates the the components and calls update or something on composite so the composite resets its data with the up to date stuff from its components.
-*/
