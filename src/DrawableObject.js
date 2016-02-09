@@ -1,9 +1,18 @@
 function DrawableObject(canvas) {
 	if(arguments.length < 1) return;
+	WebGLObject.call(this, canvas);
 	
 	this._canvas = canvas;
-	this.graphic = new WebGLObject(this._canvas);
 	this._center = null;
+	this._readyToDraw = false;
+} DrawableObject.prototype = new WebGLObject();
+
+DrawableObject.prototype.readyToDraw = function() {
+	return this._readyToDraw;
+}
+
+DrawableObject.prototype.getCenter = function() {
+	return this._center;
 }
 
 DrawableObject.prototype.setCenter = function(xyz) {
@@ -14,11 +23,8 @@ DrawableObject.prototype.addToCanvas = function() {
 	this._canvas.addDrawableObject(this);
 }
 
-DrawableObject.prototype.draw = function() {
-	// TODO 
-	// Dev: should use template method
-	this.graphic.updateShader();
-    this.graphic.draw();
+DrawableObject.prototype.drawSetup = function() {
+	this.updateShader();
 }
 
 DrawableObject.prototype.translate = function(x, y, z) {
@@ -27,7 +33,7 @@ DrawableObject.prototype.translate = function(x, y, z) {
 		this._center[1] = this._center[1] + y;
 		this._center[2] = this._center[2] + z;
 	}
-	var xyz = this.graphic.buffers["aXYZ"].data;
+	var xyz = this.buffers["aXYZ"].data;
 	for(var i = 0; i < xyz.length; i++) {
 		if(i%3 == 0) 				// x-coordinate
 			xyz[i] = xyz[i] + x;
@@ -36,7 +42,7 @@ DrawableObject.prototype.translate = function(x, y, z) {
 		else 						// z-coordinate
 			xyz[i] = xyz[i] + z;
 	}
-	this.graphic.setXYZ(xyz);
+	this.setXYZ(xyz);
 	this._canvas.updatePickingMap();
 }
 

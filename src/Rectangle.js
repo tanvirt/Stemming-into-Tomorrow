@@ -2,6 +2,8 @@ function Rectangle(canvas, centerXYZ, height, width, depth) {
 	if(arguments < 3) return;
 	DrawableObject.call(this, canvas);
 	
+	this.disablePicking(false);
+	
 	this._center = centerXYZ;
 	this._height = height;
 	this._width = width;
@@ -16,9 +18,10 @@ function Rectangle(canvas, centerXYZ, height, width, depth) {
 } Rectangle.prototype = new DrawableObject();
 
 Rectangle.prototype._makeRectangle = function() {
-	this.graphic.setXYZ(this._generateXYZs());
-	this.graphic.setTriangles(this._generateTriangles());
-	this.graphic.setColors([1,0,0, 1,1,0, 1,0,1, 1,1,1, 0,0,0, 0,1,0, 0,0,1, 0,1,1]); 
+	this.setXYZ(this._generateXYZs());
+	this.setTriangles(this._generateTriangles());
+	this.setColors([1,0,0, 1,1,0, 1,0,1, 1,1,1, 0,0,0, 0,1,0, 0,0,1, 0,1,1]);
+	this._readyToDraw = true;
 }
 
 Rectangle.prototype._generateXYZs = function() {

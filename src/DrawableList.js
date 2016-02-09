@@ -11,23 +11,10 @@ DrawableList.prototype.add = function(drawableObject) {
 	this._graphicList.push(drawableObject);
 }
 
-DrawableList.prototype.getDrawable = function() {
-	return this._graphicList[0];
-}
-
-DrawableList.prototype.setDrawableList = function(graphicList) {
-	this._graphicList = graphicList;
-}
-
-DrawableList.prototype.getDrawableList = function() {
-	return this._graphicList;
-}
-
-DrawableList.prototype.resetDrawableList = function() {
-	this._graphicList = [];
-}
-
 DrawableList.prototype.draw = function() {
-	for(var i = 0; i < this._graphicList.length; i++)
-		this._graphicList[i].draw();
+	for(var i = 0; i < this._graphicList.length; i++) {
+		this._graphicList[i].drawSetup();
+		if(this._graphicList[i].readyToDraw())
+			this._graphicList[i].draw();
+	}
 }

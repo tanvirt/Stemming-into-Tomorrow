@@ -6,16 +6,20 @@ function Hand(canvas) {
     if(arguments.length < 1) return;
     DrawableObject.call(this, canvas);
     
+    this.disablePicking(false);
+    
     this._handPoints = [];
     this._makeHand();
 } Hand.prototype = new DrawableObject();
 
-Hand.prototype.draw = function() {
+Hand.prototype.drawSetup = function() {
     this._updateHandPoints();
-    if(this._handPoints.length == 0)
+    if(this._handPoints.length == 0) {
+    	this._readyToDraw = false;
     	return;
-    this.graphic.updateShader();
-    this.graphic.draw();
+    }
+    this.updateShader();
+    this._readyToDraw = true;
 }
 
 Hand.prototype._makeHand = function() {
@@ -23,7 +27,7 @@ Hand.prototype._makeHand = function() {
     this._makeBase(lines);
     this._makeKnuckles(lines);
     this._makeWrist(lines);
-    this.graphic.setLines(lines);
+    this.setLines(lines);
 }
 
 Hand.prototype._makeBase = function(lines) {
@@ -47,5 +51,5 @@ Hand.prototype._makeWrist = function(lines) {
 
 Hand.prototype._updateHandPoints = function() {
     this._handPoints = this._canvas.getCurrentInputData();
-    this.graphic.setXYZ(this._handPoints);
+    this.setXYZ(this._handPoints);
 }

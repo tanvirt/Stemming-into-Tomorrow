@@ -4,6 +4,9 @@ function Game(canvas, inputDevice) {
 	this._canvas = canvas;
 	this._inputDevice = inputDevice;
 	this._inputDevice.addGestureListener(this);
+	
+	this._newObj = new DrawableObject(this._canvas); // Dev: created temp obj here
+	
 	this._setup();
 } Game.prototype = new GestureListener();
 
@@ -11,21 +14,17 @@ Game.prototype.onPinch = function(pinchCenter) {
 	var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
 	var obj = this._canvas.getObjectAt(pixel[0], pixel[1]);
 	
-	if(obj != null && this._newObj.graphic != obj && obj._center != null) {
-		this._newObj.graphic = obj;
-		this._newObj.setCenter(obj._center);
+	if(obj != null && this._newObj != obj && obj.getCenter() != null) {
+		this._newObj = obj;
+		this._newObj.setCenter(obj.getCenter());
 	}
-	else if(obj != null && this._newObj.graphic == obj) {
-		var objDepth = this._canvas.getXYZAt(pixel[0], pixel[1])[2];
-		//if(Math.abs(objDepth - pinchCenter[2]) < 0.25)
-			this._newObj.placeAt(pinchCenter);
-	}
+	else if(obj != null && this._newObj == obj)
+		this._newObj.placeAt(pinchCenter);
 }
 
 Game.prototype._setup = function() {
 	this._addHandToCanvas();
 	this._addRectangleToCanvas();
-	this._newObj = new DrawableObject(this._canvas);
 }
 
 Game.prototype._addHandToCanvas = function() {
@@ -36,7 +35,6 @@ Game.prototype._addHandToCanvas = function() {
 Game.prototype._addRectangleToCanvas = function() {
 	var center = [0, 0, 0];
 	var rectangle = new Rectangle(this._canvas, center, 0.1, 0.1, 0.1);
-	rectangle.graphic._center = [0, 0, 0]; // Dev: created temp center member here
-	rectangle.graphic.setDrawModeLines();
+	rectangle.setDrawModeLines();
 	rectangle.addToCanvas();
 }
