@@ -1,11 +1,9 @@
-var inputDevice = new LeapMotionInputDevice();
-var canvas = new Canvas(inputDevice);
-//canvas.getWebGLCanvas().useRedCyanProjector();
-canvas.setRoom("http://localhost/webapps/Senior_Project/Stemming-into-Tomorrow/data/rooms/default");
-canvas.getWebGLCanvas().onDrag = function(event) {
-	canvas.getWebGLCanvas().camera.oneFingerRotate(event);
+var my_inputDevice = new LeapMotionInputDevice();
+var my_canvas = new Canvas(my_inputDevice);
+//my_canvas.getWebGLCanvas().useRedCyanProjector();
+my_canvas.setRoom("http://localhost/webapps/Senior_Project/Stemming-into-Tomorrow/data/rooms/default");
+my_canvas.getWebGLCanvas().onDrag = function(event) {
+	my_canvas.getWebGLCanvas().camera.oneFingerRotate(event);
 }
-var hand = new Hand(canvas);
-hand.addToCanvas();
 
-var game = new Game(canvas, inputDevice);
+var game = new Game(my_canvas, my_inputDevice);
