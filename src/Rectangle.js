@@ -1,6 +1,6 @@
 function Rectangle(canvas, centerXYZ, height, width, depth) {
 	if(arguments < 3) return;
-	DrawableObject.apply(this, arguments);
+	DrawableObject.call(this, canvas);
 	
 	this._center = centerXYZ;
 	this._height = height;

@@ -2,9 +2,9 @@
       calling super methods in hand construction does not function properly.
 */
 
-function Hand(Canvas) { 
+function Hand(canvas) { 
     if(arguments.length < 1) return;
-    DrawableObject.apply(this, arguments);
+    DrawableObject.call(this, canvas);
     
     this._handPoints = [];
     this._makeHand();

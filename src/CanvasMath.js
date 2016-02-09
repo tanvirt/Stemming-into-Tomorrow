@@ -36,17 +36,16 @@ CanvasMath.distanceFromPointToLine = function(px, py, ax, ay, bx, by) {
 }
 
 CanvasMath.getProjectedPixelPoint = function(canvas, xyz) {
-	var webGLCanvas = canvas.getWebGLCanvas();
-	var mvMatrix = webGLCanvas.getCamera().mvMatrix;
-	var fieldOfView = CanvasMath.degreesToRadians(webGLCanvas.getCamera().getFOV());
-	var height = webGLCanvas.gl.viewportHeight;
+	var mvMatrix = canvas.getCamera().mvMatrix;
+	var fieldOfView = CanvasMath.degreesToRadians(canvas.getCamera().getFOV());
+	var height = canvas.gl.viewportHeight;
 	
 	var point = [xyz[0], xyz[1], xyz[2], 1];
 	var vector = CanvasMath.multiplyMat4Vec4(mvMatrix, point);
 	
 	var projectedPoint = CanvasMath._projectionFrom3dTo2d(vector, fieldOfView, height);
-	var pixelX = (webGLCanvas.gl.viewportWidth / 2) + projectedPoint[0];
-	var pixelY = (webGLCanvas.gl.viewportHeight / 2) + projectedPoint[1];
+	var pixelX = (canvas.gl.viewportWidth / 2) + projectedPoint[0];
+	var pixelY = (canvas.gl.viewportHeight / 2) + projectedPoint[1];
 	
 	return [pixelX, pixelY];
 }

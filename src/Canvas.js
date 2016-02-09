@@ -1,26 +1,20 @@
 function Canvas(inputDevice, elementId) {
     if(arguments.length < 1) return;
-    
     this._elementId = elementId;
-    
     if(this._elementId == undefined)
     	this._elementId = this._createCanvasContainerElement().id;
+    WebGLCanvas.call(this, this._elementId);
     
-    this._webGLCanvas = new WebGLCanvas(this._elementId);
     this._inputDevice = inputDevice;
     this._drawableList = new DrawableList();
     this._room = null;
 
-    this._start();
-}
+    this.start();
+} Canvas.prototype = new WebGLCanvas();
 
 Canvas.prototype.setRoom = function(filePath) {
-	this._room = new WebGLImageComposition(this._webGLCanvas);
+	this._room = new WebGLImageComposition(this);
 	this._room.load(filePath);
-}
-
-Canvas.prototype.getWebGLCanvas = function() {
-    return this._webGLCanvas;
 }
 
 Canvas.prototype.addDrawableObject = function(drawableObject) {
@@ -46,20 +40,13 @@ Canvas.prototype._createCanvasContainerElement = function() {
 	return container;
 }
 
-Canvas.prototype._start = function() {
-    var self = this;
-    this._webGLCanvas.onSetup = function() { self._onSetup() }
-    this._webGLCanvas.onDraw = function() { self._onDraw() }
-    this._webGLCanvas.start();
+Canvas.prototype.onSetup = function() {
+    this.setBackgroundColor(0, 0, 0);
+    this.setLoadingStatus(false);
 }
 
-Canvas.prototype._onSetup = function() {
-    this._webGLCanvas.setBackgroundColor(0, 0, 0);
-    this._webGLCanvas.setLoadingStatus(false);
-}
-
-Canvas.prototype._onDraw = function() {
-    var gl = this._webGLCanvas.getGL();
+Canvas.prototype.onDraw = function() {
+    var gl = this.getGL();
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     if(this._room != null)
     	this._room.draw();

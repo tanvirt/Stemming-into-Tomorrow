@@ -8,16 +8,15 @@ function Game(canvas, inputDevice) {
 } Game.prototype = new GestureListener();
 
 Game.prototype.onPinch = function(pinchCenter) {
-	var webGLCanvas = this._canvas.getWebGLCanvas();
 	var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
-	var obj = webGLCanvas.getObjectAt(pixel[0], pixel[1]);
+	var obj = this._canvas.getObjectAt(pixel[0], pixel[1]);
 	
 	if(obj != null && this._newObj.graphic != obj && obj._center != null) {
 		this._newObj.graphic = obj;
 		this._newObj.setCenter(obj._center);
 	}
 	else if(obj != null && this._newObj.graphic == obj) {
-		var objDepth = webGLCanvas.getXYZAt(pixel[0], pixel[1])[2];
+		var objDepth = this._canvas.getXYZAt(pixel[0], pixel[1])[2];
 		//if(Math.abs(objDepth - pinchCenter[2]) < 0.25)
 			this._newObj.placeAt(pinchCenter);
 	}

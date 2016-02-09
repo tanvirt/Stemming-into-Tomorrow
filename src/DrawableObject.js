@@ -1,7 +1,8 @@
 function DrawableObject(canvas) {
 	if(arguments.length < 1) return;
+	
 	this._canvas = canvas;
-	this.graphic = new WebGLObject(this._canvas.getWebGLCanvas());
+	this.graphic = new WebGLObject(this._canvas);
 	this._center = null;
 }
 
@@ -36,7 +37,7 @@ DrawableObject.prototype.translate = function(x, y, z) {
 			xyz[i] = xyz[i] + z;
 	}
 	this.graphic.setXYZ(xyz);
-	this._canvas.getWebGLCanvas().updatePickingMap();
+	this._canvas.updatePickingMap();
 }
 
 DrawableObject.prototype.placeAt = function(xyz) {
