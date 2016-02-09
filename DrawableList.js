@@ -4,8 +4,6 @@
 */
 
 function DrawableList() {
-	if(arguments.length != 0) return;
-	
 	this._graphicList = [];
 }
 

@@ -2,13 +2,11 @@ function DrawableObject(Canvas) {
 	if(arguments.length < 1) return;
 	this._canvas = Canvas;
 	this.graphic = new WebGLObject(this._canvas.getWebGLCanvas());
-	this._center = [];
+	this._center = null;
 }
 
-DrawableObject.prototype.setCenter = function(x, y, z) {
-	this._center.push(x);
-	this._center.push(y);
-	this._center.push(z);
+DrawableObject.prototype.setCenter = function(Point3d) {
+	this._center = Point3d;
 }
 
 DrawableObject.prototype.addToCanvas = function() {
@@ -16,16 +14,17 @@ DrawableObject.prototype.addToCanvas = function() {
 }
 
 DrawableObject.prototype.draw = function() {
-	//TODO
+	// TODO 
+	// Dev: should use template method
 	this.graphic.updateShader();
     this.graphic.draw();
 }
 
 DrawableObject.prototype.translate = function(x, y, z) {
-	if(this._center.length == 3) {
-		this._center[0] = this._center[0] + x;
-		this._center[1] = this._center[1] + y;
-		this._center[2] = this._center[2] + z;
+	if(this._center != null) {
+		this._center.setX(this._center.getX() + x);
+		this._center.setY(this._center.getY() + y);
+		this._center.setZ(this._center.getZ() + z);
 	}
 	var xyz = this.graphic.buffers["aXYZ"].data;
 	for(var i = 0; i < xyz.length; i++) {
@@ -40,23 +39,23 @@ DrawableObject.prototype.translate = function(x, y, z) {
 	this._canvas.getWebGLCanvas().updatePickingMap();
 }
 
-DrawableObject.prototype.placeAt = function(x, y, z) {
-	if(this._center.length != 3)
+DrawableObject.prototype.placeAt = function(Point3d) {
+	if(this._center == null)
 		return;
 	
-	var dx = x - this._center[0];
-	var dy = y - this._center[1];
-	var dz = z - this._center[2];
+	var dx = Point3d.getX() - this._center.getX();
+	var dy = Point3d.getY() - this._center.getY();
+	var dz = Point3d.getZ() - this._center.getZ();
 	
 	this.translate(dx, dy, dz);
 }
 /*
-DrawableObject.prototype.translateTo = function(x, y, z, timeToTarget) {
-	if(this._center.length != 3)
+DrawableObject.prototype.translateTo = function(Point3d, timeToTarget) {
+	if(this._center == null)
 		return;
 	
 	if(timeToTarget == 0) {
-		this.placeAt(x, y, z);
+		this.placeAt(Point3d);
 		return;
 	}
 	

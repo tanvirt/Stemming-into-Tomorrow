@@ -1,0 +1,41 @@
+texture wall blueprint.png
+clearcolor 0 0 0
+enable textures
+color 1 1 1
+pushMatrix
+translate 0 -1 0
+	pushMatrix
+		rotate 90 1 0 0
+		bindtexture wall
+		rectangle 50 50 1 1
+	popMatrix
+	pushMatrix
+		translate 0 50 0
+		rotate 90 1 0 0
+		bindtexture wall
+		rectangle 50 50 1 1
+	popMatrix
+	pushMatrix
+		translate 0 25 -25
+		bindtexture wall
+		rectangle 50 50 1 1
+	popMatrix
+	pushMatrix
+		translate 0 25 25
+		bindtexture wall
+		rectangle 50 50 1 1
+	popMatrix
+	pushMatrix
+		translate 25 25 0
+		rotate 90 0 1 0
+		bindtexture wall
+		rectangle 50 50 1 1
+	popMatrix
+	pushMatrix
+		translate -25 25 0
+		rotate 90 0 1 0
+		bindtexture wall
+		rectangle 50 50 1 1
+	popMatrix
+popMatrix
+disable textures

@@ -1,6 +1,4 @@
 function LeapMotionInputDevice() {
-    if(arguments.length != 0) return;
-
     this._leapPoints = [];
     this._listeners = [];
 
