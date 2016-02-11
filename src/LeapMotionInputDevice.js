@@ -33,23 +33,10 @@ LeapMotionInputDevice.prototype._onFrame = function(frame) {
     this._publishHandData(frame);
     this._updatePinchGesture(frame);
     
-    if(frame.gestures.length > 0) {
-    	for(var i = 0; i < frame.gestures.length; i++) {
-    		var gesture = frame.gestures[i];
-    		var gestureType = gesture.type;
-    		
-    		if(gestureType == 'pinch')
-    			this._notifyForPinching(gesture);
-    		else if(gestureType == 'circle')
-    			this._notifyForCircling(gesture);
-    		else if(gestureType == 'keyTap')
-    			this._notifyForKeyTapping(gesture);
-    		else if(gestureType == 'screenTap')
-    			this._notifyForScreenTapping(gesture);
-    		else if(gestureType == 'swipe')
-    			this._notifyForSwiping(gesture);
-    	}
-    }
+    var gestures = frame.gestures;
+    if(gestures.length > 0)
+    	for(var i = 0; i < gestures.length; i++)
+    		this._notifyForGesture(gestures[i]);
 }
 
 LeapMotionInputDevice.prototype._publishHandData = function(frame) {
@@ -128,6 +115,20 @@ LeapMotionInputDevice.prototype._getGlXYZ = function(leapXYZ) {
     glXYZ[2] = 0.4993973239+0.0067629654*leapXYZ[2];
     
     return glXYZ;
+}
+
+LeapMotionInputDevice.prototype._notifyForGesture = function(gesture) {
+	var gestureType = gesture.type;
+	if(gestureType == 'pinch')
+		this._notifyForPinching(gesture);
+	else if(gestureType == 'circle')
+		this._notifyForCircling(gesture);
+	else if(gestureType == 'keyTap')
+		this._notifyForKeyTapping(gesture);
+	else if(gestureType == 'screenTap')
+		this._notifyForScreenTapping(gesture);
+	else if(gestureType == 'swipe')
+		this._notifyForSwiping(gesture);
 }
 
 LeapMotionInputDevice.prototype._notifyForPinching = function(gesture) {
