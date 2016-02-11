@@ -8,7 +8,7 @@ function Canvas(inputDevice, elementId) {
     this._inputDevice = inputDevice;
     this._drawableList = new DrawableList();
     this._room = null;
-
+    
     this.start();
 } Canvas.prototype = new WebGLCanvas();
 

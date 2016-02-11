@@ -1,3 +1,4 @@
+// Implements the GestureListener interface.
 function Game(canvas, inputDevice) {
 	if(arguments.length < 2) return;
 	
@@ -8,7 +9,7 @@ function Game(canvas, inputDevice) {
 	this._newObj = new DrawableObject(this._canvas); // Dev: created temp obj here
 	
 	this._setup();
-} Game.prototype = new GestureListener();
+}
 
 Game.prototype.onPinch = function(pinchCenter) {
 	var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);

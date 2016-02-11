@@ -50,7 +50,7 @@ CanvasMath.getProjectedPixelPoint = function(canvas, xyz) {
 	return [pixelX, pixelY];
 }
 
-// field of view must be in radians
+// Field of view must be in radians.
 CanvasMath._projectionFrom3dTo2d = function(xyz, fieldOfView, height) {
 	var x = xyz[0];
 	var y = xyz[1];
@@ -63,7 +63,7 @@ CanvasMath._projectionFrom3dTo2d = function(xyz, fieldOfView, height) {
 	return [projX, projY];
 }
 
-//angle must be in radians
+// Angle must be in radians.
 CanvasMath._focalLength = function(angle, height) {
 	return (height / 2)*( 1 / (Math.tan(angle / 2)) );
 }

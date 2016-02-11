@@ -1,11 +1,11 @@
 function Text(canvas, string) {
 	this._gl = canvas.gl;
 	this._string = string;
-
+	
 	this._canvas = null;
 	this._texture = null;
 	
-	// default values
+	// Default text properties.
 	this._maxWidth = 256;
 	this._squareTexture = false;
 	this._textHeight = 56;

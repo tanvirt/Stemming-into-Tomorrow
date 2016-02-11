@@ -1,27 +1,25 @@
 function LeapMotionInputDevice() {
     this._leapPoints = [];
-    this._listeners = [];
+    this._gestureListeners = [];
 
     this._startLeapLoop();
 }
 
-LeapMotionInputDevice.prototype.getPoints = function() {
-    return this._leapPoints;
-}
+LeapMotionInputDevice.prototype.getPoints = function() { return this._leapPoints; }
 
 LeapMotionInputDevice.prototype.resetLeapPoints = function() {
     this._leapPoints = [];
 }
 
 LeapMotionInputDevice.prototype.addGestureListener = function(GestureListener) {
-    this._listeners.push(GestureListener);
+    this._gestureListeners.push(GestureListener);
 }
 
 LeapMotionInputDevice.prototype._startLeapLoop = function() {
     var self = this;
     var options = { enableGestures: true };
-
-    // runs at 60fps
+    
+    // Runs at approximately 60 frames per second.
     Leap.loop(options, function(frame) { self._onFrame(frame); });
 }
 
@@ -31,16 +29,12 @@ LeapMotionInputDevice.prototype._onFrame = function(frame) {
         this._publishHandData(frame);
         this._notifyIfPinching(frame);
     }
-    else
-        console.log("No hands available");
 }
 
 LeapMotionInputDevice.prototype._publishHandData = function(frame) {
     var hand = frame.hands[0];
-    if(hand == null) {
-        console.log('No hands detected');
+    if(hand == null)
         return;
-    }
     this._setHandPoints(hand);
 }
 
@@ -69,8 +63,8 @@ LeapMotionInputDevice.prototype._notifyIfPinching = function(frame) {
     var hand = frame.hands[0];
     if(this._isPinching(hand)) {
         var pinchCenter = this._getPinchCenter(hand);
-        for(var i = 0; i < this._listeners.length; i++)
-            this._listeners[i].onPinch(pinchCenter);
+        for(var i = 0; i < this._gestureListeners.length; i++)
+            this._gestureListeners[i].onPinch(pinchCenter);
     }
 }
 

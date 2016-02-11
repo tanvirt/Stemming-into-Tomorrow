@@ -1,12 +1,8 @@
-/*
-      calling super methods in hand construction does not function properly.
-*/
+// DEV: calling super methods in hand constructor does not function properly
 
 function Hand(canvas) { 
     if(arguments.length < 1) return;
     DrawableObject.call(this, canvas);
-    
-    this.disablePicking(false);
     
     this._handPoints = [];
     this._makeHand();
@@ -14,12 +10,9 @@ function Hand(canvas) {
 
 Hand.prototype.drawSetup = function() {
     this._updateHandPoints();
-    if(this._handPoints.length == 0) {
-    	this._readyToDraw = false;
+    if(this._handPoints.length == 0)
     	return;
-    }
     this.updateShader();
-    this._readyToDraw = true;
 }
 
 Hand.prototype._makeHand = function() {

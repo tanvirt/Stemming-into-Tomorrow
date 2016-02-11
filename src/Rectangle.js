@@ -2,8 +2,6 @@ function Rectangle(canvas, centerXYZ, height, width, depth) {
 	if(arguments < 3) return;
 	DrawableObject.call(this, canvas);
 	
-	this.disablePicking(false);
-	
 	this._center = centerXYZ;
 	this._height = height;
 	this._width = width;
@@ -26,13 +24,13 @@ Rectangle.prototype._makeRectangle = function() {
 
 Rectangle.prototype._generateXYZs = function() {
 	var xyz = [ 
-	    //Front Face starting from top left and going clockwise
+	    // Front Face starting from top left and going clockwise
 		this._center[0]-(this._width/2), this._center[1]+(this._height/2), this._center[2]+(this._depth/2),  
 		this._center[0]+(this._width/2), this._center[1]+(this._height/2), this._center[2]+(this._depth/2),
 		this._center[0]+(this._width/2), this._center[1]-(this._height/2), this._center[2]+(this._depth/2),
 		this._center[0]-(this._width/2), this._center[1]-(this._height/2), this._center[2]+(this._depth/2),
 		
-		//Rear Face starting from its top left and going clockwise --- As if you are looking at the 
+		// Rear Face starting from its top left and going clockwise --- As if you are looking at the 
 		this._center[0]+(this._width/2), this._center[1]+(this._height/2), this._center[2]-(this._depth/2),
 		this._center[0]-(this._width/2), this._center[1]+(this._height/2), this._center[2]-(this._depth/2),
 		this._center[0]-(this._width/2), this._center[1]-(this._height/2), this._center[2]-(this._depth/2),
@@ -43,7 +41,7 @@ Rectangle.prototype._generateXYZs = function() {
 
 Rectangle.prototype._generateTriangles = function() {
 	var triangles = [
-	    //Front Face, Right Face, Rear Face, Left Face, Top Face, Bottom Face --Each new line
+	    // Front Face, Right Face, Rear Face, Left Face, Top Face, Bottom Face --Each new line
 		0,1,2, 2,3,0,
 		1,4,7, 7,2,1,
 		4,5,6, 6,7,4,
@@ -55,5 +53,5 @@ Rectangle.prototype._generateTriangles = function() {
 }
 
 Rectangle.prototype.onDrag = function(event) {
-	//TODO
+	// TODO
 }

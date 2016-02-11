@@ -4,20 +4,18 @@ function DrawableObject(canvas) {
 	
 	this._canvas = canvas;
 	this._center = null;
-	this._readyToDraw = false;
+	
+	this.enablePicking();
 } DrawableObject.prototype = new WebGLObject();
 
+// DEV: should "ready to draw" be determined only by xyz coordinates?
 DrawableObject.prototype.readyToDraw = function() {
-	return this._readyToDraw;
+	return this.buffers["aXYZ"] != undefined &&
+		this.buffers["aXYZ"].data.length > 0;
 }
 
-DrawableObject.prototype.getCenter = function() {
-	return this._center;
-}
-
-DrawableObject.prototype.setCenter = function(xyz) {
-	this._center = xyz;
-}
+DrawableObject.prototype.getCenter = function() { return this._center; }
+DrawableObject.prototype.setCenter = function(xyz) { this._center = xyz; }
 
 DrawableObject.prototype.addToCanvas = function() {
 	this._canvas.addDrawableObject(this);
@@ -28,20 +26,9 @@ DrawableObject.prototype.drawSetup = function() {
 }
 
 DrawableObject.prototype.translate = function(x, y, z) {
-	if(this._center != null) {
-		this._center[0] = this._center[0] + x;
-		this._center[1] = this._center[1] + y;
-		this._center[2] = this._center[2] + z;
-	}
-	var xyz = this.buffers["aXYZ"].data;
-	for(var i = 0; i < xyz.length; i++) {
-		if(i%3 == 0) 				// x-coordinate
-			xyz[i] = xyz[i] + x;
-		else if(i%3 == 1) 			// y-coordinate
-			xyz[i] = xyz[i] + y;
-		else 						// z-coordinate
-			xyz[i] = xyz[i] + z;
-	}
+	if(this._center != null)
+		this._translateCenter(x, y, z);
+	var xyz = this._getTranslatedXYZ(x, y, z);
 	this.setXYZ(xyz);
 	this._canvas.updatePickingMap();
 }
@@ -92,6 +79,25 @@ DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
 	this._rotateX(thetaX);
 	this._rotateY(thetaY);
 	this._rotateZ(thetaZ);
+}
+
+DrawableObject.prototype._translateCenter = function(x, y, z) {
+	this._center[0] = this._center[0] + x;
+	this._center[1] = this._center[1] + y;
+	this._center[2] = this._center[2] + z;
+}
+
+DrawableObject.prototype._getTranslatedXYZ = function(x, y, z) {
+	var xyz = this.buffers["aXYZ"].data;
+	for(var i = 0; i < xyz.length; i++) {
+		if(i%3 == 0) 				// x-coordinate
+			xyz[i] = xyz[i] + x;
+		else if(i%3 == 1) 			// y-coordinate
+			xyz[i] = xyz[i] + y;
+		else 						// z-coordinate
+			xyz[i] = xyz[i] + z;
+	}
+	return xyz;
 }
 
 DrawableObject.prototype._rotateX = function(theta) {

@@ -13,7 +13,7 @@ CompositeDrawable.prototype.add = function(drawableObject) {
 		this._center = this._calculateCenter();
 }
 
-// Dev: the calculated center can be skewed if there are many objects in one area
+// DEV: the calculated center can be skewed if there are many objects in one area
 CompositeDrawable.prototype._calculateCenter = function() {
 	var total = [0, 0, 0];
 	var length = this._drawableComponents.length;

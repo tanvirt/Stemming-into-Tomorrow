@@ -1,7 +1,4 @@
-/*
-	TODO future:
-		removing objects from the drawable list --Memory management?????
-*/
+// TODO: object removal from graphic list, memory management
 
 function DrawableList() {
 	this._graphicList = [];
