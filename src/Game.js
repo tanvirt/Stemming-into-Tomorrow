@@ -11,7 +11,8 @@ function Game(canvas, inputDevice) {
 	this._setup();
 }
 
-Game.prototype.onPinch = function(pinchCenter) {
+Game.prototype.onPinch = function(gesture) {
+	var pinchCenter = gesture.position;
 	var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
 	var obj = this._canvas.getObjectAt(pixel[0], pixel[1]);
 	
@@ -22,6 +23,15 @@ Game.prototype.onPinch = function(pinchCenter) {
 	else if(obj != null && this._newObj == obj)
 		this._newObj.placeAt(pinchCenter);
 }
+
+Game.prototype.onCircle = function(gesture) {}
+Game.prototype.onKeyTap = function(gesture) {
+	console.log('onKeyTap: [' + gesture.position + ']');
+}
+Game.prototype.onScreenTap = function(gesture) {
+	console.log('onScreenTap: [' + gesture.position +']');
+}
+Game.prototype.onSwipe = function(gesture) {}
 
 Game.prototype._setup = function() {
 	this._addHandToCanvas();

@@ -2,6 +2,8 @@ function LeapMotionInputDevice() {
     this._leapPoints = [];
     this._gestureListeners = [];
 
+    this._pinchGesture = new PinchGesture();
+    
     this._startLeapLoop();
 }
 
@@ -25,9 +27,28 @@ LeapMotionInputDevice.prototype._startLeapLoop = function() {
 
 LeapMotionInputDevice.prototype._onFrame = function(frame) {
     this.resetLeapPoints();
-    if(frame.hands != null) {
-        this._publishHandData(frame);
-        this._notifyIfPinching(frame);
+    if(!frame.valid || frame.hands == null)
+    	return;
+    
+    this._publishHandData(frame);
+    this._updatePinchGesture(frame);
+    
+    if(frame.gestures.length > 0) {
+    	for(var i = 0; i < frame.gestures.length; i++) {
+    		var gesture = frame.gestures[i];
+    		var gestureType = gesture.type;
+    		
+    		if(gestureType == 'pinch')
+    			this._notifyForPinching(gesture);
+    		else if(gestureType == 'circle')
+    			this._notifyForCircling(gesture);
+    		else if(gestureType == 'keyTap')
+    			this._notifyForKeyTapping(gesture);
+    		else if(gestureType == 'screenTap')
+    			this._notifyForScreenTapping(gesture);
+    		else if(gestureType == 'swipe')
+    			this._notifyForSwiping(gesture);
+    	}
     }
 }
 
@@ -59,13 +80,21 @@ LeapMotionInputDevice.prototype._setLeapPoints = function(leapXYZ) {
     this._leapPoints.push(glXYZ[2]);
 }
 
-LeapMotionInputDevice.prototype._notifyIfPinching = function(frame) {
-    var hand = frame.hands[0];
+LeapMotionInputDevice.prototype._updatePinchGesture = function(frame) {
+	if(this._pinchGesture.state == 'stop')
+		this._pinchGesture = new PinchGesture();
+	
+	var hand = frame.hands[0];
     if(this._isPinching(hand)) {
-        var pinchCenter = this._getPinchCenter(hand);
-        for(var i = 0; i < this._gestureListeners.length; i++)
-            this._gestureListeners[i].onPinch(pinchCenter);
+    	if(this._pinchGesture.state == null)
+    		this._pinchGesture.state = 'start';
+    	else if(this._pinchGesture.state == 'start')
+    		this._pinchGesture.state = 'update';
+    	this._pinchGesture.position = this._getPinchCenter(hand);
+        frame.gestures.push(this._pinchGesture);
     }
+    else if(this._pinchGesture.state != null)
+    	this._pinchGesture.state = 'stop';
 }
 
 LeapMotionInputDevice.prototype._isPinching = function(hand) {
@@ -99,4 +128,29 @@ LeapMotionInputDevice.prototype._getGlXYZ = function(leapXYZ) {
     glXYZ[2] = 0.4993973239+0.0067629654*leapXYZ[2];
     
     return glXYZ;
+}
+
+LeapMotionInputDevice.prototype._notifyForPinching = function(gesture) {
+	for(var i = 0; i < this._gestureListeners.length; i++)
+        this._gestureListeners[i].onPinch(gesture);
+}
+
+LeapMotionInputDevice.prototype._notifyForCircling = function(gesture) {
+	for(var i = 0; i < this._gestureListeners.length; i++)
+        this._gestureListeners[i].onCircle(gesture);
+}
+
+LeapMotionInputDevice.prototype._notifyForKeyTapping = function(gesture) {
+	for(var i = 0; i < this._gestureListeners.length; i++)
+		this._gestureListeners[i].onKeyTap(gesture);
+}
+
+LeapMotionInputDevice.prototype._notifyForScreenTapping = function(gesture) {
+	for(var i = 0; i < this._gestureListeners.length; i++)
+		this._gestureListeners[i].onScreenTap(gesture);
+}
+
+LeapMotionInputDevice.prototype._notifyForSwiping = function(gesture) {
+	for(var i = 0; i < this._gestureListeners.length; i++)
+		this._gestureListeners[i].onSwipe(gesture);
 }
