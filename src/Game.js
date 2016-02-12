@@ -13,15 +13,15 @@ function Game(canvas, inputDevice) {
 
 Game.prototype.onGesture = function(gesture) {
 	var gestureType = gesture.type;
-	if(gestureType == 'pinch')
+	if(gestureType == "pinch")
 		this._onPinch(gesture);
-	else if(gestureType == 'circle')
+	else if(gestureType == "circle")
 		this._onCircle(gesture);
-	else if(gestureType == 'keyTap')
+	else if(gestureType == "keyTap")
 		this._onKeyTap(gesture);
-	else if(gestureType == 'screenTap')
+	else if(gestureType == "screenTap")
 		this._onScreenTap(gesture);
-	else if(gestureType == 'swipe')
+	else if(gestureType == "swipe")
 		this._onSwipe(gesture);
 }
 
@@ -57,9 +57,9 @@ Game.prototype._onPinch = function(gesture) {
 
 Game.prototype._onCircle = function(gesture) {}
 Game.prototype._onKeyTap = function(gesture) {
-	console.log('onKeyTap: [' + gesture.position + ']');
+	console.log("onKeyTap: [" + gesture.position + "]");
 }
 Game.prototype._onScreenTap = function(gesture) {
-	console.log('onScreenTap: [' + gesture.position +']');
+	console.log("onScreenTap: [" + gesture.position +"]");
 }
 Game.prototype._onSwipe = function(gesture) {}

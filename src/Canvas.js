@@ -1,9 +1,9 @@
 function Canvas(inputDevice, elementId) {
     if(arguments.length < 1) return;
-    this._elementId = elementId;
-    if(this._elementId == undefined)
-    	this._elementId = this._createCanvasContainerElement().id;
-    WebGLCanvas.call(this, this._elementId);
+    if(elementId == undefined)
+    	WebGLCanvas.call(this, this._createCanvasContainerElement().id);
+    else
+    	WebGLCanvas.call(this, this._elementId);
     
     this._inputDevice = inputDevice;
     this._drawableList = new DrawableList();
@@ -66,7 +66,7 @@ Canvas.prototype._requestFullScreen = function(element) {
     
     if(requestMethod) // Native full screen.
         requestMethod.call(element);
-    else if(typeof window.ActiveXObject !== "undefined") { // Older IE.
+    else if(window.ActiveXObject == undefined) { // Older IE.
         var wscript = new ActiveXObject("WScript.Shell");
         if(wscript !== null)
             wscript.SendKeys("{F11}");
