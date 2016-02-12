@@ -104,7 +104,7 @@ Text.prototype._createText = function() {
 	}
 	else {
 		text.push(this._string);
-		canvasX = this._getPowerOfTwo(context.measureText(string).width);
+		canvasX = this._getPowerOfTwo(context.measureText(this._string).width);
 	}
 	canvasY = this._getPowerOfTwo(this._textHeight*(text.length + 1));
 	if(this._squareTexture) {
