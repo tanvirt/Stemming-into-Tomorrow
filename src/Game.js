@@ -42,6 +42,7 @@ Game.prototype._addRectangleToCanvas = function() {
 	rectangle.addToCanvas();
 }
 
+// DEV: does not work when the canvas projector is changed
 Game.prototype._onPinch = function(gesture) {
 	var pinchCenter = gesture.position;
 	var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
