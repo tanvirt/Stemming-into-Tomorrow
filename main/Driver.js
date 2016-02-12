@@ -7,3 +7,14 @@ my_canvas.onDrag = function(event) {
 }
 
 var game = new Game(my_canvas, my_inputDevice);
+
+document.body.onkeypress = function(event) {
+	if(event.keyCode === 49)
+		my_canvas.useRegularProjector();
+	else if(event.keyCode === 50)
+		my_canvas.useRedCyanProjector();
+	else if(event.keyCode === 51)
+		my_canvas.useOculusProjector();
+	else if(event.keyCode === 52)
+		my_canvas.useSideBySideProjector();
+}

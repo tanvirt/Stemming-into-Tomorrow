@@ -2,11 +2,14 @@ function DrawableObject(canvas) {
 	if(arguments.length < 1) return;
 	WebGLObject.call(this, canvas);
 	
+	this._id = CanvasMath.generateUniqueString(10);;
 	this._canvas = canvas;
 	this._center = null;
 	
 	this.enablePicking();
 } DrawableObject.prototype = new WebGLObject();
+
+DrawableObject.prototype.getId = function() { return this._id; }
 
 // DEV: should "ready to draw" be determined only by xyz coordinates?
 DrawableObject.prototype.readyToDraw = function() {
@@ -19,6 +22,10 @@ DrawableObject.prototype.setCenter = function(xyz) { this._center = xyz; }
 
 DrawableObject.prototype.addToCanvas = function() {
 	this._canvas.addDrawableObject(this);
+}
+
+DrawableObject.prototype.removeFromCanvas = function() {
+	this._canvas.removeDrawableObject(this);
 }
 
 DrawableObject.prototype.drawSetup = function() {

@@ -1,5 +1,10 @@
 function CanvasMath() {}
 
+CanvasMath.generateUniqueString = function(length) {
+	var s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	return Array(length).join().split(',').map(function() { return s.charAt(Math.floor(Math.random() * s.length)); }).join('');
+}
+
 CanvasMath.getMidpoint = function(point1, point2) {
 	var midpoint = [];
     for(var i = 0; i < 3; i++)

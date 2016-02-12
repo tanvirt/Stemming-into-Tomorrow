@@ -21,6 +21,10 @@ Canvas.prototype.addDrawableObject = function(drawableObject) {
     this._drawableList.add(drawableObject);
 }
 
+Canvas.prototype.removeDrawableObject = function(drawableObject) {
+    this._drawableList.remove(drawableObject);
+}
+
 Canvas.prototype.getCurrentInputData = function() {
     return this._inputDevice.getPoints();
 }
