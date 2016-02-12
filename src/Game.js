@@ -11,27 +11,19 @@ function Game(canvas, inputDevice) {
 	this._setup();
 }
 
-Game.prototype.onPinch = function(gesture) {
-	var pinchCenter = gesture.position;
-	var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
-	var obj = this._canvas.getObjectAt(pixel[0], pixel[1]);
-	
-	if(obj != null && this._newObj != obj && obj.getCenter() != null) {
-		this._newObj = obj;
-		this._newObj.setCenter(obj.getCenter());
-	}
-	else if(obj != null && this._newObj == obj)
-		this._newObj.placeAt(pinchCenter);
+Game.prototype.onGesture = function(gesture) {
+	var gestureType = gesture.type;
+	if(gestureType == 'pinch')
+		this._onPinch(gesture);
+	else if(gestureType == 'circle')
+		this._onCircle(gesture);
+	else if(gestureType == 'keyTap')
+		this._onKeyTap(gesture);
+	else if(gestureType == 'screenTap')
+		this._onScreenTap(gesture);
+	else if(gestureType == 'swipe')
+		this._onSwipe(gesture);
 }
-
-Game.prototype.onCircle = function(gesture) {}
-Game.prototype.onKeyTap = function(gesture) {
-	console.log('onKeyTap: [' + gesture.position + ']');
-}
-Game.prototype.onScreenTap = function(gesture) {
-	console.log('onScreenTap: [' + gesture.position +']');
-}
-Game.prototype.onSwipe = function(gesture) {}
 
 Game.prototype._setup = function() {
 	this._addHandToCanvas();
@@ -49,3 +41,25 @@ Game.prototype._addRectangleToCanvas = function() {
 	rectangle.setDrawModeLines();
 	rectangle.addToCanvas();
 }
+
+Game.prototype._onPinch = function(gesture) {
+	var pinchCenter = gesture.position;
+	var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
+	var obj = this._canvas.getObjectAt(pixel[0], pixel[1]);
+	
+	if(obj != null && this._newObj != obj && obj.getCenter() != null) {
+		this._newObj = obj;
+		this._newObj.setCenter(obj.getCenter());
+	}
+	else if(obj != null && this._newObj == obj)
+		this._newObj.placeAt(pinchCenter);
+}
+
+Game.prototype._onCircle = function(gesture) {}
+Game.prototype._onKeyTap = function(gesture) {
+	console.log('onKeyTap: [' + gesture.position + ']');
+}
+Game.prototype._onScreenTap = function(gesture) {
+	console.log('onScreenTap: [' + gesture.position +']');
+}
+Game.prototype._onSwipe = function(gesture) {}

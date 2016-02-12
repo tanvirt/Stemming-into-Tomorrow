@@ -1,5 +1,22 @@
 function CanvasMath() {}
 
+CanvasMath.getMidpoint = function(point1, point2) {
+	var midpoint = [];
+    for(var i = 0; i < 3; i++)
+    	midpoint.push((point1[i] + point2[i])/2);
+    
+    return midpoint;
+}
+
+CanvasMath.leapPointToGlPoint = function(leapXYZ) {
+	var glXYZ = [];
+	glXYZ[0] = 0.0006130897+0.006277410*leapXYZ[0];
+	glXYZ[1] = -0.350110952+0.0042503121*leapXYZ[1];
+	glXYZ[2] = 0.4993973239+0.0067629654*leapXYZ[2];
+	
+	return glXYZ;
+}
+
 CanvasMath.degreesToRadians = function(degrees) {
 	return degrees*Math.PI/180;
 }
