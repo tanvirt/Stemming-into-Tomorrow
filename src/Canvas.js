@@ -35,17 +35,16 @@ Canvas.prototype._createCanvasContainerElement = function() {
 	container.style.bottom = "0px";
 	container.style.right = "0px";
 	
-	var self = this;
-	container.ondblclick = function() {
-		self._requestFullScreen(document.body);
-	}
-	
 	document.body.appendChild(container);
 	
 	return container;
 }
 
 Canvas.prototype.onSetup = function() {
+	var self = this;
+	this.getDiv().ondblclick = function() {
+		self._requestFullScreen(document.body);
+	}
     this.setBackgroundColor(0, 0, 0);
     this.setLoadingStatus(false);
 }
