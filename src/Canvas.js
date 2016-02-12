@@ -35,6 +35,11 @@ Canvas.prototype._createCanvasContainerElement = function() {
 	container.style.bottom = "0px";
 	container.style.right = "0px";
 	
+	var self = this;
+	container.ondblclick = function() {
+		self._requestFullScreen(document.body);
+	}
+	
 	document.body.appendChild(container);
 	
 	return container;
@@ -51,4 +56,20 @@ Canvas.prototype.onDraw = function() {
     if(this._room != null)
     	this._room.draw();
     this._drawableList.draw();
+}
+
+Canvas.prototype._requestFullScreen = function(element) {
+    // Supports most browsers and their versions.
+    var requestMethod = element.requestFullScreen || 
+    	element.webkitRequestFullScreen || 
+    	element.mozRequestFullScreen || 
+    	element.msRequestFullscreen;
+    
+    if(requestMethod) // Native full screen.
+        requestMethod.call(element);
+    else if(typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if(wscript !== null)
+            wscript.SendKeys("{F11}");
+    }
 }
