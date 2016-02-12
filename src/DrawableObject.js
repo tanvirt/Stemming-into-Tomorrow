@@ -2,7 +2,7 @@ function DrawableObject(canvas) {
 	if(arguments.length < 1) return;
 	WebGLObject.call(this, canvas);
 	
-	this._id = CanvasMath.generateUniqueString(10);;
+	this._id = CanvasMath.generateUniqueString(10);
 	this._canvas = canvas;
 	this._center = null;
 	
