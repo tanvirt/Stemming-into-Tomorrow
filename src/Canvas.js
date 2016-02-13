@@ -49,6 +49,9 @@ Canvas.prototype.onSetup = function() {
 	this.getDiv().ondblclick = function() {
 		self._requestFullScreen(document.body);
 	}
+	this.getDiv().ontouchend = function() {
+		self._requestFullScreen(document.body);
+	}
     this.setBackgroundColor(0, 0, 0);
     this.setLoadingStatus(false);
 }

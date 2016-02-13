@@ -27,7 +27,8 @@ Game.prototype.onGesture = function(gesture) {
 
 Game.prototype._setup = function() {
 	this._addHandToCanvas();
-	this._addRectangleToCanvas();
+	this._addTextCubeToCanvas();
+	//this._addRectangleToCanvas();
 }
 
 Game.prototype._addHandToCanvas = function() {
@@ -40,6 +41,22 @@ Game.prototype._addRectangleToCanvas = function() {
 	var rectangle = new Rectangle(this._canvas, center, 0.1, 0.1, 0.1);
 	rectangle.setDrawModeLines();
 	rectangle.addToCanvas();
+}
+
+Game.prototype._addTextCubeToCanvas = function() {
+	var text = new Text(my_canvas, "Hello World!");
+	text.setBackgroundColor("white");
+	text.setTextColor("black");
+	text.setTextHeight(60);
+	text.enableSquareTexture();
+	var textCube = new DrawableObject(my_canvas);
+	
+	textCube.setXYZ([-0.1,0.1,0.1, 0.1,0.1,0.1, -0.1,-0.1,0.1, 0.1,-0.1,0.1, -0.1,0.1,-0.1, 0.1,0.1,-0.1, -0.1,-0.1,-0.1, 0.1,-0.1,-0.1, 0.1,0.1,0.1, 0.1,-0.1,0.1, 0.1,0.1,-0.1, 0.1,-0.1,-0.1, -0.1,0.1,0.1, -0.1,-0.1,0.1, -0.1,0.1,-0.1, -0.1,-0.1,-0.1, -0.1,0.1,0.1, 0.1,0.1,0.1, -0.1,0.1,-0.1, 0.1,0.1,-0.1, -0.1,-0.1,0.1, 0.1,-0.1,0.1, -0.1,-0.1,-0.1, 0.1,-0.1,-0.1]);
+	textCube.setUV([0,1, 1,1, 0,0, 1,0, 1,1, 0,1, 1,0, 0,0, 0,1, 0,0, 1,1, 1,0, 1,1, 1,0, 0,1, 0,0, 0,0, 1,0, 0,1, 1,1, 1,0, 0,0, 1,1, 0,1]);
+	textCube.setTriangles([0,2,1, 1,2,3, 4,5,6, 6,5,7, 9,11,8, 8,11,10, 13,12,15, 15,12,14, 16,17,18, 18,17,19, 21,20,22, 21,22,23]);
+	textCube.setTexture(text.getTexture());
+	textCube.setCenter([0,0,0]);
+	textCube.addToCanvas();
 }
 
 // DEV: does not work when the canvas projector is changed
