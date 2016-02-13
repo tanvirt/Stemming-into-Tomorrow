@@ -1,5 +1,3 @@
-// TODO: object removal from graphic list, memory management
-
 function DrawableList() {
 	this._graphicList = [];
 }
@@ -11,6 +9,11 @@ DrawableList.prototype.add = function(drawableObject) {
 DrawableList.prototype.remove = function(drawableObject) {
 	if(drawableObject.getId() in this._graphicList)
 		delete this._graphicList[drawableObject.getId()];
+}
+
+DrawableList.prototype.getObject = function(id) {
+	if(id in this._graphicList)
+		return this._graphicList[id];
 }
 
 DrawableList.prototype.draw = function() {
