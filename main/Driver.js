@@ -22,7 +22,7 @@ document.body.onkeypress = function(event) {
 }
 
 window.onorientationchange = function() {
-	if(Mobile.isEnabled() && Mobile.isLandscape())
+	if(Mobile.isPhone() && Mobile.isLandscape())
 		my_canvas.useOculusProjector();
 	else
 		my_canvas.useRegularProjector();
