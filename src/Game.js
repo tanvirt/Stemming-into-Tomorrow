@@ -6,7 +6,7 @@ function Game(canvas, inputDevice) {
 	this._inputDevice = inputDevice;
 	this._inputDevice.addGestureListener(this);
 	
-	this._newObj = new DrawableObject(this._canvas); // Dev: created temp obj here
+	this._selectedObject = null;
 	
 	this._setup();
 }
@@ -55,7 +55,7 @@ Game.prototype._addTextCubeToCanvas = function() {
 	textCube.setUV([0,1, 1,1, 0,0, 1,0, 1,1, 0,1, 1,0, 0,0, 0,1, 0,0, 1,1, 1,0, 1,1, 1,0, 0,1, 0,0, 0,0, 1,0, 0,1, 1,1, 1,0, 0,0, 1,1, 0,1]);
 	textCube.setTriangles([0,2,1, 1,2,3, 4,5,6, 6,5,7, 9,11,8, 8,11,10, 13,12,15, 15,12,14, 16,17,18, 18,17,19, 21,20,22, 21,22,23]);
 	textCube.setTexture(text.getTexture());
-	textCube.setCenter([0,0,0]);
+	textCube.setCenter([0, 0, 0]);
 	textCube.addToCanvas();
 }
 
@@ -63,14 +63,9 @@ Game.prototype._addTextCubeToCanvas = function() {
 Game.prototype._onPinch = function(gesture) {
 	var pinchCenter = gesture.position;
 	var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
-	var obj = this._canvas.getObjectAt(pixel[0], pixel[1]);
-	
-	if(obj != null && this._newObj != obj && obj.getCenter() != null) {
-		this._newObj = obj;
-		this._newObj.setCenter(obj.getCenter());
-	}
-	else if(obj != null && this._newObj == obj)
-		this._newObj.placeAt(pinchCenter);
+	this._selectedObject = this._canvas.getObjectAt(pixel[0], pixel[1]);
+	if(this._selectedObject != null)
+		this._selectedObject.placeAt(pinchCenter);
 }
 
 Game.prototype._onCircle = function(gesture) {}
