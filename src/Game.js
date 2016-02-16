@@ -63,8 +63,9 @@ Game.prototype._addTextCubeToCanvas = function() {
 Game.prototype._onPinch = function(gesture) {
 	var pinchCenter = gesture.position;
 	var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
-	this._selectedObject = this._canvas.getObjectAt(pixel[0], pixel[1]);
-	if(this._selectedObject != null)
+	if(gesture.state == "start")
+		this._selectedObject = this._canvas.getObjectAt(pixel[0], pixel[1]);
+	else if(gesture.state == "update" && this._selectedObject != null)
 		this._selectedObject.placeAt(pinchCenter);
 }
 
