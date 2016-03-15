@@ -27,3 +27,25 @@ window.onorientationchange = function() {
 	else
 		my_canvas.useRegularProjector();
 }
+
+var server = new VNServer();
+
+server.onConnectionOpened = function() {
+	server.joinFirstAvailableSession(0, false);
+};
+
+server.onSelfJoinedSession = function(session) {
+	var message = server.currentSession.variable("message");
+	
+	message.onValueChanged = function(message, user) {
+		if(user.Id == server.me().Id)
+			console.log("me: " + message.value());
+		else console.log("other: " + message.value());
+	};
+	
+	document.body.onclick = function(event) {
+		message.set(CanvasMath.generateUniqueString(10));
+	}
+};
+
+server.connect("Experiential Learning");
