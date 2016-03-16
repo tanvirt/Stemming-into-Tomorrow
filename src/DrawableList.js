@@ -6,9 +6,9 @@ DrawableList.prototype.add = function(drawableObject) {
 	this._graphicList[drawableObject.getId()] = drawableObject;
 }
 
-DrawableList.prototype.remove = function(objectId) {
-	if(objectId in this._graphicList)
-		delete this._graphicList[objectId];
+DrawableList.prototype.remove = function(drawableObject) {
+	if(drawableObject.getId() in this._graphicList)
+		delete this._graphicList[drawableObject.getId()];
 }
 
 DrawableList.prototype.getObject = function(objectId) {
