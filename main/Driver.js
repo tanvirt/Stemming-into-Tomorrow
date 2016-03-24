@@ -1,6 +1,3 @@
-
-
-
 function Driver() {
 	var host = Host.toString();
 	var room = "Senior_Project/Stemming-into-Tomorrow/data/rooms/default";
