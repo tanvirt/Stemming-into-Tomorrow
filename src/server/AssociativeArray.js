@@ -46,7 +46,6 @@ AssociativeArray.prototype.remove = function(key) {
 AssociativeArray.prototype.initWithKeys = function(keyList) {
 	for(var i in keyList) {
 		this.put(keyList[i], "");
-		console.log(keyList[i]);
 	}
 }
 
