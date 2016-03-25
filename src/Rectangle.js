@@ -18,9 +18,19 @@ function Rectangle(canvas, centerXYZ, height, width, depth) {
 Rectangle.prototype._makeRectangle = function() {
 	this.setXYZ(this._generateXYZs());
 	this.setTriangles(this._generateTriangles());
-	this.setColors(this._generateColors());
+	this.setColor(1, 1, 1);
 	this.setUV(this._generateUVs());
 	this.setTexture(new WebGLTexture(this._canvas));
+}
+
+Rectangle.prototype.setColor = function(red, green, blue) {
+	var colors = [];
+	for(var i = 0; i < 24; i++) {
+		colors.push(red);
+		colors.push(green);
+		colors.push(blue);
+	}
+	this.setColors(colors);
 }
 
 Rectangle.prototype.enableShading = function() {
@@ -99,18 +109,6 @@ Rectangle.prototype._generateTriangles = function() {
     ];
 	
 	return triangles;
-}
-
-Rectangle.prototype._generateColors = function() {
-	var colors = [];
-	
-	for(var i = 0; i < 24; i++) {
-		colors.push(1);
-		colors.push(1);
-		colors.push(1);
-	}
-	
-	return colors;
 }
 
 Rectangle.prototype._generateUVs = function() {
