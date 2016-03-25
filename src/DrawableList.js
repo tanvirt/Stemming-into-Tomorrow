@@ -24,6 +24,7 @@ DrawableList.prototype.draw = function() {
 			return;
 		var graphic = this._graphicList[key];
 		graphic.drawSetup();
+		graphic.updateShader();
 		if(graphic.readyToDraw())
 			graphic.draw();
 	}

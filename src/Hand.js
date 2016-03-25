@@ -12,7 +12,6 @@ Hand.prototype.drawSetup = function() {
     this._updateHandPoints();
     if(this._handPoints.length == 0)
     	return;
-    this.updateShader();
 }
 
 Hand.prototype._makeHand = function() {

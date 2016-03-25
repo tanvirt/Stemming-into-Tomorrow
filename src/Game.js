@@ -27,7 +27,8 @@ Game.prototype.onGesture = function(gesture) {
 
 Game.prototype._setup = function() {
 	this._addHandToCanvas();
-	this._addTextCubeToCanvas();
+	this._addTextCubeToCanvas([1.5, -0.75, -3], "15");
+	this._addTextCubeToCanvas([-1.5, -0.75, -3], "7");
 	this._addRoomToCanvas();
 	this._addQuestionToCanvas();
 }
@@ -39,19 +40,20 @@ Game.prototype._addHandToCanvas = function() {
 
 Game.prototype._addRoomToCanvas = function() {
 	var center = [0, 0, 0];
-	var room = new Rectangle(this._canvas, center, 3, 4, 4);
+	var room = new Rectangle(this._canvas, center, 3, 4, 8);
+	room.setTexture("../data/textures/dark_wood.jpg");
 	room.addToCanvas();
 }
 
 Game.prototype._addQuestionToCanvas = function() {
 	var center = [0, 0, 0];
-	var text = "Which numbers are divisible by 5?";
+	var text = "Which numbers are divisible by 3?";
 	
 	var question = new DrawableObject(this._canvas);
 	question.setCenter(center);
 	question.setTexture(this._createText(text, 60).getTexture());
 	
-	question.setXYZ([-1.25,1.25,-2, 1.25,1.25,-2, -1.25,-1.25,-2, 1.25,-1.25,-2]);
+	question.setXYZ([-1.25,1.25,-4, 1.25,1.25,-4, -1.25,-1.25,-4, 1.25,-1.25,-4]);
 	question.setTriangles([0,2,1, 1,2,3]);
 	question.setUV([0,1, 1,1, 0,0, 1,0]);
 	
@@ -59,11 +61,8 @@ Game.prototype._addQuestionToCanvas = function() {
 	question.addToCanvas();
 }
 
-Game.prototype._addTextCubeToCanvas = function() {
-	var center = [1.7, -0.7, -1.5];
-	var text = "15"
-	
-	var textCube = new Rectangle(this._canvas, center, 0.5);
+Game.prototype._addTextCubeToCanvas = function(centerXYZ, text) {
+	var textCube = new Rectangle(this._canvas, centerXYZ, 0.5);
 	textCube.setTexture(this._createText(text, 60).getTexture());
 	textCube.enableShading();
 	textCube.enablePicking();
@@ -73,8 +72,8 @@ Game.prototype._addTextCubeToCanvas = function() {
 
 Game.prototype._createText = function(string, height) {
 	var text = new Text(this._canvas, string);
-	text.setBackgroundColor("white");
-	text.setTextColor("black");
+	text.setBackgroundColor("black");
+	text.setTextColor("white");
 	text.setTextHeight(height);
 	text.enableSquareTexture();
 	
