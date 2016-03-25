@@ -3,7 +3,7 @@ function Driver() {
 	var room = "Senior_Project/Stemming-into-Tomorrow/data/rooms/default";
 	var my_inputDevice = new LeapMotionInputDevice();
 	var my_canvas = new Canvas(my_inputDevice);
-	my_canvas.setRoom(host + room);
+	//my_canvas.setRoom(host + room);
 	
 	my_canvas.onDrag = function(event) {
 		my_canvas.getCamera().oneFingerRotate(event);
@@ -29,7 +29,7 @@ function Driver() {
 			my_canvas.useRegularProjector();
 	}
 	var variables = ["gameScore", "HandPoints", "Gestures"];
-	var server = new Server(variables, this);
+	var server = new Server(variables, this, "Fuck");
 } 
 
 
