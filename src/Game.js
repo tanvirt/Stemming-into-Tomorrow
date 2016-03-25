@@ -28,7 +28,8 @@ Game.prototype.onGesture = function(gesture) {
 Game.prototype._setup = function() {
 	this._addHandToCanvas();
 	this._addTextCubeToCanvas();
-	//this._addRectangleToCanvas();
+	this._addRoomToCanvas();
+	this._addQuestionToCanvas();
 }
 
 Game.prototype._addHandToCanvas = function() {
@@ -36,24 +37,48 @@ Game.prototype._addHandToCanvas = function() {
 	hand.addToCanvas();
 }
 
-Game.prototype._addRectangleToCanvas = function() {
+Game.prototype._addRoomToCanvas = function() {
 	var center = [0, 0, 0];
-	var rectangle = new Rectangle(this._canvas, center, 0.1, 0.1, 0.1);
-	rectangle.setDrawModeLines();
-	rectangle.addToCanvas();
+	var room = new Rectangle(this._canvas, center, 3, 4, 4);
+	room.addToCanvas();
+}
+
+Game.prototype._addQuestionToCanvas = function() {
+	var center = [0, 0, 0];
+	var text = "Which numbers are divisible by 5?";
+	
+	var question = new DrawableObject(this._canvas);
+	question.setCenter(center);
+	question.setTexture(this._createText(text, 60).getTexture());
+	
+	question.setXYZ([-1.25,1.25,-2, 1.25,1.25,-2, -1.25,-1.25,-2, 1.25,-1.25,-2]);
+	question.setTriangles([0,2,1, 1,2,3]);
+	question.setUV([0,1, 1,1, 0,0, 1,0]);
+	
+	question.translate(0, 0, .01);
+	question.addToCanvas();
 }
 
 Game.prototype._addTextCubeToCanvas = function() {
-	var text = new Text(this._canvas, "Hello World!");
+	var center = [1.7, -0.7, -1.5];
+	var text = "15"
+	
+	var textCube = new Rectangle(this._canvas, center, 0.5);
+	textCube.setTexture(this._createText(text, 60).getTexture());
+	textCube.enableShading();
+	textCube.enablePicking();
+	
+	textCube.addToCanvas();
+}
+
+Game.prototype._createText = function(string, height) {
+	var text = new Text(this._canvas, string);
 	text.setBackgroundColor("white");
 	text.setTextColor("black");
-	text.setTextHeight(60);
+	text.setTextHeight(height);
 	text.enableSquareTexture();
 	
-	var center = [0, 0, 0];
-	var textCube = new Rectangle(this._canvas, center, 0.5);
-	textCube.setTexture(text.getTexture());
-	textCube.addToCanvas();
+	return text;
 }
 
 // DEV: does not work when the canvas projector is changed

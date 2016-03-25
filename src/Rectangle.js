@@ -19,8 +19,12 @@ Rectangle.prototype._makeRectangle = function() {
 	this.setXYZ(this._generateXYZs());
 	this.setTriangles(this._generateTriangles());
 	this.setColors(this._generateColors());
-	this.setNormals(this._generateNormals());
 	this.setUV(this._generateUVs());
+	this.setTexture(new WebGLTexture(this._canvas));
+}
+
+Rectangle.prototype.enableShading = function() {
+	this.setNormals(this._generateNormals());
 }
 
 Rectangle.prototype._generateXYZs = function() {

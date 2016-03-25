@@ -16,7 +16,7 @@ CanvasMath.getMidpoint = function(point1, point2) {
 CanvasMath.leapPointToGlPoint = function(leapXYZ) {
 	var glXYZ = [];
 	glXYZ[0] = 0.0006130897+0.006277410*leapXYZ[0];
-	glXYZ[1] = -0.350110952+0.0042503121*leapXYZ[1];
+	glXYZ[1] = -0.850110952+0.0042503121*leapXYZ[1];
 	glXYZ[2] = 0.4993973239+0.0067629654*leapXYZ[2];
 	
 	return glXYZ;

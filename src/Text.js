@@ -41,9 +41,21 @@ Text.prototype.setTextHeight = function(height) {
 	this._create();
 }
 
-Text.prototype.setTextAlignment = function(alignment) {
+Text.prototype._setTextAlignment = function(alignment) {
 	this._textAlignment = alignment;
 	this._create();
+}
+
+Text.prototype.alignTextLeft = function() {
+	this._setTextAlignment("left");
+}
+
+Text.prototype.alignTextCenter = function() {
+	this._setTextAlignment("center");
+}
+
+Text.prototype.alignTextRight = function() {
+	this._setTextAlignment("right");
 }
 
 Text.prototype.setTextColor = function(color) {

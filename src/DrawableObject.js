@@ -5,8 +5,6 @@ function DrawableObject(canvas) {
 	this._id = CanvasMath.generateUniqueString(10);
 	this._canvas = canvas;
 	this._center = null;
-	
-	this.enablePicking();
 } DrawableObject.prototype = new WebGLObject();
 
 DrawableObject.prototype.getId = function() { return this._id; }
