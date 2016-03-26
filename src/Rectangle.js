@@ -1,5 +1,5 @@
 function Rectangle(canvas, centerXYZ, height, width, depth) {
-	if(arguments < 3) return;
+	if(arguments.length < 3) return;
 	DrawableObject.call(this, canvas);
 	
 	this.setCenter(centerXYZ);

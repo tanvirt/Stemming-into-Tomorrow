@@ -18,7 +18,7 @@ CanvasMath.leapPointToGlPoint = function(leapXYZ) {
 	var glXYZ = [];
 	glXYZ[0] = 0.0 + 0.006*leapXYZ[0];
 	glXYZ[1] = -0.9 + 0.004*leapXYZ[1];
-	glXYZ[2] = 0.0 + 0.007*leapXYZ[2];
+	glXYZ[2] = -0.9 + 0.007*leapXYZ[2];
 	
 	return glXYZ;
 }
@@ -48,25 +48,31 @@ CanvasMath.multiplyMat4Vec4 = function(mat, vec) {
 	];
 }
 
+// DEV: the rotated coordinates seem to be closer to the origin than previously
 // Angles must be in radians.
-CanvasMath.getRotatedXYZ = function(xyz, thetaX, thetaY, thetaZ) {
-	var rotatedXYZ = xyz;
+CanvasMath.getRotatedXYZ = function(xyz, originXYZ, thetaX, thetaY, thetaZ) {
+	var rotatedXYZ = [xyz[0] - originXYZ[0], xyz[1] - originXYZ[1], xyz[2] - originXYZ[2]];
 	if(thetaX != 0) {
-		var xRotationMatrix = CanvasMath._createXRotationMatrix(thetaX);
-		rotatedXYZ = CanvasMath.multiplyMat3Vec3(xRotationMatrix, rotatedXYZ);
+		rotatedXYZ[1] = Math.cos(thetaX)*rotatedXYZ[1] - Math.sin(thetaX)*rotatedXYZ[2];
+		rotatedXYZ[2] = Math.sin(thetaX)*rotatedXYZ[1] + Math.cos(thetaX)*rotatedXYZ[2];
 	}
 	if(thetaY != 0) {
-		var yRotationMatrix = CanvasMath._createYRotationMatrix(thetaY);
-		rotatedXYZ = CanvasMath.multiplyMat3Vec3(yRotationMatrix, rotatedXYZ);
+		rotatedXYZ[0] = Math.cos(thetaY)*rotatedXYZ[0] + Math.sin(thetaY)*rotatedXYZ[2];
+		rotatedXYZ[2] = -Math.sin(thetaY)*rotatedXYZ[0] + Math.cos(thetaY)*rotatedXYZ[2];
 	}
 	if(thetaZ != 0) {
-		var zRotationMatrix = CanvasMath._createZRotationMatrix(thetaZ);
-		rotatetdXYZ = CanvasMath.multiplyMat3Vec3(zRotationMatrix, rotatedXYZ);
+		rotatedXYZ[0] = Math.cos(thetaZ)*rotatedXYZ[0] - Math.sin(thetaZ)*rotatedXYZ[1];
+		rotatedXYZ[1] = Math.sin(thetaZ)*rotatedXYZ[0] + Math.cos(thetaZ)*rotatedXYZ[1];
 	}
+	rotatedXYZ = [rotatedXYZ[0] + originXYZ[0], rotatedXYZ[1] + originXYZ[1], rotatedXYZ[2] + originXYZ[2]];
 	return rotatedXYZ;
 }
 
-CanvasMath.distanceFromPointToPoint = function(x1, y1, x2, y2) {
+CanvasMath.distanceFromPointToPoint3D = function(x1, y1, z1, x2, y2, z2) {
+	return Math.sqrt( Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2) + Math.pow((z2 - z1), 2) );
+}
+
+CanvasMath.distanceFromPointToPoint2D = function(x1, y1, x2, y2) {
 	return Math.sqrt( Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2) );
 }
 
@@ -81,7 +87,7 @@ CanvasMath.distanceFromPointToLine = function(px, py, ax, ay, bx, by) {
 	var x = ax + lambda*(bx - ax);
 	var y = ay + lambda*(by - ay);
 	
-	return distanceFromPointToPoint(px, py, x, y);
+	return distanceFromPointToPoint2D(px, py, x, y);
 }
 
 CanvasMath.getProjectedPixelPoint = function(canvas, xyz) {
@@ -115,31 +121,4 @@ CanvasMath._projectionFrom3dTo2d = function(xyz, fieldOfView, height) {
 // Angle must be in radians.
 CanvasMath._focalLength = function(angle, height) {
 	return (height / 2)*( 1 / (Math.tan(angle / 2)) );
-}
-
-//Angle must be in radians.
-CanvasMath._createXRotationMatrix = function(theta) {
-	return [
-  		1,					0,					0,
-  		0,					Math.cos(theta),	-Math.sin(theta),
-  		0,					Math.sin(theta),	Math.cos(theta)
-  	];
-}
-
-// Angle must be in radians.
-CanvasMath._createYRotationMatrix = function(theta) {
-	return [
-  		Math.cos(theta),	0,					Math.sin(theta),
-  		0,					1,					0,
-  		-Math.sin(theta),	0,					Math.cos(theta)
-  	];
-}
-
-// Angle must be in radians.
-CanvasMath._createZRotationMatrix = function(theta) {
-	return [
-  		Math.cos(theta),	-Math.sin(theta),	0,
-  		Math.sin(theta),	Math.cos(theta),	0,
-  		0,					0,					1
-  	];
 }

@@ -3,7 +3,7 @@ function Canvas(inputDevice, elementId) {
     if(elementId == undefined)
     	WebGLCanvas.call(this, this._createCanvasContainerElement().id);
     else
-    	WebGLCanvas.call(this, this._elementId);
+    	WebGLCanvas.call(this, elementId);
     
     this._inputDevice = inputDevice;
     this._drawableList = new DrawableList();

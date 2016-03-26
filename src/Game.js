@@ -39,10 +39,36 @@ Game.prototype._addHandToCanvas = function() {
 }
 
 Game.prototype._addRoomToCanvas = function() {
+	var self = this;
 	var center = [0, 0, 0];
 	var room = new Rectangle(this._canvas, center, 3, 4, 8);
 	room.setTexture("../data/textures/dark_wood.jpg");
+	var startTime = new Date().getTime();
+	room.drawSetup = function() {
+		var currentTime = new Date().getTime();
+		var elapsedTime = currentTime - startTime;
+		if(elapsedTime%1000 < 20) // entered approximately every 1 second
+			this.setColors(self._getNewRoomColors());
+	}
+	
 	room.addToCanvas();
+}
+
+Game.prototype._getNewRoomColors = function() {
+	var colors = [];
+	for(var i = 0; i < 24; i++) {
+		if(i > 20) {
+			colors.push(Math.random());
+			colors.push(Math.random());
+			colors.push(Math.random());
+		}
+		else {
+			colors.push(1);
+			colors.push(1);
+			colors.push(1);
+		}
+	}
+	return colors;
 }
 
 Game.prototype._addQuestionToCanvas = function() {
@@ -57,15 +83,17 @@ Game.prototype._addQuestionToCanvas = function() {
 	question.setTriangles([0,2,1, 1,2,3]);
 	question.setUV([0,1, 1,1, 0,0, 1,0]);
 	
-	question.translate(0, 0, .01);
+	question.translate(0, 0, 0.0001);
 	question.addToCanvas();
 }
 
 Game.prototype._addTextCubeToCanvas = function(centerXYZ, text) {
 	var textCube = new Rectangle(this._canvas, centerXYZ, 0.5);
 	textCube.setTexture(this._createText(text, 60).getTexture());
-	textCube.enableShading();
 	textCube.enablePicking();
+	textCube.drawSetup = function() {
+		this.rotate(0.01, 0.01, 0.01);
+	}
 	
 	textCube.addToCanvas();
 }

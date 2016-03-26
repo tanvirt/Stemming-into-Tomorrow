@@ -47,12 +47,16 @@ DrawableObject.prototype.placeAt = function(xyz) {
 	this.translate(dx, dy, dz);
 }
 
+// DEV: rotation of xyz needs to be synchronized with normals
 DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
-	if(this._center != null)
-		this._rotateCenter(thetaX, thetaY, thetaZ);
+	if(this._center == null)
+		return;
+	this._rotateCenter(thetaX, thetaY, thetaZ);
 	var xyz = this._getRotatedXYZ(thetaX, thetaY, thetaZ);
 	this.setXYZ(xyz);
-	this._canvas.updatePickingMap();
+	
+	// DEV: WebGLCanvas.updatePickingMap() sometimes causes "maximum call stack exceeded errors"
+	//this._canvas.updatePickingMap();
 }
 
 DrawableObject.prototype._translateCenter = function(x, y, z) {
@@ -62,7 +66,7 @@ DrawableObject.prototype._translateCenter = function(x, y, z) {
 }
 
 DrawableObject.prototype._rotateCenter = function(thetaX, thetaY, thetaZ) {
-	this._center = CanvasMath.getRotatedXYZ(this._center, thetaX, thetaY, thetaZ);
+	this._center = CanvasMath.getRotatedXYZ(this._center, this._center, thetaX, thetaY, thetaZ);
 }
 
 DrawableObject.prototype._getTranslatedXYZ = function(x, y, z) {
@@ -81,11 +85,11 @@ DrawableObject.prototype._getTranslatedXYZ = function(x, y, z) {
 DrawableObject.prototype._getRotatedXYZ = function(thetaX, thetaY, thetaZ) {
 	var xyz = this.buffers["aXYZ"].data;
 	for(var i = 0; i < xyz.length; i += 3) {
-		var vec = [xyz[i], xyz[i + 1], xyz[i + 2]];
-		var rotatedVec = CanvasMath.getRotatedXYZ(vec, thetaX, thetaY, thetaZ);
-		xyz[i] = rotatedVec[0];
-		xyz[i + 1] = rotatedVec[1];
-		xyz[i + 2] = rotatedVec[2];
+		var vector = [xyz[i], xyz[i + 1], xyz[i + 2]];
+		var rotatedVector = CanvasMath.getRotatedXYZ(vector, this._center, thetaX, thetaY, thetaZ);
+		xyz[i] = rotatedVector[0];
+		xyz[i + 1] = rotatedVector[1];
+		xyz[i + 2] = rotatedVector[2];
 	}
 	return xyz;
 }
