@@ -27,10 +27,34 @@ Game.prototype.onGesture = function(gesture) {
 
 Game.prototype._setup = function() {
 	this._addHandToCanvas();
-	this._addTextCubeToCanvas([1.5, -0.75, -3], "15");
+	this._addReflectiveCubeToCanvas([0, -0.75, -3]);
+	this._addVideoCubeToCanvas([1.5, -0.75, -3]);
 	this._addTextCubeToCanvas([-1.5, -0.75, -3], "7");
 	this._addRoomToCanvas();
 	this._addQuestionToCanvas();
+}
+
+Game.prototype._addReflectiveCubeToCanvas = function(centerXYZ) {
+	var reflectiveCube = new Rectangle(this._canvas, centerXYZ, 0.5);
+	reflectiveCube.setTexture("http://www.visineat.com/js/img/textures/wood_tile.jpg");
+	reflectiveCube.enableDefaultReflection();
+	reflectiveCube.drawSetup = function() {
+		this.rotate(0.01, 0.01, 0.01);
+	}
+	reflectiveCube.addToCanvas();
+}
+
+Game.prototype._addVideoCubeToCanvas = function(centerXYZ) {
+	var videoCube = new Rectangle(this._canvas, centerXYZ, 0.5);
+	videoCube.disablePicking(false);
+	videoCube.setVideoTexture("../data/textures/abstract_light_hd.mp4");
+	videoCube.disableShading();
+	
+	videoCube.drawSetup = function() {
+		this.getTexture().update();
+		this.rotate(0.01, 0.01, 0.01);
+	}
+	videoCube.addToCanvas();
 }
 
 Game.prototype._addHandToCanvas = function() {
@@ -43,6 +67,8 @@ Game.prototype._addRoomToCanvas = function() {
 	var center = [0, 0, 0];
 	var room = new Rectangle(this._canvas, center, 3, 4, 8);
 	room.setTexture("../data/textures/dark_wood.jpg");
+	room.disableShading();
+	
 	var startTime = new Date().getTime();
 	room.drawSetup = function() {
 		var currentTime = new Date().getTime();
@@ -50,7 +76,6 @@ Game.prototype._addRoomToCanvas = function() {
 		if(elapsedTime%1000 < 20) // entered approximately every 1 second
 			this.setColors(self._getNewRoomColors());
 	}
-	
 	room.addToCanvas();
 }
 
@@ -78,30 +103,31 @@ Game.prototype._addQuestionToCanvas = function() {
 	var question = new DrawableObject(this._canvas);
 	question.setCenter(center);
 	question.setTexture(this._createText(text, 60).getTexture());
-	
-	question.setXYZ([-1.25,1.25,-4, 1.25,1.25,-4, -1.25,-1.25,-4, 1.25,-1.25,-4]);
+	question.setXYZ([-1.25,1.25,0, 1.25,1.25,0, -1.25,-1.25,0, 1.25,-1.25,0]);
 	question.setTriangles([0,2,1, 1,2,3]);
 	question.setUV([0,1, 1,1, 0,0, 1,0]);
+	question.disableShading();
 	
+	question.translate(0, 0, -4);
 	question.translate(0, 0, 0.0001);
 	question.addToCanvas();
 }
 
 Game.prototype._addTextCubeToCanvas = function(centerXYZ, text) {
 	var textCube = new Rectangle(this._canvas, centerXYZ, 0.5);
+	textCube.disablePicking(false);
 	textCube.setTexture(this._createText(text, 60).getTexture());
-	textCube.enablePicking();
+	
 	textCube.drawSetup = function() {
 		this.rotate(0.01, 0.01, 0.01);
 	}
-	
 	textCube.addToCanvas();
 }
 
 Game.prototype._createText = function(string, height) {
 	var text = new Text(this._canvas, string);
-	text.setBackgroundColor("black");
-	text.setTextColor("white");
+	text.setBackgroundColor("white");
+	text.setTextColor("black");
 	text.setTextHeight(height);
 	text.enableSquareTexture();
 	

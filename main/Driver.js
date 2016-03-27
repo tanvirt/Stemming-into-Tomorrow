@@ -1,12 +1,9 @@
 function Driver() {
-	var host = Host.toString();
-	var room = "Senior_Project/Stemming-into-Tomorrow/data/rooms/default";
 	var my_inputDevice = new LeapMotionInputDevice();
 	var my_canvas = new Canvas(my_inputDevice);
-	//my_canvas.setRoom(host + room);
 	
 	my_canvas.onDrag = function(event) {
-		my_canvas.getCamera().oneFingerRotate(event);
+		my_canvas.getCamera().oneFingerRotate(event, {radius : 2});
 	}
 	
 	var game = new Game(my_canvas, my_inputDevice);
@@ -29,7 +26,7 @@ function Driver() {
 			my_canvas.useRegularProjector();
 	}
 	var variables = ["gameScore", "HandPoints", "Gestures"];
-	var server = new Server(variables, this, "Fuck");
+	var server = new Server(variables, this, "MyUserName");
 } 
 
 

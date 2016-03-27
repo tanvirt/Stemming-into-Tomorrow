@@ -20,6 +20,7 @@ Rectangle.prototype._makeRectangle = function() {
 	this.setTriangles(this._generateTriangles());
 	this.setColor(1, 1, 1);
 	this.setUV(this._generateUVs());
+	this.setNormals(this._generateNormals());
 	this.setTexture(new WebGLTexture(this._canvas));
 }
 
@@ -31,10 +32,6 @@ Rectangle.prototype.setColor = function(red, green, blue) {
 		colors.push(blue);
 	}
 	this.setColors(colors);
-}
-
-Rectangle.prototype.enableShading = function() {
-	this.setNormals(this._generateNormals());
 }
 
 Rectangle.prototype._generateXYZs = function() {

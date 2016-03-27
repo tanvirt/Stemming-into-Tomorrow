@@ -59,6 +59,7 @@ Canvas.prototype.onSetup = function() {
 Canvas.prototype.onDraw = function() {
     var gl = this.getGL();
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    this.getCamera().translate([0,0,-2])
     this.getCamera().rotate(0.25, [1, 0, 0]);
     if(this._room != null)
     	this._room.draw();

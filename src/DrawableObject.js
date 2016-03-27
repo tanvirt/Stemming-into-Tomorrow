@@ -5,16 +5,57 @@ function DrawableObject(canvas) {
 	this._id = CanvasMath.generateUniqueString(10);
 	this._canvas = canvas;
 	this._center = null;
-	this.eventHandlerList = new AssociativeArray();
+	this.disablePicking(true);
 	
+	this.eventHandlerList = new AssociativeArray();
 } DrawableObject.prototype = new WebGLObject();
 
 DrawableObject.prototype.getId = function() { return this._id; }
 
 // DEV: should "ready to draw" be determined only by xyz coordinates?
 DrawableObject.prototype.readyToDraw = function() {
-	return this.buffers["aXYZ"] != undefined &&
-		this.buffers["aXYZ"].data.length > 0;
+	return 	this.buffers["aXYZ"] != undefined &&
+			this.buffers["aXYZ"].data.length > 0;
+}
+
+DrawableObject.prototype.enableDefaultReflection = function() {
+	var material = new WebGLMaterial(this._canvas);
+	//material.setSpecularColor([1,1,1]);
+	//material.setSpecularExponent(10);
+	material.setMatCap("http://www.visineat.com/js/img/matcap/matcap3.jpg");
+	material.setReflection("http://www.visineat.com/js/img/hdri/country1.jpg");
+	material.setReflectionColor([0.2,0.1,0.1]);
+	
+	this.setMaterial(material);
+	//this.getShader().setLightingDirection([-0.5, 1, 1.5]);
+}
+
+DrawableObject.prototype.enableShading = function() {
+	this.getShader().useLighting(true);
+}
+
+DrawableObject.prototype.disableShading = function() {
+	this.getShader().useLighting(false);
+}
+
+DrawableObject.prototype.enableTexture = function() {
+	this.getShader().useTexture(true);
+}
+
+DrawableObject.prototype.disableTexture = function() {
+	this.getShader().useTexture(false);
+}
+
+DrawableObject.prototype.enableColors = function() {
+	this.getShader().useColors(true);
+}
+
+DrawableObject.prototype.disableColors = function() {
+	this.getShader().useColors(false);
+}
+
+DrawableObject.prototype.setColorMask = function(rgba) {
+	this.getShader().setColorMask(rgba);
 }
 
 DrawableObject.prototype.getCenter = function() { return this._center; }
@@ -57,6 +98,12 @@ DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
 	var xyz = this._getRotatedXYZ(thetaX, thetaY, thetaZ);
 	this.setXYZ(xyz);
 	
+	if(this.buffers["aNormal"] != undefined &&
+			this.buffers["aNormal"].data.length > 0) {
+		var normals = this._getRotatedNormals(thetaX, thetaY, thetaZ);
+		this.setNormals(normals);
+	}
+	
 	// DEV: WebGLCanvas.updatePickingMap() sometimes causes "maximum call stack exceeded errors"
 	//this._canvas.updatePickingMap();
 }
@@ -96,6 +143,19 @@ DrawableObject.prototype._getRotatedXYZ = function(thetaX, thetaY, thetaZ) {
 	return xyz;
 }
 
+DrawableObject.prototype._getRotatedNormals = function(thetaX, thetaY, thetaZ) {
+	var normals = this.buffers["aNormal"].data;
+	var center = [0, 0, 0];
+	for(var i = 0; i < normals.length; i += 3) {
+		var vector = [normals[i], normals[i + 1], normals[i + 2]];
+		var rotatedVector = CanvasMath.getRotatedXYZ(vector, center, thetaX, thetaY, thetaZ);
+		normals[i] = rotatedVector[0];
+		normals[i + 1] = rotatedVector[1];
+		normals[i + 2] = rotatedVector[2];
+	}
+	
+	return normals;
+}
 
 
 
