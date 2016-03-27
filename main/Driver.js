@@ -3,7 +3,7 @@ function Driver() {
 	var my_canvas = new Canvas(my_inputDevice);
 	
 	my_canvas.onDrag = function(event) {
-		my_canvas.getCamera().oneFingerRotate(event, {radius : 2});
+		my_canvas.getCamera().oneFingerRotate(event);
 	}
 	
 	var game = new Game(my_canvas, my_inputDevice);

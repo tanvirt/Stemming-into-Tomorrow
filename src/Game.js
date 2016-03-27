@@ -27,9 +27,9 @@ Game.prototype.onGesture = function(gesture) {
 
 Game.prototype._setup = function() {
 	this._addHandToCanvas();
-	this._addReflectiveCubeToCanvas([0, -0.75, -3]);
-	this._addVideoCubeToCanvas([1.5, -0.75, -3]);
-	this._addTextCubeToCanvas([-1.5, -0.75, -3], "7");
+	this._addReflectiveCubeToCanvas([0, -0.75, -5]);
+	this._addVideoCubeToCanvas([1.5, -0.75, -5]);
+	this._addTextCubeToCanvas([-1.5, -0.75, -5], "7");
 	this._addRoomToCanvas();
 	this._addQuestionToCanvas();
 }
@@ -38,6 +38,8 @@ Game.prototype._addReflectiveCubeToCanvas = function(centerXYZ) {
 	var reflectiveCube = new Rectangle(this._canvas, centerXYZ, 0.5);
 	reflectiveCube.setTexture("http://www.visineat.com/js/img/textures/wood_tile.jpg");
 	reflectiveCube.enableDefaultReflection();
+	reflectiveCube.disablePicking(false);
+	
 	reflectiveCube.drawSetup = function() {
 		this.rotate(0.01, 0.01, 0.01);
 	}
@@ -65,7 +67,7 @@ Game.prototype._addHandToCanvas = function() {
 Game.prototype._addRoomToCanvas = function() {
 	var self = this;
 	var center = [0, 0, 0];
-	var room = new Rectangle(this._canvas, center, 3, 4, 8);
+	var room = new Rectangle(this._canvas, center, 3, 4, 12);
 	room.setTexture("../data/textures/dark_wood.jpg");
 	room.disableShading();
 	
@@ -108,7 +110,7 @@ Game.prototype._addQuestionToCanvas = function() {
 	question.setUV([0,1, 1,1, 0,0, 1,0]);
 	question.disableShading();
 	
-	question.translate(0, 0, -4);
+	question.translate(0, 0, -6);
 	question.translate(0, 0, 0.0001);
 	question.addToCanvas();
 }
