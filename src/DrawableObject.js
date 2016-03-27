@@ -5,6 +5,8 @@ function DrawableObject(canvas) {
 	this._id = CanvasMath.generateUniqueString(10);
 	this._canvas = canvas;
 	this._center = null;
+	this.eventHandlerList = new AssociativeArray();
+	
 } DrawableObject.prototype = new WebGLObject();
 
 DrawableObject.prototype.getId = function() { return this._id; }
@@ -92,4 +94,43 @@ DrawableObject.prototype._getRotatedXYZ = function(thetaX, thetaY, thetaZ) {
 		xyz[i + 2] = rotatedVector[2];
 	}
 	return xyz;
+}
+
+
+
+
+
+
+
+
+
+
+//TODO add some type of dispatcher for the below to use
+DrawableObject.prototype.addListener = function(eventType, eventHandler) {
+	EventDispatcher.register(eventType, this);  //TODO
+	this._addEventHandlerToList(eventType, eventHandler);
+}
+
+//The below is called by the drawable list????
+DrawableObject.prototype.interact = function(eventType, drawableObject) {
+	this._getEventHandler.handle(this, drawableObject);
+	
+	//Maybe... Huh???? what if the above destroys the drawableObject...... Template Method....???
+	drawableObject.interact(eventType, this);
+}
+
+DrawableObject.prototype._getEventHandler = function(eventType) {
+	if(this._eventExists(eventType))
+		return this.eventHandlerList.get(key);
+	else
+		console.log("EventHandler for type: " + key + " does not exist! :(");
+	return null;
+}
+
+DrawableObject.prototype._addEventHandlerToList = function(eventType, eventHandler) {
+	this.eventHandlerList.put(eventType, eventHandler);
+}
+
+DrawableObject.prototype._eventExists = function(eventType) {
+	return this.eventHandlerList.containsKey(eventType);
 }

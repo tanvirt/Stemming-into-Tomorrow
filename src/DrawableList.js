@@ -29,3 +29,7 @@ DrawableList.prototype.draw = function() {
 			graphic.draw();
 	}
 }
+
+DrawableList.prototype.acceptDrawableUpdate = function(DrawableObject) {
+	//Maybe for events
+}
