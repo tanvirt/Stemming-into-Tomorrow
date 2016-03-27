@@ -8,7 +8,7 @@ function EventHandler(eventHandlingFunction) {
 	this._initDynamicFunction(eventHandlingFunction);
 }
 
-EventHandler.prototype.handle(DrawableObject) {
+EventHandler.prototype.handle = function(DrawableObject) {
 	this._dynamicFunction(sourceDrawable, targetDrawable);
 }
 
