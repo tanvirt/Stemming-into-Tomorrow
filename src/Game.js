@@ -102,7 +102,7 @@ Game.prototype._addQuestionToCanvas = function() {
 	
 	var question = new DrawableObject(this._canvas);
 	question.setCenter(center);
-	question.setTexture(this._createText(text, 60).getTexture());
+	question.setTexture(this._createWhiteText(text, 60).getTexture());
 	question.setXYZ([-1.25,1.25,0, 1.25,1.25,0, -1.25,-1.25,0, 1.25,-1.25,0]);
 	question.setTriangles([0,2,1, 1,2,3]);
 	question.setUV([0,1, 1,1, 0,0, 1,0]);
@@ -116,7 +116,7 @@ Game.prototype._addQuestionToCanvas = function() {
 Game.prototype._addTextCubeToCanvas = function(centerXYZ, text) {
 	var textCube = new Rectangle(this._canvas, centerXYZ, 0.5);
 	textCube.disablePicking(false);
-	textCube.setTexture(this._createText(text, 60).getTexture());
+	textCube.setTexture(this._createBlackText(text, 60).getTexture());
 	
 	textCube.drawSetup = function() {
 		this.rotate(0.01, 0.01, 0.01);
@@ -124,10 +124,20 @@ Game.prototype._addTextCubeToCanvas = function(centerXYZ, text) {
 	textCube.addToCanvas();
 }
 
-Game.prototype._createText = function(string, height) {
+Game.prototype._createBlackText = function(string, height) {
 	var text = new Text(this._canvas, string);
 	text.setBackgroundColor("white");
 	text.setTextColor("black");
+	text.setTextHeight(height);
+	text.enableSquareTexture();
+	
+	return text;
+}
+
+Game.prototype._createWhiteText = function(string, height) {
+	var text = new Text(this._canvas, string);
+	text.setBackgroundColor("black");
+	text.setTextColor("white");
 	text.setTextHeight(height);
 	text.enableSquareTexture();
 	
