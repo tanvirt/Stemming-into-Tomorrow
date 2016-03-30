@@ -110,14 +110,14 @@ DrawableObject.prototype.scale = function(width, height, depth) {
 
 
 //TODO add some type of dispatcher for the below to use
-DrawableObject.prototype.addListener = function(eventType, eventHandler) {
+DrawableObject.prototype.addEventListener = function(eventType, eventHandler) {
 	EventDispatcher.register(eventType, this);  //TODO
 	this._addEventHandlerToList(eventType, eventHandler);
 }
 
 //The below is called by the drawable list????
-DrawableObject.prototype.interact = function(eventType, drawableObject) {
-	this._getEventHandler.handle(this, drawableObject);
+DrawableObject.prototype.interact = function(event, drawableObject) {
+	this._getEventHandler(event).handle(this, drawableObject);
 	
 	//Maybe... Huh???? what if the above destroys the drawableObject...... Template Method....???
 	drawableObject.interact(eventType, this);
@@ -138,3 +138,5 @@ DrawableObject.prototype._addEventHandlerToList = function(eventType, eventHandl
 DrawableObject.prototype._eventExists = function(eventType) {
 	return this.eventHandlerList.containsKey(eventType);
 }
+
+drawable.addEventListener(new CollisionEvent(), new EventHandler());

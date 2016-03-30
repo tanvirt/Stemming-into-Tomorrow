@@ -17,15 +17,18 @@ EventDispatcher.prototype.removeEventListener = function(eventType, listener) {
 	this._replaceEventListenerBin(eventType, eventBin);
 }
 
-EventDispatcher.prototype.dispatch = function(eventType) {
+EventDispatcher.prototype.checkForEvents = function() {
+	//find events happening....
+}
+
+EventDispatcher.prototype.dispatch = function(eventType, source, target) {
 	//How to find the objects that are interacting????
 	//Maybe different way??
 }
 
-
-
-
-
+EventDispatcher.prototype.fireEvent = function(event) {
+	
+}
 
 
 
