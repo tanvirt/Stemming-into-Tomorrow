@@ -1,6 +1,6 @@
 function DrawableObject(canvas) {
 	if(arguments.length < 1) return;
-	WebGLObject.call(this, canvas);
+	GLObject.call(this, canvas);
 	
 	this._id = CanvasMath.generateUniqueString(10);
 	this._canvas = canvas;
@@ -10,8 +10,10 @@ function DrawableObject(canvas) {
 	this._position = [0, 0, 0];
 	this._scale = [1, 1, 1];
 	
+	this._boundingBox;
+	
 	this.eventHandlerList = new AssociativeArray();
-} DrawableObject.prototype = new WebGLObject();
+} DrawableObject.prototype = new GLObject();
 
 DrawableObject.prototype.getId = function() { return this._id; }
 
@@ -22,7 +24,7 @@ DrawableObject.prototype.readyToDraw = function() {
 }
 
 DrawableObject.prototype.enableDefaultReflection = function(reflectionImage) {
-	var material = new WebGLMaterial(this._canvas);
+	var material = new GLMaterial(this._canvas);
 	//material.setSpecularColor([1,1,1]);
 	//material.setSpecularExponent(10);
 	material.setMatCap("http://www.visineat.com/js/img/matcap/matcap3.jpg");
@@ -139,4 +141,4 @@ DrawableObject.prototype._eventExists = function(eventType) {
 	return this.eventHandlerList.containsKey(eventType);
 }
 
-drawable.addEventListener(new CollisionEvent(), new EventHandler());
+//drawable.addEventListener(new CollisionEvent(), new EventHandler());

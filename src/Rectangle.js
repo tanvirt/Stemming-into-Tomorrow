@@ -20,7 +20,7 @@ Rectangle.prototype._makeRectangle = function() {
 	this.setColor(1, 1, 1);
 	this.setUV(this._generateUVs());
 	this.setNormals(this._generateNormals());
-	this.setTexture(new WebGLTexture(this._canvas));
+	this.setTexture(new GLTexture(this._canvas));
 }
 
 Rectangle.prototype.setColor = function(red, green, blue) {
