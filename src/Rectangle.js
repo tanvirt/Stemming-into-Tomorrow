@@ -1,8 +1,7 @@
-function Rectangle(canvas, centerXYZ, height, width, depth) {
-	if(arguments.length < 3) return;
+function Rectangle(canvas, height, width, depth) {
+	if(arguments.length < 2) return;
 	DrawableObject.call(this, canvas);
 	
-	this.setCenter(centerXYZ);
 	this._height = height;
 	this._width = width;
 	this._depth = depth;
@@ -35,51 +34,47 @@ Rectangle.prototype.setColor = function(red, green, blue) {
 }
 
 Rectangle.prototype._generateXYZs = function() {
-	var centerX = this.getCenter()[0];
-	var centerY = this.getCenter()[1];
-	var centerZ = this.getCenter()[2];
-	
 	var halfWidth = this._width/2;
 	var halfHeight = this._height/2;
 	var halfDepth = this._depth/2;
 	
 	var xyz = [
-	    // back face
-		centerX - halfWidth, centerY + halfHeight, centerZ + halfDepth,
-		centerX + halfWidth, centerY + halfHeight, centerZ + halfDepth,
-		centerX - halfWidth, centerY - halfHeight, centerZ + halfDepth,
-		centerX + halfWidth, centerY - halfHeight, centerZ + halfDepth,
-		
-		// front face
-		centerX - halfWidth, centerY + halfHeight, centerZ - halfDepth,
-		centerX + halfWidth, centerY + halfHeight, centerZ - halfDepth,
-		centerX - halfWidth, centerY - halfHeight, centerZ - halfDepth,
-		centerX + halfWidth, centerY - halfHeight, centerZ - halfDepth,
-		
-		// right face
-		centerX + halfWidth, centerY + halfHeight, centerZ + halfDepth,
-		centerX + halfWidth, centerY - halfHeight, centerZ + halfDepth,
-		centerX + halfWidth, centerY + halfHeight, centerZ - halfDepth,
-		centerX + halfWidth, centerY - halfHeight, centerZ - halfDepth,
-		
-		// left face
-		centerX - halfWidth, centerY + halfHeight, centerZ + halfDepth,
-		centerX - halfWidth, centerY - halfHeight, centerZ + halfDepth,
-		centerX - halfWidth, centerY + halfHeight, centerZ - halfDepth,
-		centerX - halfWidth, centerY - halfHeight, centerZ - halfDepth,
-	
-		// top face
-		centerX - halfWidth, centerY + halfHeight, centerZ + halfDepth,
-		centerX + halfWidth, centerY + halfHeight, centerZ + halfDepth,
-		centerX - halfWidth, centerY + halfHeight, centerZ - halfDepth,
-		centerX + halfWidth, centerY + halfHeight, centerZ - halfDepth,
-		
-		// bottom face
-		centerX - halfWidth, centerY - halfHeight, centerZ + halfDepth,
-		centerX + halfWidth, centerY - halfHeight, centerZ + halfDepth,
-		centerX - halfWidth, centerY - halfHeight, centerZ - halfDepth,
-		centerX + halfWidth, centerY - halfHeight, centerZ - halfDepth
-	];
+   	    // back face
+   		-halfWidth, halfHeight, halfDepth,
+   		halfWidth, halfHeight, halfDepth,
+   		-halfWidth, -halfHeight, halfDepth,
+   		halfWidth, -halfHeight, halfDepth,
+   		
+   		// front face
+   		-halfWidth, halfHeight, -halfDepth,
+   		halfWidth, halfHeight, -halfDepth,
+   		-halfWidth, -halfHeight, -halfDepth,
+   		halfWidth, -halfHeight, -halfDepth,
+   		
+   		// right face
+   		halfWidth, halfHeight, halfDepth,
+   		halfWidth, -halfHeight, halfDepth,
+   		halfWidth, halfHeight, -halfDepth,
+   		halfWidth, -halfHeight, -halfDepth,
+   		
+   		// left face
+   		-halfWidth, halfHeight, halfDepth,
+   		-halfWidth, -halfHeight, halfDepth,
+   		-halfWidth, halfHeight, -halfDepth,
+   		-halfWidth, -halfHeight, -halfDepth,
+   	
+   		// top face
+   		-halfWidth, halfHeight, halfDepth,
+   		halfWidth, halfHeight, halfDepth,
+   		-halfWidth, halfHeight, -halfDepth,
+   		halfWidth, halfHeight, -halfDepth,
+   		
+   		// bottom face
+   		-halfWidth, -halfHeight, halfDepth,
+   		halfWidth, -halfHeight, halfDepth,
+   		-halfWidth, -halfHeight, -halfDepth,
+   		halfWidth, -halfHeight, -halfDepth
+   	];
 	
 	return xyz;
 }

@@ -6,7 +6,7 @@ function Canvas(inputDevice, elementId) {
     	WebGLCanvas.call(this, elementId);
     
     this._inputDevice = inputDevice;
-    this._drawableList = new DrawableList();
+    this._drawableList = new DrawableList(this.getCamera());
     this._room = null;
     
     this.start();
