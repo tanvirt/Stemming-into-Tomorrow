@@ -18,32 +18,28 @@ function Text(canvas, string) {
 }
 
 Text.prototype.getTexture = function() { 
+	this._create();
 	return this._texture;
 }
 
 Text.prototype.setMaxWidth = function(width) {
 	this._maxWidth = width;
-	this._create();
 }
 
 Text.prototype.enableSquareTexture = function() {
 	this._squareTexture = true;
-	this._create();
 }
 
 Text.prototype.disableSquareTexture = function() {
 	this._squareTexture = false;
-	this._create();
 }
 
 Text.prototype.setTextHeight = function(height) {
 	this._textHeight = height;
-	this._create();
 }
 
 Text.prototype._setTextAlignment = function(alignment) {
 	this._textAlignment = alignment;
-	this._create();
 }
 
 Text.prototype.alignTextLeft = function() {
@@ -60,17 +56,14 @@ Text.prototype.alignTextRight = function() {
 
 Text.prototype.setTextColor = function(color) {
 	this._textColor = color;
-	this._create();
 }
 
 Text.prototype.setFontFamily = function(font) {
 	this._fontFamily = font;
-	this._create();
 }
 
 Text.prototype.setBackgroundColor = function(color) {
 	this._backgroundColor = color;
-	this._create();
 }
 
 Text.prototype._create = function() {
