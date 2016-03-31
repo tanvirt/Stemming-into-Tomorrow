@@ -39,13 +39,13 @@ Rectangle.prototype._generateXYZs = function() {
 	var halfDepth = this._depth/2;
 	
 	var xyz = [
-   	    // back face
+   	    // front face
    		-halfWidth, halfHeight, halfDepth,
    		halfWidth, halfHeight, halfDepth,
    		-halfWidth, -halfHeight, halfDepth,
    		halfWidth, -halfHeight, halfDepth,
    		
-   		// front face
+   		// back face
    		-halfWidth, halfHeight, -halfDepth,
    		halfWidth, halfHeight, -halfDepth,
    		-halfWidth, -halfHeight, -halfDepth,
@@ -81,10 +81,10 @@ Rectangle.prototype._generateXYZs = function() {
 
 Rectangle.prototype._generateTriangles = function() {
 	var triangles = [
-	    // back face
+	    // front face
     	0,2,1,		1,2,3, 
     	
-    	// front face
+    	// back face
     	4,5,6,		6,5,7, 
     	
     	// right face
@@ -105,10 +105,10 @@ Rectangle.prototype._generateTriangles = function() {
 
 Rectangle.prototype._generateUVs = function() {
 	var uv = [
-		// back face
+		// front face
     	0,1, 1,1, 0,0, 1,0, 
     	
-    	// front face
+    	// back face
     	1,1, 0,1, 1,0, 0,0, 
     	
     	// right face
@@ -129,10 +129,10 @@ Rectangle.prototype._generateUVs = function() {
 
 Rectangle.prototype._generateNormals = function() {
 	var normals = [
-		// back face
+		// front face
 		0,0,1, 0,0,1, 0,0,1, 0,0,1, 
 		
-		// front face
+		// back face
 		0,0,-1, 0,0,-1, 0,0,-1, 0,0,-1, 
 		
 		// right face

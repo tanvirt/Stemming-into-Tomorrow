@@ -28,6 +28,7 @@ BoundingBox.prototype._createHalfExtents = function(width, height, depth) {
 	return halfExtents;
 }
 
+BoundingBox.prototype.getPosition = function() { return this._position; }
 BoundingBox.prototype.setPosition = function(xyz) { this._position = xyz; }
 
 BoundingBox.prototype.recalculate = function(rotation) {
@@ -54,48 +55,70 @@ BoundingBox.prototype.intersects = function(boundingBox) {
 BoundingBox.prototype._createView = function() {
 	var view = new DrawableObject(this._canvas);
 	
-	var halfWidth = this._halfExtents[0];
-	var halfHeight = this._halfExtents[1];
-	var halfDepth = this._halfExtents[2];
+	view.setXYZ(this._generateXYZ(this._halfExtents));
+	view.setTriangles(this._generateTriangles());
+	view.setColors(this._generateColors());
+	view.setDrawModeLines();
+	
+	return view;
+}
+
+BoundingBox.prototype._generateXYZ = function(halfExtents) {
+	var halfWidth = halfExtents[0];
+	var halfHeight = halfExtents[1];
+	var halfDepth = halfExtents[2];
 	
 	var xyz = [
-  	    // back face
+  	    // front face
   		-halfWidth, halfHeight, halfDepth,
   		halfWidth, halfHeight, halfDepth,
   		-halfWidth, -halfHeight, halfDepth,
   		halfWidth, -halfHeight, halfDepth,
   		
-  		// front face
+  		// back face
   		-halfWidth, halfHeight, -halfDepth,
   		halfWidth, halfHeight, -halfDepth,
   		-halfWidth, -halfHeight, -halfDepth,
   		halfWidth, -halfHeight, -halfDepth
   	];
 	
-	var lines = [
-		// back face
-		0,1, 1,3, 3,2, 2,0,
-		
-		// front face
-		4,5, 5,7, 7,6, 6,4,
-		
-		// connect front and back faces
-		0,4, 1,5, 3,7, 2,6
-	];
+	return xyz;
+}
+
+BoundingBox.prototype._generateTriangles = function() {
+	var triangles = [
+ 		// front face
+ 		0,2,1, 1,2,3,
+ 		
+ 		// back face
+ 		4,5,6, 6,5,7,
+ 		
+ 		// right face
+ 		1,3,5, 5,3,7,
+ 		
+ 		// left face
+ 		4,6,0, 0,6,2,
+ 		
+ 		// top face
+ 		4,0,5, 5,0,1,
+ 		
+ 		// bottom face
+ 		2,6,3, 3,6,7
+ 	];
 	
+	return triangles;
+}
+
+BoundingBox.prototype._generateColors = function() {
 	var colors = [
-		// back face
-		1,1,1, 0,0,1, 0,1,0, 0,1,1, 
-		
-		// front face
-		1,0,0, 1,0,1, 1,1,0, 1,1,1
-	];
+  		// front face
+  		1,1,1, 0,0,1, 0,1,0, 0,1,1, 
+  		
+  		// back face
+  		1,0,0, 1,0,1, 1,1,0, 1,1,1
+  	];
 	
-	view.setXYZ(xyz);
-	view.setLines(lines);
-	view.setColors(colors);
-	
-	return view;
+	return colors;
 }
 
 BoundingBox.prototype._updateView = function() {
