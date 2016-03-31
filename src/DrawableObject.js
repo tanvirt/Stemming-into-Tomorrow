@@ -10,10 +10,28 @@ function DrawableObject(canvas) {
 	this._position = [0, 0, 0];
 	this._scale = [1, 1, 1];
 	
-	this._boundingBox;
+	this._boundingBox = null;
 	
 	this.eventHandlerList = new AssociativeArray();
 } DrawableObject.prototype = new GLObject();
+
+DrawableObject.prototype.getBoundingBox = function() { return this._boundingBox; }
+
+DrawableObject.prototype.intersects = function(drawableObject) {
+	return this._boundingBox.intersects(drawableObject.getBoundingBox());
+}
+
+DrawableObject.prototype.drawBoundingBox = function() {
+	if(this._boundingBox != null)
+		this._boundingBox.draw();
+}
+
+DrawableObject.prototype.addBoundingBox = function(height, width, depth) {
+	this._boundingBox = new BoundingBox(this._canvas, height, width, depth);
+	this._boundingBox.setPosition(this._position);
+	this._boundingBox.scale(this._scale);
+	this._boundingBox.recalculate(this._rotation);
+}
 
 DrawableObject.prototype.getId = function() { return this._id; }
 
@@ -73,11 +91,16 @@ DrawableObject.prototype.removeFromCanvas = function() {
 
 DrawableObject.prototype.drawSetup = function() {} // hook operation
 
-DrawableObject.prototype.setPosition = function(xyz) { this._position = xyz; }
-
 DrawableObject.prototype.getRotation = function() { return this._rotation; }
 DrawableObject.prototype.getPosition = function() { return this._position; }
 DrawableObject.prototype.getScale = function() { return this._scale; }
+
+DrawableObject.prototype.setPosition = function(xyz) { 
+	this._position = xyz;
+	
+	if(this._boundingBox != null)
+		this._boundingBox.setPosition(this._position);
+}
 
 DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
 	this._rotation[0] += thetaX;
@@ -90,18 +113,27 @@ DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
 		this._rotation[1] = 2*Math.PI - this._rotation[1];
 	if(this._rotation[2] > 2*Math.PI)
 		this._rotation[2] = 2*Math.PI - this._rotation[2];
+	
+	if(this._boundingBox != null)
+		this._boundingBox.recalculate([thetaX, thetaY, thetaZ]);
 }
 
 DrawableObject.prototype.translate = function(x, y, z) {
 	this._position[0] += x;
 	this._position[1] += y;
 	this._position[2] += z;
+	
+	if(this._boundingBox != null)
+		this._boundingBox.setPosition(this._position);
 }
 
 DrawableObject.prototype.scale = function(width, height, depth) {
 	this._scale[0] *= width;
 	this._scale[1] *= height;
 	this._scale[2] *= depth;
+	
+	if(this._boundingBox != null)
+		this._boundingBox.scale([width, height, depth]);
 }
 
 

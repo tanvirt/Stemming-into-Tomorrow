@@ -31,22 +31,32 @@ DrawableList.prototype.draw = function() {
 }
 
 DrawableList.prototype._drawGraphic = function(graphic) {
-	var camera = this._camera;
-	camera.pushMatrix();
-		camera.translate(graphic.getPosition());
-		camera.rotate(graphic.getRotation()[0], [1, 0, 0]);
-		camera.rotate(graphic.getRotation()[1], [0, 1, 0]);
-		camera.rotate(graphic.getRotation()[2], [0, 0, 1]);
-		camera.translate([
-			-graphic.getPosition()[0], 
-			-graphic.getPosition()[1], 
-			-graphic.getPosition()[2]
-		]);
-		camera.scale(graphic.getScale());
-		camera.translate(graphic.getPosition());
+	this._camera.pushMatrix();
+		this._rotateGraphic(graphic);
+		this._scaleGraphic(graphic);
+		this._positionGraphic(graphic);
 		graphic.updateShader();
 		graphic.draw();
-	camera.popMatrix();
+	this._camera.popMatrix();
+}
+
+DrawableList.prototype._rotateGraphic = function(graphic) {
+	var position = graphic.getPosition();
+	var rotation = graphic.getRotation();
+	
+	this._camera.translate(position);
+	this._camera.rotate(rotation[0], [1, 0, 0]);
+	this._camera.rotate(rotation[1], [0, 1, 0]);
+	this._camera.rotate(rotation[2], [0, 0, 1]);
+	this._camera.translate([-position[0], -position[1], -position[2]]);
+}
+
+DrawableList.prototype._scaleGraphic = function(graphic) {
+	this._camera.scale(graphic.getScale());
+}
+
+DrawableList.prototype._positionGraphic = function(graphic) {
+	this._camera.translate(graphic.getPosition());
 }
 
 DrawableList.prototype.acceptDrawableUpdate = function(DrawableObject) {
