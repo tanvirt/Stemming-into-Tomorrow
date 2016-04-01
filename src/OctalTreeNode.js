@@ -1,6 +1,6 @@
 function OctalTreeNode(boundingBox) {
 	this._children = new AssociativeArray();
-	this._leaf = null;
+	this._spacialObjectBucket = new AssociativeArray();
 	this._boundingBox = boundingBox;
 	this._initChildrenList();
 }
@@ -32,10 +32,10 @@ OctalTreeNode.prototype.remove = function(quadrant) {
 	this._children.replace(quadrant, "Empty");
 }
 
-OctalTreeNode.prototype.makeLeaf = function(leaf) {
-	this._leaf = leaf;
+OctalTreeNode.prototype.addLeaf = function(leaf) {
+	this._spacialObjectBucket.put(leaf.getKey(), leaf);
 }
 
-OctalTreeNode.prototype.getLeaf = function() {
-	return this._leaf;
+OctalTreeNode.prototype.getLeaf = function(leaf) {
+	return this._spacialObjectBucket.get(leaf.getKey());
 }
