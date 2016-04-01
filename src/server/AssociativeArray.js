@@ -67,3 +67,11 @@ AssociativeArray.prototype.getKeys = function() {
 	return keys;
 }
 
+AssociativeArray.prototype.values = function() {
+	var values = [];
+	for(var key in this._associativeArray)
+		if(this.containsKey(key))
+			values.push(this.get(key));
+	return values;
+}
+
