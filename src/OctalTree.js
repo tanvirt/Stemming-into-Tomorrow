@@ -1,18 +1,17 @@
 function OctalTree() {
 	this._root = new OctalTreeNode();
-	this._drawableObjectMap = new AssociativeArray();
+	this._spacialObjectMap = new AssociativeArray();
 }
 
-OctalTree.prototype.insert = function(drawableObject) {
-	this._drawableObjectMap.put(drawable.getID(), drawableObject);
-	//Add
+OctalTree.prototype.insert = function(leaf) {
+	this._spacialObjectMap.put(leaf.getKey(), leaf);
+	this._root.add(octalTreeNode);
 }
 
-OctalTree.prototype.remove = function(drawableObject) {
-	
+OctalTree.prototype.remove = function(leaf) {
+	this._spacialObjectMap.remove(leaf.getKey());
 }
 
-OctalTree.prototype.get = function(drawableObject) {
-	//DO THIS
+OctalTree.prototype.get = function(leaf) {
+	return this._spacialObjectMap.get(leaf.getKey());
 }
-

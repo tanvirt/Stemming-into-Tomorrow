@@ -1,6 +1,6 @@
-function OctalTreeNode(drawableObject) {
+function OctalTreeNode() {
 	this._children = new AssociativeArray();
-	this._drawableObject = null;
+	this._leaf = null;
 	this._initChildrenList();
 }
 
@@ -19,6 +19,10 @@ OctalTreeNode.prototype.getChildren = function() {
 	return this._children;
 }
 
+OctalTreeNode.prototype.addToLimb = function(leaf) {
+	//Setting Logic here...
+}
+
 OctalTreeNode.prototype.add = function(quadrant, octalTreeNode) {
 	this._children.replace(quadrant, treeNode); // Maybe no good
 }
@@ -27,10 +31,10 @@ OctalTreeNode.prototype.remove = function(quadrant) {
 	this._children.replace(quadrant, "Empty");
 }
 
-//TreeNode.prototype.setDrawable = function(drawableObject) {
-//	this._drawableObject = drawableObject;
-//}
-//
-//TreeNode.prototype.getDrawable = function() {
-//	return this._drawableObject;
-//}
+OctalTreeNode.prototype.makeLeaf = function(leaf) {
+	this._leaf = leaf;
+}
+
+OctalTreeNode.prototype.getLeaf = function() {
+	return this._leaf;
+}
