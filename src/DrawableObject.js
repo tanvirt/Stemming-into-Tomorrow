@@ -1,14 +1,41 @@
 function DrawableObject(canvas) {
 	if(arguments.length < 1) return;
-	WebGLObject.call(this, canvas);
+	GLObject.call(this, canvas);
 	
 	this._id = CanvasMath.generateUniqueString(10);
 	this._canvas = canvas;
-	this._center = null;
 	this.disablePicking(true);
 	
+	this._rotation = [0, 0, 0];
+	this._position = [0, 0, 0];
+	this._scale = [1, 1, 1];
+	
+	this._lastMoved = new Date().getTime();
+	this._velocity = 0;
+	this._direction = [0, 0, 0];
+	
+	this._boundingBox = null;
+	
 	this.eventHandlerList = new AssociativeArray();
-} DrawableObject.prototype = new WebGLObject();
+} DrawableObject.prototype = new GLObject();
+
+DrawableObject.prototype.getBoundingBox = function() { return this._boundingBox; }
+
+DrawableObject.prototype.intersects = function(drawableObject) {
+	return this._boundingBox.intersects(drawableObject.getBoundingBox());
+}
+
+DrawableObject.prototype.drawBoundingBox = function() {
+	if(this._boundingBox != null)
+		this._boundingBox.draw();
+}
+
+DrawableObject.prototype.addBoundingBox = function(height, width, depth) {
+	this._boundingBox = new BoundingBox(this._canvas, height, width, depth);
+	this._boundingBox.setPosition(this._position);
+	this._boundingBox.scale(this._scale);
+	this._boundingBox.recalculate(this._rotation);
+}
 
 DrawableObject.prototype.getId = function() { return this._id; }
 
@@ -18,12 +45,12 @@ DrawableObject.prototype.readyToDraw = function() {
 			this.buffers["aXYZ"].data.length > 0;
 }
 
-DrawableObject.prototype.enableDefaultReflection = function() {
-	var material = new WebGLMaterial(this._canvas);
+DrawableObject.prototype.enableDefaultReflection = function(reflectionImage) {
+	var material = new GLMaterial(this._canvas);
 	//material.setSpecularColor([1,1,1]);
 	//material.setSpecularExponent(10);
 	material.setMatCap("http://www.visineat.com/js/img/matcap/matcap3.jpg");
-	material.setReflection("http://www.visineat.com/js/img/hdri/country1.jpg");
+	material.setReflection(reflectionImage);
 	material.setReflectionColor([0.2,0.1,0.1]);
 	
 	this.setMaterial(material);
@@ -58,9 +85,6 @@ DrawableObject.prototype.setColorMask = function(rgba) {
 	this.getShader().setColorMask(rgba);
 }
 
-DrawableObject.prototype.getCenter = function() { return this._center; }
-DrawableObject.prototype.setCenter = function(xyz) { this._center = xyz; }
-
 DrawableObject.prototype.addToCanvas = function() {
 	this._canvas.addDrawableObject(this);
 }
@@ -69,94 +93,62 @@ DrawableObject.prototype.removeFromCanvas = function() {
 	this._canvas.removeDrawableObject(this);
 }
 
-DrawableObject.prototype.drawSetup = function() {}
+DrawableObject.prototype.drawSetup = function() {} // hook operation
+
+DrawableObject.prototype.getRotation = function() { return this._rotation; }
+DrawableObject.prototype.getPosition = function() { return this._position; }
+DrawableObject.prototype.getScale = function() { return this._scale; }
+DrawableObject.prototype.getVelocity = function() {	return this._velocity; }
+DrawableObject.prototype.getDirection = function() { return this._direction; }
+
+DrawableObject.prototype.setPosition = function(xyz) {
+	var changeInTime = new Date().getTime() - this._lastMoved;
+	var vector = CanvasMath.createVec3(this._position, xyz);
+	var magnitude = CanvasMath.getVec3Magnitude(vector);
+	
+	this._direction = CanvasMath.getDirectionVec3(vector, magnitude);
+	this._velocity = (magnitude/changeInTime)*1000; // distance per second
+	this._position = xyz;
+	this._lastMoved = new Date().getTime();
+	
+	if(this._boundingBox != null)
+		this._boundingBox.setPosition(this._position);
+}
+
+DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
+	this._rotation[0] += thetaX;
+	this._rotation[1] += thetaY;
+	this._rotation[2] += thetaZ;
+	
+	if(this._rotation[0] > 2*Math.PI)
+		this._rotation[0] = 2*Math.PI - this._rotation[0];
+	if(this._rotation[1] > 2*Math.PI)
+		this._rotation[1] = 2*Math.PI - this._rotation[1];
+	if(this._rotation[2] > 2*Math.PI)
+		this._rotation[2] = 2*Math.PI - this._rotation[2];
+	
+	if(this._boundingBox != null)
+		this._boundingBox.recalculate([thetaX, thetaY, thetaZ]);
+}
 
 DrawableObject.prototype.translate = function(x, y, z) {
-	if(this._center != null)
-		this._translateCenter(x, y, z);
-	var xyz = this._getTranslatedXYZ(x, y, z);
-	this.setXYZ(xyz);
-	this._canvas.updatePickingMap();
-}
-
-DrawableObject.prototype.placeAt = function(xyz) {
-	if(this._center == null)
-		return;
+	var xyz = [
+		this._position[0] + x,
+		this._position[1] + y,
+		this._position[2] + z
+	];
 	
-	var dx = xyz[0] - this._center[0];
-	var dy = xyz[1] - this._center[1];
-	var dz = xyz[2] - this._center[2];
+	this.setPosition(xyz);
+}
+
+DrawableObject.prototype.scale = function(width, height, depth) {
+	this._scale[0] *= width;
+	this._scale[1] *= height;
+	this._scale[2] *= depth;
 	
-	this.translate(dx, dy, dz);
+	if(this._boundingBox != null)
+		this._boundingBox.scale([width, height, depth]);
 }
-
-// DEV: rotation of xyz needs to be synchronized with normals
-DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
-	if(this._center == null)
-		return;
-	this._rotateCenter(thetaX, thetaY, thetaZ);
-	var xyz = this._getRotatedXYZ(thetaX, thetaY, thetaZ);
-	this.setXYZ(xyz);
-	
-	if(this.buffers["aNormal"] != undefined &&
-			this.buffers["aNormal"].data.length > 0) {
-		var normals = this._getRotatedNormals(thetaX, thetaY, thetaZ);
-		this.setNormals(normals);
-	}
-	
-	// DEV: WebGLCanvas.updatePickingMap() sometimes causes "maximum call stack exceeded errors"
-	//this._canvas.updatePickingMap();
-}
-
-DrawableObject.prototype._translateCenter = function(x, y, z) {
-	this._center[0] = this._center[0] + x;
-	this._center[1] = this._center[1] + y;
-	this._center[2] = this._center[2] + z;
-}
-
-DrawableObject.prototype._rotateCenter = function(thetaX, thetaY, thetaZ) {
-	this._center = CanvasMath.getRotatedXYZ(this._center, this._center, thetaX, thetaY, thetaZ);
-}
-
-DrawableObject.prototype._getTranslatedXYZ = function(x, y, z) {
-	var xyz = this.buffers["aXYZ"].data;
-	for(var i = 0; i < xyz.length; i++) {
-		if(i%3 == 0) 				// x-coordinate
-			xyz[i] = xyz[i] + x;
-		else if(i%3 == 1) 			// y-coordinate
-			xyz[i] = xyz[i] + y;
-		else 						// z-coordinate
-			xyz[i] = xyz[i] + z;
-	}
-	return xyz;
-}
-
-DrawableObject.prototype._getRotatedXYZ = function(thetaX, thetaY, thetaZ) {
-	var xyz = this.buffers["aXYZ"].data;
-	for(var i = 0; i < xyz.length; i += 3) {
-		var vector = [xyz[i], xyz[i + 1], xyz[i + 2]];
-		var rotatedVector = CanvasMath.getRotatedXYZ(vector, this._center, thetaX, thetaY, thetaZ);
-		xyz[i] = rotatedVector[0];
-		xyz[i + 1] = rotatedVector[1];
-		xyz[i + 2] = rotatedVector[2];
-	}
-	return xyz;
-}
-
-DrawableObject.prototype._getRotatedNormals = function(thetaX, thetaY, thetaZ) {
-	var normals = this.buffers["aNormal"].data;
-	var center = [0, 0, 0];
-	for(var i = 0; i < normals.length; i += 3) {
-		var vector = [normals[i], normals[i + 1], normals[i + 2]];
-		var rotatedVector = CanvasMath.getRotatedXYZ(vector, center, thetaX, thetaY, thetaZ);
-		normals[i] = rotatedVector[0];
-		normals[i + 1] = rotatedVector[1];
-		normals[i + 2] = rotatedVector[2];
-	}
-	
-	return normals;
-}
-
 
 
 
@@ -195,4 +187,4 @@ DrawableObject.prototype._eventExists = function(eventType) {
 	return this.eventHandlerList.containsKey(eventType);
 }
 
-drawable.addEventListener(new CollisionEvent(), new EventHandler());
+//drawable.addEventListener(new CollisionEvent(), new EventHandler());

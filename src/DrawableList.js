@@ -1,4 +1,5 @@
-function DrawableList() {
+function DrawableList(camera) {
+	this._camera = camera;
 	this._graphicList = [];
 }
 
@@ -24,10 +25,38 @@ DrawableList.prototype.draw = function() {
 			return;
 		var graphic = this._graphicList[key];
 		graphic.drawSetup();
-		graphic.updateShader();
 		if(graphic.readyToDraw())
-			graphic.draw();
+			this._drawGraphic(graphic);
 	}
+}
+
+DrawableList.prototype._drawGraphic = function(graphic) {
+	this._camera.pushMatrix();
+		this._rotateGraphic(graphic);
+		this._scaleGraphic(graphic);
+		this._positionGraphic(graphic);
+		graphic.updateShader();
+		graphic.draw();
+	this._camera.popMatrix();
+}
+
+DrawableList.prototype._rotateGraphic = function(graphic) {
+	var position = graphic.getPosition();
+	var rotation = graphic.getRotation();
+	
+	this._camera.translate(position);
+	this._camera.rotate(rotation[0], [1, 0, 0]);
+	this._camera.rotate(rotation[1], [0, 1, 0]);
+	this._camera.rotate(rotation[2], [0, 0, 1]);
+	this._camera.translate([-position[0], -position[1], -position[2]]);
+}
+
+DrawableList.prototype._scaleGraphic = function(graphic) {
+	this._camera.scale(graphic.getScale());
+}
+
+DrawableList.prototype._positionGraphic = function(graphic) {
+	this._camera.translate(graphic.getPosition());
 }
 
 DrawableList.prototype.acceptDrawableUpdate = function(DrawableObject) {

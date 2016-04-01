@@ -98,6 +98,8 @@ LeapMotionInputDevice.prototype._updateCustomGesture = function(frame, gesture) 
 		gesture.updateProperties(frame);
         frame.gestures.push(gesture);
 	}
-	else if(gesture.state != null)
+	else if(gesture.state != null) {
 		gesture.state = "stop";
+		frame.gestures.push(gesture);
+	}
 }

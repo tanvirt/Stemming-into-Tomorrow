@@ -1,16 +1,16 @@
 function Canvas(inputDevice, elementId) {
     if(arguments.length < 1) return;
     if(elementId == undefined)
-    	WebGLCanvas.call(this, this._createCanvasContainerElement().id);
+    	GLCanvas.call(this, this._createCanvasContainerElement().id);
     else
-    	WebGLCanvas.call(this, elementId);
+    	GLCanvas.call(this, elementId);
     
     this._inputDevice = inputDevice;
-    this._drawableList = new DrawableList();
+    this._drawableList = new DrawableList(this.getCamera());
     this._room = null;
     
     this.start();
-} Canvas.prototype = new WebGLCanvas();
+} Canvas.prototype = new GLCanvas();
 
 Canvas.prototype.setRoom = function(filePath) {
 	this._room = new WebGLImageComposition(this);
