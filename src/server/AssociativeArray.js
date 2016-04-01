@@ -8,6 +8,11 @@ AssociativeArray.prototype.put = function(key, value) {
 	this._size++;
 }
 
+AssociativeArray.prototype.putPrimativeAssociativeArray = function(associativeArray) {
+	for(var key in associativeArray)
+		this.put(key, associativeArray[key]);
+}
+
 AssociativeArray.prototype.putAll = function(associativeArray) {
 	this._associativeArray = associativeArray;
 	for(var key in associativeArray)
