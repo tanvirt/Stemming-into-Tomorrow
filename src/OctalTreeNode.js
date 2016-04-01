@@ -1,6 +1,7 @@
-function OctalTreeNode() {
+function OctalTreeNode(boundingBox) {
 	this._children = new AssociativeArray();
 	this._leaf = null;
+	this._boundingBox = boundingBox;
 	this._initChildrenList();
 }
 
