@@ -7,6 +7,7 @@ function BoundingBox(canvas, height, width, depth)  {
 	this._view = this._createView(canvas);
 }
 
+BoundingBox.prototype.setPosition = function(xyz) { this._position = xyz; }
 BoundingBox.prototype.getPosition = function() { return this._position; }
 BoundingBox.prototype.getHalfExtents = function() { return this.__halfExtents; }
 
@@ -27,9 +28,6 @@ BoundingBox.prototype._createHalfExtents = function(width, height, depth) {
 	
 	return halfExtents;
 }
-
-BoundingBox.prototype.getPosition = function() { return this._position; }
-BoundingBox.prototype.setPosition = function(xyz) { this._position = xyz; }
 
 BoundingBox.prototype.recalculate = function(rotation) {
 	// TODO: update half extents

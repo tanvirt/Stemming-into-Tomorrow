@@ -10,6 +10,10 @@ function DrawableObject(canvas) {
 	this._position = [0, 0, 0];
 	this._scale = [1, 1, 1];
 	
+	this._lastMoved = new Date().getTime();
+	this._velocity = 0;
+	this._direction = [0, 0, 0];
+	
 	this._boundingBox = null;
 	
 	this.eventHandlerList = new AssociativeArray();
@@ -94,9 +98,18 @@ DrawableObject.prototype.drawSetup = function() {} // hook operation
 DrawableObject.prototype.getRotation = function() { return this._rotation; }
 DrawableObject.prototype.getPosition = function() { return this._position; }
 DrawableObject.prototype.getScale = function() { return this._scale; }
+DrawableObject.prototype.getVelocity = function() {	return this._velocity; }
+DrawableObject.prototype.getDirection = function() { return this._direction; }
 
-DrawableObject.prototype.setPosition = function(xyz) { 
+DrawableObject.prototype.setPosition = function(xyz) {
+	var changeInTime = new Date().getTime() - this._lastMoved;
+	var vector = CanvasMath.createVec3(this._position, xyz);
+	var magnitude = CanvasMath.getVec3Magnitude(vector);
+	
+	this._direction = CanvasMath.getDirectionVec3(vector, magnitude);
+	this._velocity = (magnitude/changeInTime)*1000; // distance per second
 	this._position = xyz;
+	this._lastMoved = new Date().getTime();
 	
 	if(this._boundingBox != null)
 		this._boundingBox.setPosition(this._position);
@@ -119,12 +132,13 @@ DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
 }
 
 DrawableObject.prototype.translate = function(x, y, z) {
-	this._position[0] += x;
-	this._position[1] += y;
-	this._position[2] += z;
+	var xyz = [
+		this._position[0] + x,
+		this._position[1] + y,
+		this._position[2] + z
+	];
 	
-	if(this._boundingBox != null)
-		this._boundingBox.setPosition(this._position);
+	this.setPosition(xyz);
 }
 
 DrawableObject.prototype.scale = function(width, height, depth) {

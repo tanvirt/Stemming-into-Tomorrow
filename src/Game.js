@@ -117,12 +117,18 @@ Game.prototype._addQuestionToCanvas = function() {
 }
 
 Game.prototype._addTextCubeToCanvas = function(text) {
+	var self = this;
 	var textCube = new Rectangle(this._canvas, 0.5);
 	textCube.disablePicking(false);
-	textCube.setTexture(this._createBlackText(text, 60).getTexture());
-	
+	textCube.setTexture(self._createBlackText("0", 60).getTexture());
 	textCube.setPosition([-1.5, -0.75, -5], "7");
+	
+	var previousVelocity = textCube.getVelocity();
 	textCube.drawSetup = function() {
+		var currentVelocity = this.getVelocity();
+		if(currentVelocity != previousVelocity)
+			this.setTexture(self._createBlackText(Math.floor(currentVelocity), 60).getTexture());
+		previousVelocity = currentVelocity;
 		this.rotate(0.01, 0.01, 0.01);
 	}
 	textCube.addToCanvas();

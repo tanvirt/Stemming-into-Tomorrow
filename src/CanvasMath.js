@@ -27,6 +27,37 @@ CanvasMath.degreesToRadians = function(degrees) {
 	return degrees*Math.PI/180;
 }
 
+CanvasMath.createVec3 = function(startXYZ, endXYZ) {
+	var vector = [
+  		endXYZ[0] - startXYZ[0],
+  		endXYZ[1] - startXYZ[1],
+  		endXYZ[2] - startXYZ[2]
+  	];
+	
+	return vector;
+}
+
+CanvasMath.getDirectionVec3 = function(vec, magnitude) {
+	if(magnitude == 0)
+		return [0, 0, 0];
+	
+	var direction = [
+		vec[0]/magnitude,
+		vec[1]/magnitude,
+		vec[2]/magnitude
+	];
+	
+	return direction;
+}
+
+CanvasMath.getVec3Magnitude = function(vec) {
+	return Math.sqrt(
+		Math.pow(vec[0], 2) +
+		Math.pow(vec[1], 2) +
+		Math.pow(vec[2], 2)
+	);
+}
+
 CanvasMath.multiplyMat4Vec4 = function(mat, vec) {
 	return [
 		mat[0]*vec[0] 	+ mat[4]*vec[1] 	+ mat[8]*vec[2] 	+ mat[12]*vec[3],
