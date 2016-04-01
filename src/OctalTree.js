@@ -5,7 +5,7 @@ function OctalTree() {
 
 OctalTree.prototype.insert = function(leaf) {
 	this._spacialObjectMap.put(leaf.getKey(), leaf);
-	this._root.add(octalTreeNode);
+	this._root.addToLimb(leaf);
 }
 
 OctalTree.prototype.remove = function(leaf) {
@@ -15,3 +15,4 @@ OctalTree.prototype.remove = function(leaf) {
 OctalTree.prototype.get = function(leaf) {
 	return this._spacialObjectMap.get(leaf.getKey());
 }
+
