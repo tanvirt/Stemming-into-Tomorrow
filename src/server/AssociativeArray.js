@@ -9,8 +9,10 @@ AssociativeArray.prototype.put = function(key, value) {
 }
 
 AssociativeArray.prototype.putPrimativeAssociativeArray = function(associativeArray) {
-	for(var key in associativeArray)
+	for(var key in associativeArray) {
 		this.put(key, associativeArray[key]);
+		this._size++;
+	}
 }
 
 AssociativeArray.prototype.putAll = function(associativeArray) {
@@ -50,7 +52,7 @@ AssociativeArray.prototype.remove = function(key) {
 
 AssociativeArray.prototype.initWithKeys = function(keyList) {
 	for(var i in keyList) {
-		this.put(keyList[i], "");
+		this.put(keyList[i], "empty");
 	}
 }
 
@@ -73,5 +75,12 @@ AssociativeArray.prototype.values = function() {
 		if(this.containsKey(key))
 			values.push(this.get(key));
 	return values;
+}
+
+AssociativeArray.prototype.isEmpty = function() {
+	for(var value in this.values())
+		if(value != "empty")
+			return false;
+	return true;
 }
 

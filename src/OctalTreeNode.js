@@ -6,7 +6,10 @@ function OctalTreeNode(boundingBox) {
 }
 
 OctalTreeNode.prototype._initChildrenList = function() {
-	this._children.initWithKeys([1, 2, 3, 4, 5, 6, 7, 8]);
+	this._subSpace.initWithKeys(["+++", "++-", "+-+", "+--", "-++", "-+-", "--+", "---"]);
+//	for(var key in this._subSpaces.getKeys()) {
+//		this._subSpaces.put(key, "empty");
+//	}
 }
 
 OctalTreeNode.prototype.setChildren = function(associativeArray) {
@@ -41,15 +44,17 @@ OctalTreeNode.prototype.addToLimb = function(leaf) {
 
 OctalTreeNode.prototype._addToSubSpace = function(leaf) {
 	var foundSubSpace = false;
-	for(var i = 1; i < 9; i++){
-		var value = this._subSpaces.get(i);
+	
+	//make switch state if all goes to hell
+	for(var key in this._subSpaces.getKeys()) {
+		var value = this._subSpaces.get(key);
 		try {
 			value.addToLimb(leaf);
 			foundSubSpace = true;
 		}
 		catch(error) {
-			if(!foundSubSpace)
-				continue;
+			if(foundSubSpace)
+				break;
 		}
 	}
 	
@@ -64,12 +69,56 @@ OctalTreeNode.prototype._addToSubSpace = function(leaf) {
 OctalTreeNode.prototype._addToCurrentGraphicBin = function(leaf) {
 	if(this._spacialObjectBin.size() < 8)
 		this._spacialObjectBin.put(leaf.getKey(), leaf);
-	else
+	else {
+		this._setSubSpaces();
+		this._addLeavesToSubSpaces();
+		this.addToLimb(leaf);
+	}
 		//make subspaces and add leaves accordingly... including the one in this param
 }
 
+OctalTreeNode.prototype._setSubSpaces = function() {
+	//TODO
+	var nodeCenter = this._boundingBox.getPosition();
+	var nodeHalfExtents = this._boundingBox.getHalfExtents();
+	for(var key in this._subSpaces.getKeys()) {
+		var boundingBox = new BoundingBox(nodeHalfExtents[1], nodeHalfExtents[0], nodeHalfExtents[2]);
+			if(key == "+++") {
+				boundingBox.setPosition([nodeHalfExtents[0]/2 + nodeCenter[0], nodeHalfExtents[1]/2 + nodeCenter[1], nodeHalfExtents[2]/2 + nodeCenter[2]]);
+			}
+			else if(key == "++-") {
+				boundingBox.setPosition([nodeHalfExtents[0]/2 + nodeCenter[0], nodeHalfExtents[1]/2 + nodeCenter[1], nodeHalfExtents[2]/2 - nodeCenter[2]]);
+			}
+			else if(key == "-+-") {
+				boundingBox.setPosition([nodeHalfExtents[0]/2 - nodeCenter[0], nodeHalfExtents[1]/2 + nodeCenter[1], nodeHalfExtents[2]/2 - nodeCenter[2]]);
+			}
+			else if(key == "-++") {
+				boundingBox.setPosition([nodeHalfExtents[0]/2 - nodeCenter[0], nodeHalfExtents[1]/2 + nodeCenter[1], nodeHalfExtents[2]/2 + nodeCenter[2]]);
+			}
+			else if(key == "+-+") {
+				boundingBox.setPosition([nodeHalfExtents[0]/2 + nodeCenter[0], nodeHalfExtents[1]/2 - nodeCenter[1], nodeHalfExtents[2]/2 + nodeCenter[2]]);
+			}
+			else if(key == "+--") {
+				boundingBox.setPosition([nodeHalfExtents[0]/2 + nodeCenter[0], nodeHalfExtents[1]/2 - nodeCenter[1], nodeHalfExtents[2]/2 - nodeCenter[2]]);
+			}
+			else if(key == "---") {
+				boundingBox.setPosition([nodeHalfExtents[0]/2 - nodeCenter[0], nodeHalfExtents[1]/2 - nodeCenter[1], nodeHalfExtents[2]/2 - nodeCenter[2]]);
+			}
+			else if(key == "--+") {
+				boundingBox.setPosition([nodeHalfExtents[0]/2 - nodeCenter[0], nodeHalfExtents[1]/2 - nodeCenter[1], nodeHalfExtents[2]/2 + nodeCenter[2]]);
+			}
+			else {
+				console.log("WHAAAAATTT??");
+			}
+	}
+}
+
+OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
+	//TODO
+}
+
 OctalTreeNode.prototype._hasNoSubspaces = function() {
-	//iterate through spaces... find if there are none
+	return this._subSpaces.isEmpty();
 }
 
 OctalTreeNode.prototype._existsInBoundingBox = function(lead) {
@@ -81,7 +130,7 @@ OctalTreeNode.prototype.add = function(quadrant, octalTreeNode) {
 }
 
 OctalTreeNode.prototype.remove = function(quadrant) {
-	this._subSpaces.replace(quadrant, "Empty");
+	this._subSpaces.replace(quadrant, "empty");
 }
 
 OctalTreeNode.prototype.addLeaf = function(leaf) {
