@@ -57,7 +57,7 @@ AssociativeArray.prototype.initWithKeys = function(keyList) {
 }
 
 AssociativeArray.prototype.size = function() {
-	return size;
+	return this._size;
 }
 
 
