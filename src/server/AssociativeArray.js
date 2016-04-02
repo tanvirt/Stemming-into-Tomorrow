@@ -45,8 +45,17 @@ AssociativeArray.prototype.getAssociativeArray = function() {
 
 AssociativeArray.prototype.remove = function(key) {
 	if(this.containsKey(key)) {
+//		var keySet = this.getKeys();
+//		for(var i in keySet) {
+//			if(key == keySet[i])
+//				this._associativeArray.splice
+//		}
+		//console.log(delete this._associativeArray[key]);
+//		console.log(key);
 		delete this._associativeArray[key];
 		this._size--;
+//		console.log(this._associativeArray[key]);
+//		console.log(this._associativeArray);
 	}
 }
 
@@ -86,4 +95,3 @@ AssociativeArray.prototype.isEmpty = function() {
 	}
 	return true;
 }
-

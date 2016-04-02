@@ -126,18 +126,22 @@ OctalTreeNode.prototype._setSubSpaces = function() {
 	}
 }
 
+//Current Issue... key value pair is not removed. The AssociativeArray class need to fixed so the remove function actually removes
+
 OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
 	console.log("addLeavesToSubSpaces");
 	var nodeCenter = this._boundingBox.getPosition();
 	var keySet = this._spacialObjectBin.getKeys();
-	console.log(keySet);
+	console.log(nodeCenter);
+//	console.log(keySet);
 	for(var i in keySet) {
 		var key = keySet[i];
 		var value = this._spacialObjectBin.get(key);
-		console.log("i: " + i);
-		console.log("value: " + value);
+//		console.log("i: " + i);
+//		console.log("value: " + value);
 		var boundingBox = value.getBoundingBox();
 		var boundingBoxCenter = boundingBox.getPosition();
+		console.log(boundingBoxCenter);
 		try {
 			if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2] ) {
 				this._spacialObjectBin.remove(key);
@@ -158,6 +162,7 @@ OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
 			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("++-").addToLimb(value);
+				console.log("value: " + value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
 				this._spacialObjectBin.remove(key);
@@ -168,8 +173,11 @@ OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
 				this._subSpaces.get("+--").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
+				console.log("__________");
+				console.log(key);
 				this._spacialObjectBin.remove(key);
-				this._subSpaces.get("--").addToLimb(value);
+				console.log(this._spacialObjectBin);
+				this._subSpaces.get("---").addToLimb(value);
 			}
 		}
 		catch(error) {
@@ -200,4 +208,9 @@ OctalTreeNode.prototype.addLeaf = function(leaf) {
 
 OctalTreeNode.prototype.getLeaf = function(leaf) {
 	return this._spacialObjectBin.get(leaf.getKey());
+}
+
+OctalTreeNode.prototype.detectCollision = function(drawableObject) {
+	//check my local bin
+	//throw to right subspace if not in local bin
 }
