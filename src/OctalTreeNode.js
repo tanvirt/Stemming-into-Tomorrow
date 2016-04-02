@@ -6,7 +6,7 @@ function OctalTreeNode(boundingBox) {
 }
 
 OctalTreeNode.prototype._initChildrenList = function() {
-	this._subSpace.initWithKeys(["+++", "++-", "+-+", "+--", "-++", "-+-", "--+", "---"]);
+	this._subSpaces.initWithKeys(["+++", "++-", "+-+", "+--", "-++", "-+-", "--+", "---"]);
 //	for(var key in this._subSpaces.getKeys()) {
 //		this._subSpaces.put(key, "empty");
 //	}
@@ -119,23 +119,27 @@ OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
 		var value = this._spacialObjectBin.get(key);
 		var boundingBox = value.getBoundingBox();
 		var boundingBoxCenter = boundingBox.getPosition();
-		
-		if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2] )
-			this._subSpaces.get("+++").addToLimb(value);
-		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2])
-			this._subSpaces.get("-++").addToLimb(value);
-		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2])
-			this._subSpaces.get("+-+").addToLimb(value);
-		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2])
-			this._subSpaces.get("--+").addToLimb(value);
-		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
-			this._subSpaces.get("++-").addToLimb(value);
-		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
-			this._subSpaces.get("-+-").addToLimb(value);
-		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
-			this._subSpaces.get("+--").addToLimb(value);
-		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
-			this._subSpaces.get("--").addToLimb(value);
+		try {
+			if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2] )
+				this._subSpaces.get("+++").addToLimb(value);
+			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2])
+				this._subSpaces.get("-++").addToLimb(value);
+			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2])
+				this._subSpaces.get("+-+").addToLimb(value);
+			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2])
+				this._subSpaces.get("--+").addToLimb(value);
+			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
+				this._subSpaces.get("++-").addToLimb(value);
+			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
+				this._subSpaces.get("-+-").addToLimb(value);
+			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
+				this._subSpaces.get("+--").addToLimb(value);
+			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
+				this._subSpaces.get("--").addToLimb(value);
+		}
+		catch(error) {
+			this._spacialObjectBin.put(value.getKey(), value);
+		}
 	}
 }
 
@@ -143,7 +147,7 @@ OctalTreeNode.prototype._hasNoSubspaces = function() {
 	return this._subSpaces.isEmpty();
 }
 
-OctalTreeNode.prototype._existsInBoundingBox = function(lead) {
+OctalTreeNode.prototype._existsInBoundingBox = function(leaf) {
 	return this._boundingBox.contains(leaf.getBoundingBox());
 }
 

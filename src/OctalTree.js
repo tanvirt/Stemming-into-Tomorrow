@@ -1,5 +1,5 @@
 function OctalTree(spaceHeight, spaceWidth, spaceDepth) {
-	this._root = new OctalTreeNode(new boundingBox(spaceHeight, spaceWidth, spaceDepth));
+	this._root = new OctalTreeNode(new BoundingBox(spaceHeight, spaceWidth, spaceDepth));
 	this._spacialObjectMap = new AssociativeArray();
 }
 
