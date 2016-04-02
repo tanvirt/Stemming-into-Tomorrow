@@ -14,7 +14,7 @@ function DrawableObject(canvas) {
 	this._velocity = 0;
 	this._direction = [0, 0, 0];
 	
-	this._boundingBox = null;
+	this._boundingBox = new BoundingBox(0); // DEV: consider calculating dimensions based on xyz's
 	
 	this.eventHandlerList = new AssociativeArray();
 } DrawableObject.prototype = new GLObject();
@@ -25,13 +25,8 @@ DrawableObject.prototype.intersects = function(drawableObject) {
 	return this._boundingBox.intersects(drawableObject.getBoundingBox());
 }
 
-DrawableObject.prototype.drawBoundingBox = function() {
-	if(this._boundingBox != null)
-		this._boundingBox.draw();
-}
-
 DrawableObject.prototype.addBoundingBox = function(height, width, depth) {
-	this._boundingBox = new BoundingBox(this._canvas, height, width, depth);
+	this._boundingBox = new BoundingBox(height, width, depth);
 	this._boundingBox.setPosition(this._position);
 	this._boundingBox.scale(this._scale);
 	this._boundingBox.recalculate(this._rotation);
@@ -111,8 +106,7 @@ DrawableObject.prototype.setPosition = function(xyz) {
 	this._position = xyz;
 	this._lastMoved = new Date().getTime();
 	
-	if(this._boundingBox != null)
-		this._boundingBox.setPosition(this._position);
+	this._boundingBox.setPosition(this._position);
 }
 
 DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
@@ -127,8 +121,7 @@ DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
 	if(this._rotation[2] > 2*Math.PI)
 		this._rotation[2] = 2*Math.PI - this._rotation[2];
 	
-	if(this._boundingBox != null)
-		this._boundingBox.recalculate([thetaX, thetaY, thetaZ]);
+	this._boundingBox.recalculate([thetaX, thetaY, thetaZ]);
 }
 
 DrawableObject.prototype.translate = function(x, y, z) {
@@ -146,8 +139,7 @@ DrawableObject.prototype.scale = function(width, height, depth) {
 	this._scale[1] *= height;
 	this._scale[2] *= depth;
 	
-	if(this._boundingBox != null)
-		this._boundingBox.scale([width, height, depth]);
+	this._boundingBox.scale([width, height, depth]);
 }
 
 
