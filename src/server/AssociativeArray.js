@@ -78,9 +78,12 @@ AssociativeArray.prototype.values = function() {
 }
 
 AssociativeArray.prototype.isEmpty = function() {
-	for(var value in this.values())
+	var values = this.values();
+	for(var i in values) {
+		var value = values[i];
 		if(value != "empty")
 			return false;
+	}
 	return true;
 }
 
