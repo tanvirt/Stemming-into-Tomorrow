@@ -1,15 +1,20 @@
-function BoundingBox(canvas, height, width, depth)  {
-	this._canvas = canvas;
+function BoundingBox(/*canvas, */height, width, depth)  {
+	//this._canvas = canvas;
 	
 	this._position = [0, 0, 0];
 	this._halfExtents = this._createHalfExtents(width, height, depth);
+	this._xyz = this.getXYZ();
 	
-	this._view = this._createView(canvas);
+	//this._view = this._createView(canvas); // DEV: temporary, should be removed for de-coupling
 }
 
-BoundingBox.prototype.setPosition = function(xyz) { this._position = xyz; }
+BoundingBox.prototype.setPosition = function(xyz) { 
+	this._position = xyz; 
+	this._xyz = this.getXYZ();
+	//this._view = this._createView(this._canvas);
+}
 BoundingBox.prototype.getPosition = function() { return this._position; }
-BoundingBox.prototype.getHalfExtents = function() { return this.__halfExtents; }
+BoundingBox.prototype.getHalfExtents = function() { return this._halfExtents; }
 
 BoundingBox.prototype._createHalfExtents = function(width, height, depth) {
 	var halfExtents = [];
@@ -31,6 +36,13 @@ BoundingBox.prototype._createHalfExtents = function(width, height, depth) {
 
 BoundingBox.prototype.recalculate = function(rotation) {
 	// TODO: update half extents
+	/*
+	var xyz = this.getXYZ();
+	
+	var point1 = [xyz[3], xyz[4], xyz[5]];
+	var point2 = [xyz[6], xyz[7], xyz[8]];
+	var point3 = [xyz[13], xyz[14], xyz[15]];
+	*/
 }
 
 BoundingBox.prototype.scale = function(scale) {
@@ -39,51 +51,74 @@ BoundingBox.prototype.scale = function(scale) {
 	this._halfExtents[2] *= scale[2];
 }
 
-BoundingBox.prototype.intersects = function(boundingBox) {
+BoundingBox.prototype.contains = function(boundingBox) {
 	var position = boundingBox.getPosition();
 	var halfExtents = boundingBox.getHalfExtents();
+	
+	for(var i = 0; i < 3; i++)
+		if(position[i] + halfExtents[i] > this._position[i] + this._halfExtents[i] || 
+				position[i] - halfExtents[i] < this._position[i] - this._halfExtents[i])
+			return false;
+	
+	return true;
+}
+
+BoundingBox.prototype.intersects = function(boundingBox) {
+	// TODO: Fix this
+	/*
+	var position = boundingBox.getPosition();
+	var halfExtents = boundingBox.getHalfExtents();
+	console.log("My position: " + this._position);
+	console.log("My half extents: " + this._halfExtents);
+	console.log("Other position: " + position);
+	console.log("Other half extents: " + halfExtents);
 	
 	for(var i = 0; i < 3; i++)
 		if(Math.abs(this._position[i] - position[i]) > (this._halfExtents[i] + halfExtents[i]));
 			return false;
 	
 	return true;
+	*/
 }
 
 BoundingBox.prototype._createView = function() {
 	var view = new DrawableObject(this._canvas);
 	
-	view.setXYZ(this._generateXYZ(this._halfExtents));
-	view.setTriangles(this._generateTriangles());
-	view.setColors(this._generateColors());
+	view.setXYZ(this.getXYZ());
+	view.setTriangles(this._getTriangles());
+	view.setColors(this._getColors());
 	view.setDrawModeLines();
 	
 	return view;
 }
 
-BoundingBox.prototype._generateXYZ = function(halfExtents) {
-	var halfWidth = halfExtents[0];
-	var halfHeight = halfExtents[1];
-	var halfDepth = halfExtents[2];
+BoundingBox.prototype.getXYZ = function() {
+	var positionX = this._position[0];
+	var positionY = this._position[1];
+	var positionZ = this._position[2];
+	
+	var halfWidth = this._halfExtents[0];
+	var halfHeight = this._halfExtents[1];
+	var halfDepth = this._halfExtents[2];
 	
 	var xyz = [
   	    // front face
-  		-halfWidth, halfHeight, halfDepth,
-  		halfWidth, halfHeight, halfDepth,
-  		-halfWidth, -halfHeight, halfDepth,
-  		halfWidth, -halfHeight, halfDepth,
+  		positionX - halfWidth, positionY + halfHeight, positionZ + halfDepth,
+  		positionX + halfWidth, positionY + halfHeight, positionZ + halfDepth,
+  		positionX - halfWidth, positionY - halfHeight, positionZ + halfDepth,
+  		positionX + halfWidth, positionY - halfHeight, positionZ + halfDepth,
   		
   		// back face
-  		-halfWidth, halfHeight, -halfDepth,
-  		halfWidth, halfHeight, -halfDepth,
-  		-halfWidth, -halfHeight, -halfDepth,
-  		halfWidth, -halfHeight, -halfDepth
+  		positionX - halfWidth, positionY + halfHeight, positionZ - halfDepth,
+  		positionX + halfWidth, positionY + halfHeight, positionZ - halfDepth,
+  		positionX - halfWidth, positionY - halfHeight, positionZ - halfDepth,
+  		positionX + halfWidth, positionY - halfHeight, positionZ - halfDepth
   	];
 	
 	return xyz;
 }
 
-BoundingBox.prototype._generateTriangles = function() {
+BoundingBox.prototype._getTriangles = function() {
 	var triangles = [
  		// front face
  		0,2,1, 1,2,3,
@@ -107,7 +142,7 @@ BoundingBox.prototype._generateTriangles = function() {
 	return triangles;
 }
 
-BoundingBox.prototype._generateColors = function() {
+BoundingBox.prototype._getColors = function() {
 	var colors = [
   		// front face
   		1,1,1, 0,0,1, 0,1,0, 0,1,1, 
