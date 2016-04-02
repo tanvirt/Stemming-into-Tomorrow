@@ -78,7 +78,7 @@ OctalTreeNode.prototype._addToCurrentGraphicBin = function(leaf) {
 }
 
 OctalTreeNode.prototype._setSubSpaces = function() {
-	//TODO
+	
 	var nodeCenter = this._boundingBox.getPosition();
 	var nodeHalfExtents = this._boundingBox.getHalfExtents();
 	for(var key in this._subSpaces.getKeys()) {
@@ -114,7 +114,29 @@ OctalTreeNode.prototype._setSubSpaces = function() {
 }
 
 OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
-	//TODO
+	var nodeCenter = this._boundingBox.getPosition();
+	for(var key in this._spacialObjectBin.getKeys()) {
+		var value = this._spacialObjectBin.get(key);
+		var boundingBox = value.getBoundingBox();
+		var boundingBoxCenter = boundingBox.getPosition();
+		
+		if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2] )
+			this._subSpaces.get("+++").addToLimb(value);
+		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2])
+			this._subSpaces.get("-++").addToLimb(value);
+		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2])
+			this._subSpaces.get("+-+").addToLimb(value);
+		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2])
+			this._subSpaces.get("--+").addToLimb(value);
+		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
+			this._subSpaces.get("++-").addToLimb(value);
+		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
+			this._subSpaces.get("-+-").addToLimb(value);
+		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
+			this._subSpaces.get("+--").addToLimb(value);
+		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2])
+			this._subSpaces.get("--").addToLimb(value);
+	}
 }
 
 OctalTreeNode.prototype._hasNoSubspaces = function() {
