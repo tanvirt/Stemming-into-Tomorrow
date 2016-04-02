@@ -8,6 +8,12 @@ function Driver() {
 	
 	var game = new Game(my_canvas, my_inputDevice);
 	
+	var tree = new OctalTree(3, 4, 12);
+	var drawable = new DrawableObject(my_canvas);
+	var leaf = new Leaf(drawable);
+	tree.insert(leaf);
+	
+	
 	document.body.onkeypress = function(event) {
 		if(event.keyCode === 49)
 			my_canvas.useRegularProjector();

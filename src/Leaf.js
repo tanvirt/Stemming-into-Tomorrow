@@ -1,7 +1,7 @@
 function Leaf(data) {
 	this._data = data;
 	this._boundingBox = this._data.getBoundingBox();
-	this._key = this.generateUniqueString(50);
+	this._key = this._generateUniqueString(50);
 }
 
 Leaf.prototype.getKey = function() {
