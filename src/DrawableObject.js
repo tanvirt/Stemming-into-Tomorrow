@@ -21,6 +21,21 @@ function DrawableObject(canvas) {
 
 DrawableObject.prototype.getBoundingBox = function() { return this._boundingBox; }
 
+DrawableObject.prototype.drawBoundingBox = function() {
+	var xyz = this._getBoundingBoxXYZ();
+	var triangles = this._getBoundingBoxTriangles();
+	var colors = this._getBoundingBoxColors();
+	
+	var view = new DrawableObject(this._canvas);
+	
+	view.setXYZ(xyz);
+	view.setTriangles(triangles);
+	view.setColors(colors);
+	view.setDrawModeLines();
+	
+	view.draw();
+}
+
 DrawableObject.prototype.intersects = function(drawableObject) {
 	return this._boundingBox.intersects(drawableObject.getBoundingBox());
 }
@@ -142,7 +157,62 @@ DrawableObject.prototype.scale = function(width, height, depth) {
 	this._boundingBox.scale([width, height, depth]);
 }
 
+DrawableObject.prototype._getBoundingBoxXYZ = function() {
+	var position = this._boundingBox.getPosition();
+	var halfExtents = this._boundingBox.getHalfExtents();
+	
+	var xyz = [
+ 	    // front face
+ 		position[0] - halfExtents[0], position[1] + halfExtents[1], position[2] + halfExtents[2],
+ 		position[0] + halfExtents[0], position[1] + halfExtents[1], position[2] + halfExtents[2],
+ 		position[0] - halfExtents[0], position[1] - halfExtents[1], position[2] + halfExtents[2],
+ 		position[0] + halfExtents[0], position[1] - halfExtents[1], position[2] + halfExtents[2],
+ 		
+ 		// back face
+ 		position[0] - halfExtents[0], position[1] + halfExtents[1], position[2] - halfExtents[2],
+ 		position[0] + halfExtents[0], position[1] + halfExtents[1], position[2] - halfExtents[2],
+ 		position[0] - halfExtents[0], position[1] - halfExtents[1], position[2] - halfExtents[2],
+ 		position[0] + halfExtents[0], position[1] - halfExtents[1], position[2] - halfExtents[2]
+ 	];
+   	
+   	return xyz;
+}
 
+DrawableObject.prototype._getBoundingBoxTriangles = function() {
+	var triangles = [
+   		// front face
+   		0,2,1, 1,2,3,
+   		
+   		// back face
+   		4,5,6, 6,5,7,
+   		
+   		// right face
+   		1,3,5, 5,3,7,
+   		
+   		// left face
+   		4,6,0, 0,6,2,
+   		
+   		// top face
+   		4,0,5, 5,0,1,
+   		
+   		// bottom face
+   		2,6,3, 3,6,7
+   	];
+  	
+  	return triangles;
+}
+
+DrawableObject.prototype._getBoundingBoxColors = function() {
+	var colors = [
+  		// front face
+  		1,1,1, 0,0,1, 0,1,0, 0,1,1,
+  		
+  		// back face
+  		1,0,0, 1,0,1, 1,1,0, 1,1,1
+  	];
+	
+	return colors;
+}
 
 
 
