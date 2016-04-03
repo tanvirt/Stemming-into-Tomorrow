@@ -39,10 +39,12 @@ Game.prototype._addReflectiveCubeToCanvas = function() {
 	reflectiveCube.setTexture("http://www.visineat.com/js/img/textures/wood_tile.jpg");
 	reflectiveCube.enableDefaultReflection("http://www.visineat.com/js/img/hdri/country1.jpg");
 	reflectiveCube.disablePicking(false);
+	reflectiveCube.addBoundingBox(0.5, 0.5, 0.5);
 	
 	reflectiveCube.setPosition([0, -0.75, -5]);
 	reflectiveCube.drawSetup = function() {
 		this.rotate(0.01, 0.01, 0.01);
+		reflectiveCube.drawBoundingBox();
 	}
 	reflectiveCube.addToCanvas();
 }
