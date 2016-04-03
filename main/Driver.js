@@ -19,48 +19,66 @@ function Driver() {
 	var drawable = new DrawableObject(my_canvas);
 	drawable.addBoundingBox(0.1, 0.1, 0.1);
 	drawable.setPosition([0.25, 0.25, 0.25]);
+	drawable._id = "drawable 1 -> [0.25, 0.25, 0.25]";
 	
 	var drawable2 = new DrawableObject(my_canvas);
 	drawable2.addBoundingBox(0.1, 0.1, 0.1);
 	drawable2.setPosition([0.45, 0.45, 0.45]);
+	drawable2._id = "drawable 2 -> [0.45, 0.45, 0.45]";
 	
 	var drawable3 = new DrawableObject(my_canvas);
 	drawable3.addBoundingBox(0.1, 0.1, 0.1);
-	/*haha fuck you tanvir!*/  drawable3.setPosition([0.55, 0.55, 0.55]);
+	drawable3.setPosition([0.55, 0.55, 0.55]);
+	drawable3._id = "drawable 3 -> [0.55, 0.55, 0.55]";
 	
 	var drawable4 = new DrawableObject(my_canvas);
 	drawable4.addBoundingBox(0.1, 0.1, 0.1);
-	  drawable4.setPosition([0.65, 0.65, 0.65]);
+	drawable4.setPosition([0.65, 0.65, 0.65]);
+	drawable4._id = "drawable 4 -> [0.65, 0.65, 0.65]";
 	
-	  var drawable5 = new DrawableObject(my_canvas);
+	var drawable5 = new DrawableObject(my_canvas);
 	drawable5.addBoundingBox(0.1, 0.1, 0.1);
 	drawable5.setPosition([-0.45, -0.45, -0.45]);
+	drawable5._id = "drawable 5 -> [-0.45, -0.45, -0.45]";
 	
 	var drawable6 = new DrawableObject(my_canvas);
 	drawable6.addBoundingBox(0.1, 0.1, 0.1);
 	drawable6.setPosition([-0.45, 0.45, 0.45]);
+	drawable6._id = "drawable 6 -> [-0.45, 0.45, 0.45]";
 	
 	var drawable7 = new DrawableObject(my_canvas);
 	drawable7.addBoundingBox(0.1, 0.1, 0.1);
-		drawable7.setPosition([0.45, -0.45, 0.45]);
+	drawable7.setPosition([0.45, -0.45, 0.45]);
+	drawable7._id = "drawable 7 -> [0.45, -0.45, 0.45]";
 	
 	var drawable8 = new DrawableObject(my_canvas);
-	 drawable8.addBoundingBox(0.1, 0.1, 0.1);
+	drawable8.addBoundingBox(0.1, 0.1, 0.1);
 	drawable8.setPosition([0.45, 0.45, -0.45]);
+	drawable8._id = "drawable 8 -> [0.45, 0.45, -0.45]";
 	
 	var drawable9 = new DrawableObject(my_canvas);
-	 drawable9.addBoundingBox(0.1, 0.1, 0.1);
+	drawable9.addBoundingBox(0.1, 0.1, 0.1);
 	drawable9.setPosition([0.45, 0.45, -0.45]);
+	drawable9._id = "drawable 9 -> [0.45, 0.45, -0.45]";
 	
 	var leaf = new Leaf(drawable);
-	var  leaf2 = new Leaf(drawable2);
+	leaf._key = "leaf of 1 -> [0.25, 0.25, 0.25]";
+	var leaf2 = new Leaf(drawable2);
+	leaf2._key = "leaf of 2 -> [0.45, 0.45, 0.45]";
 	var leaf3 = new Leaf(drawable3);
+	leaf3._key = "leaf of 3 -> [0.55, 0.55, 0.55]";
 	var leaf4 = new Leaf(drawable4);
+	leaf4._key = "leaf of 4 -> [0.65, 0.65, 0.65]";
 	var leaf5 = new Leaf(drawable5);
+	leaf5._key = "leaf of 5 -> [-0.45, -0.45, -0.45]";
 	var leaf6 = new Leaf(drawable6);
+	leaf6._key = "leaf of 6 -> [-0.45, 0.45, 0.45]";
 	var leaf7 = new Leaf(drawable7);
+	leaf7._key = "leaf of 7 -> [0.45, -0.45, 0.45]";
 	var leaf8 = new Leaf(drawable8);
+	leaf8._key = "leaf of 8 -> [0.45, 0.45, -0.45]";
 	var leaf9 = new Leaf(drawable9);
+	leaf9._key = "leaf of 9 -> [0.45, 0.45, -0.45]";
 	
 	tree.insert(leaf);
 	tree.insert(leaf2);
@@ -72,7 +90,6 @@ function Driver() {
 	tree.insert(leaf8);
 	tree.insert(leaf9);
 	console.log(tree);
-	
 	
 	document.body.onkeypress = function(event) {
 		if(event.keyCode === 49)
