@@ -238,10 +238,13 @@ OctalTreeNode.prototype.getCollidee = function(boundingBox) {
 	//check my local bin
 	//throw to right subspace if not in local bin
 	
-	if(this._localCollisionOccurred(boundingBox))
-		return this._getLocalCollision(boundingBox);
+	if(this._localCollisionOccurred(boundingBox)) {
+		var collidee = this._getLocalCollision(boundingBox);
+		//console.log(collidee);
+		return collidee;
+	}
 	else if(this._hasSubspaces())
-		this._dumpToChildren(boundingBox);
+		return this._dumpToChildren(boundingBox);
 	else
 		throw "No Collision Occurred";
 }
@@ -249,7 +252,7 @@ OctalTreeNode.prototype.getCollidee = function(boundingBox) {
 OctalTreeNode.prototype._localCollisionOccurred = function(boundingBox) {
 	var leaves = this._spacialObjectBin.values();
 	for(var i in leaves) {
-		var leafBoundingBox = leaves[i];
+		var leafBoundingBox = leaves[i].getBoundingBox();
 		if(boundingBox.intersects(leafBoundingBox))
 			return true;
 	}
@@ -260,8 +263,11 @@ OctalTreeNode.prototype._getLocalCollision = function(boundingBox) {
 	var leaves = this._spacialObjectBin.values();
 	for(var i in leaves) {
 		var leafBoundingBox = leaves[i].getBoundingBox();
-		if(boundingBox.intersects(leafBoundingBox))
-			return this._spacialObjectBin.get(leaves[i].getKey());
+		if(boundingBox.intersects(leafBoundingBox)) {
+			var collidee = this._spacialObjectBin.get(leaves[i].getKey()).getData();
+			//console.log(collidee);
+			return collidee;
+		}
 	}
 	throw "No Local Collision Found After Local Check Was True!";
 }
@@ -271,28 +277,44 @@ OctalTreeNode.prototype._dumpToChildren = function(boundingBox) {
 	var boundingBoxCenter = boundingBox.getPosition();
 	try {
 		if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2] ) {
-			return this._subSpaces.get("+++").getCollidee(boundingBox);
+			var collidee = this._subSpaces.get("+++").getCollidee(boundingBox);
+			//console.log(collidee);
+			return collidee;
 		}
 		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-			return this._subSpaces.get("-++").getCollidee(boundingBox);
+			var collide = this._subSpaces.get("-++").getCollidee(boundingBox);
+			//console.log(collide);
+			return collidee;
 		}
 		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-			return this._subSpaces.get("+-+").getCollidee(boundingBox);
+			var collidee = this._subSpaces.get("+-+").getCollidee(boundingBox);
+			//console.log(collidee);
+			return collidee;
 		}
 		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-			return this._subSpaces.get("--+").getCollidee(boundingBox);
+			var collidee = this._subSpaces.get("--+").getCollidee(boundingBox);
+			//console.log(collidee);
+			return collidee;
 		}
 		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-			return this._subSpaces.get("++-").getCollidee(boundingBox);
+			var collidee = this._subSpaces.get("++-").getCollidee(boundingBox);
+			//console.log(collidee);
+			return collidee;
 		}
 		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-			return this._subSpaces.get("-+-").getCollidee(boundingBox);
+			var collidee = this._subSpaces.get("-+-").getCollidee(boundingBox);
+			//console.log(collidee);
+			return collidee;
 		}
 		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-			return this._subSpaces.get("+--").getCollidee(boundingBox);
+			var collidee = this._subSpaces.get("+--").getCollidee(boundingBox);
+			//console.log(collidee);
+			return collidee;
 		}
 		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-			return this._subSpaces.get("---").getCollidee(boundingBox);
+			var collidee = this._subSpaces.get("---").getCollidee(boundingBox);
+			//console.log(collidee);
+			return collidee;
 		}
 	}
 	catch(error) {

@@ -18,7 +18,10 @@ OctalTree.prototype.get = function(leaf) {
 
 OctalTree.prototype.getCollidee = function(boundingBox) {
 	try {
-		return this._root.getCollidee(boundingBox);
+		
+		var collidee = this._root.getCollidee(boundingBox);
+		//console.log(collidee);
+		return collidee;
 	}
 	catch(error) {
 		throw error;
