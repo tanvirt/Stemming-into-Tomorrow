@@ -59,6 +59,7 @@ AssociativeArray.prototype.remove = function(key) {
 	}
 }
 
+//Remove this and all dependencies
 AssociativeArray.prototype.initWithKeys = function(keyList) {
 	for(var i in keyList) {
 		this.put(keyList[i], "empty");
@@ -86,6 +87,8 @@ AssociativeArray.prototype.values = function() {
 	return values;
 }
 
+
+//Remove this and all dependencies
 AssociativeArray.prototype.isEmpty = function() {
 	var values = this.values();
 	for(var i in values) {

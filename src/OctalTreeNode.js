@@ -6,7 +6,14 @@ function OctalTreeNode(boundingBox) {
 }
 
 OctalTreeNode.prototype._initChildrenList = function() {
-	this._subSpaces.initWithKeys(["+++", "++-", "+-+", "+--", "-++", "-+-", "--+", "---"]);
+	this._subSpaces.put("+++", "empty");
+	this._subSpaces.put("++-", "empty");
+	this._subSpaces.put("+-+", "empty");
+	this._subSpaces.put("+--", "empty");
+	this._subSpaces.put("-++", "empty");
+	this._subSpaces.put("-+-", "empty");
+	this._subSpaces.put("--+", "empty");
+	this._subSpaces.put("---", "empty");
 }
 
 OctalTreeNode.prototype.setChildren = function(associativeArray) {
@@ -197,7 +204,13 @@ OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
 }
 
 OctalTreeNode.prototype._hasSubspaces = function() {
-	return !this._subSpaces.isEmpty();
+	var values = this._subSpaces.values();
+	for(var i in values) {
+		var value = values[i];
+		if(value != "empty")
+			return true;
+	}
+	return false;
 }
 
 OctalTreeNode.prototype._existsInBoundingBox = function(leaf) {
@@ -221,7 +234,68 @@ OctalTreeNode.prototype.getLeaf = function(leaf) {
 	return this._spacialObjectBin.get(leaf.getKey());
 }
 
-OctalTreeNode.prototype.detectCollision = function(drawableObject) {
+OctalTreeNode.prototype.getCollidee = function(boundingBox) {
 	//check my local bin
 	//throw to right subspace if not in local bin
+	
+	if(this._localCollisionOccurred(boundingBox))
+		return this._getLocalCollision(boundingBox);
+	else if(this._hasSubspaces())
+		this._dumpToChildren(boundingBox);
+	else
+		throw "No Collision Occurred";
+}
+
+OctalTreeNode.prototype._localCollisionOccurred = function(boundingBox) {
+	var leaves = this._spacialObjectBin.values();
+	for(var i in leaves) {
+		var leafBoundingBox = leaves[i];
+		if(boundingBox.intersects(leafBoundingBox))
+			return true;
+	}
+	return false;
+}
+
+OctalTreeNode.prototype._getLocalCollision = function(boundingBox) {
+	var leaves = this._spacialObjectBin.values();
+	for(var i in leaves) {
+		var leafBoundingBox = leaves[i].getBoundingBox();
+		if(boundingBox.intersects(leafBoundingBox))
+			return this._spacialObjectBin.get(leaves[i].getKey());
+	}
+	throw "No Local Collision Found After Local Check Was True!";
+}
+
+OctalTreeNode.prototype._dumpToChildren = function(boundingBox) {
+	var nodeCenter = this._boundingBox.getPosition();
+	var boundingBoxCenter = boundingBox.getPosition();
+	try {
+		if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2] ) {
+			return this._subSpaces.get("+++").getCollidee(boundingBox);
+		}
+		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
+			return this._subSpaces.get("-++").getCollidee(boundingBox);
+		}
+		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
+			return this._subSpaces.get("+-+").getCollidee(boundingBox);
+		}
+		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
+			return this._subSpaces.get("--+").getCollidee(boundingBox);
+		}
+		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
+			return this._subSpaces.get("++-").getCollidee(boundingBox);
+		}
+		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
+			return this._subSpaces.get("-+-").getCollidee(boundingBox);
+		}
+		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
+			return this._subSpaces.get("+--").getCollidee(boundingBox);
+		}
+		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
+			return this._subSpaces.get("---").getCollidee(boundingBox);
+		}
+	}
+	catch(error) {
+		throw error;
+	}
 }
