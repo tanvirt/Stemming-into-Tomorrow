@@ -61,46 +61,46 @@ function Driver() {
 	drawable5.setPosition([-1.125, -1.5, -4.5]);
 	drawable5._id = "drawable 5 -> [-1.125, -1.5, -4.5]";
 	
-	/*var drawable10 = new DrawableObject(my_canvas);
+	var drawable10 = new DrawableObject(my_canvas);
 	drawable10.addBoundingBox(0.1, 0.1, 0.1);
 	drawable10.setPosition([-1.125, -1.5, -4.5]);
 	drawable10._id = "drawable 10 -> [-1.125, -1.5, -4.5]";
 	
 	var drawable11 = new DrawableObject(my_canvas);
 	drawable11.addBoundingBox(0.1, 0.1, 0.1);
-	drawable11.setPosition([-0.45, -0.45, -0.45]);
-	drawable11._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	drawable11.setPosition([-1.125, -1.5, -4.5]);
+	drawable11._id = "drawable 11 -> [-1.125, -1.5, -4.5]";
 	
 	var drawable12 = new DrawableObject(my_canvas);
 	drawable12.addBoundingBox(0.1, 0.1, 0.1);
-	drawable12.setPosition([-0.45, -0.45, -0.45]);
-	drawable12._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	drawable12.setPosition([-1.125, -1.5, -4.5]);
+	drawable12._id = "drawable 12 -> [-1.125, -1.5, -4.5]";
 	
 	var drawable13 = new DrawableObject(my_canvas);
 	drawable13.addBoundingBox(0.1, 0.1, 0.1);
-	drawable13.setPosition([-0.45, -0.45, -0.45]);
-	drawable13._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	drawable13.setPosition([-0.375, -0.5, -1.5]);
+	drawable13._id = "drawable 13 -> [-0.375, -0.5, -1.5]";
 	
 	var drawable14 = new DrawableObject(my_canvas);
 	drawable14.addBoundingBox(0.1, 0.1, 0.1);
-	drawable14.setPosition([-0.45, -0.45, -0.45]);
-	drawable14._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	drawable14.setPosition([-0.375, -0.5, -1.5]);
+	drawable14._id = "drawable 14 -> [-0.375, -0.5, -1.5]";
 	
-	var drawable14 = new DrawableObject(my_canvas);
-	drawable14.addBoundingBox(0.1, 0.1, 0.1);
-	drawable14.setPosition([-0.45, -0.45, -0.45]);
-	drawable14._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	var drawable15 = new DrawableObject(my_canvas);
+	drawable15.addBoundingBox(0.1, 0.1, 0.1);
+	drawable15.setPosition([-0.375, -0.5, -1.5]);
+	drawable15._id = "drawable 15 -> [-0.375, -0.5, -1.5]";
 	
-	var drawable14 = new DrawableObject(my_canvas);
-	drawable14.addBoundingBox(0.1, 0.1, 0.1);
-	drawable14.setPosition([-0.45, -0.45, -0.45]);
-	drawable14._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	var drawable16 = new DrawableObject(my_canvas);
+	drawable16.addBoundingBox(0.1, 0.1, 0.1);
+	drawable16.setPosition([-0.375, -0.5, -1.5]);
+	drawable16._id = "drawable 16 -> [-0.375, -0.5, -1.5]";
 	
-	var drawable14 = new DrawableObject(my_canvas);
-	drawable14.addBoundingBox(0.1, 0.1, 0.1);
-	drawable14.setPosition([-0.45, -0.45, -0.45]);
-	drawable14._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
-	*/
+	var drawable17 = new DrawableObject(my_canvas);
+	drawable17.addBoundingBox(0.1, 0.1, 0.1);
+	drawable17.setPosition([-1.125, -0.5, -4.5]);
+	drawable17._id = "drawable 17 -> [-1.125, -0.5, -4.5]";
+	
 	
 	
 	var leaf = new Leaf(drawable);
@@ -124,8 +124,22 @@ function Driver() {
 	
 	var leaf5 = new Leaf(drawable5);
 	leaf5._key = "leaf of 5 -> [-1.125, -1.5, -4.5]";
-	/*var leaf10 = new Leaf(drawable10);
-	leaf10._key = "leaf of 10 -> [-1.125, -1.5, -4.5]";*/
+	var leaf10 = new Leaf(drawable10);
+	leaf10._key = "leaf of 10 -> [-1.125, -1.5, -4.5]";
+	var leaf11 = new Leaf(drawable11);
+	leaf11._key = "leaf of 11 -> [-1.125, -1.5, -4.5]";
+	var leaf12 = new Leaf(drawable12);
+	leaf12._key = "leaf of 12 -> [-1.125, -1.5, -4.5]";
+	var leaf13 = new Leaf(drawable13);
+	leaf13._key = "leaf of 13 -> [-0.375, -0.5, -1.5]";
+	var leaf14 = new Leaf(drawable14);
+	leaf14._key = "leaf of 14 -> [-0.375, -0.5, -1.5]";
+	var leaf15 = new Leaf(drawable15);
+	leaf15._key = "leaf of 15 -> [-0.375, -0.5, -1.5]";
+	var leaf16 = new Leaf(drawable16);
+	leaf16._key = "leaf of 16 -> [-0.375, -0.5, -1.5]";
+	var leaf17 = new Leaf(drawable17);
+	leaf17._key = "leaf of 17 -> [-1.125, -0.5, -4.5]";
 	
 	
 	
@@ -133,7 +147,6 @@ function Driver() {
 	tree.insert(leaf2);
 	tree.insert(leaf3);
 	tree.insert(leaf4);
-	tree.insert(leaf5);
 	tree.insert(leaf6);
 	tree.insert(leaf7);
 	tree.insert(leaf8);
@@ -141,7 +154,15 @@ function Driver() {
 	
 	
 	
-	//tree.insert(leaf10);
+	tree.insert(leaf5);
+	tree.insert(leaf10);
+	tree.insert(leaf11);
+	tree.insert(leaf12);
+	tree.insert(leaf13);
+	tree.insert(leaf14);
+	tree.insert(leaf15);
+	tree.insert(leaf16);
+	tree.insert(leaf17);
 	
 	
 	
