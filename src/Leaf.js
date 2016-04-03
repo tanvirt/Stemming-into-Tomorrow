@@ -16,3 +16,7 @@ Leaf.prototype._generateUniqueString = function(length) {
 Leaf.prototype.getBoundingBox = function() {
 	return this._boundingBox;
 }
+
+Leaf.prototype.getData = function() {
+	return this._data;
+}

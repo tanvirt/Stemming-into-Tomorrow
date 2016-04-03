@@ -16,6 +16,14 @@ OctalTree.prototype.get = function(leaf) {
 	return this._spacialObjectMap.get(leaf.getKey());
 }
 
-OctalTree.prototype.detectCollision = function(drawableObject) {
-	this._root.detectCollision(drawableObject);
+OctalTree.prototype.getCollidee = function(boundingBox) {
+	try {
+		
+		var collidee = this._root.getCollidee(boundingBox);
+		//console.log(collidee);
+		return collidee;
+	}
+	catch(error) {
+		throw error;
+	}
 }
