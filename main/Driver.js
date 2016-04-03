@@ -89,6 +89,7 @@ function Driver() {
 	tree.insert(leaf7);
 	tree.insert(leaf8);
 	tree.insert(leaf9);
+	console.log(tree.getCollidee(leaf9.getBoundingBox()));
 	console.log(tree);
 	
 	document.body.onkeypress = function(event) {

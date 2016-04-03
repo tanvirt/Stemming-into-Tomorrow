@@ -28,7 +28,7 @@ OctalTreeNode.prototype.getChildren = function() {
 }
 
 OctalTreeNode.prototype.addToLimb = function(leaf) {
-	console.log("addToLimb");
+	//console.log("addToLimb");
 	//console.log(this._subSpaces.values());
 //	console.log(this._existsInBoundingBox(leaf));
 //	console.log(this._hasSubspaces());
@@ -38,7 +38,7 @@ OctalTreeNode.prototype.addToLimb = function(leaf) {
 	}
 	else if(this._existsInBoundingBox(leaf) && this._hasSubspaces()) {
 		try {
-			console.log("dumpToSubSpace");
+			//console.log("dumpToSubSpace");
 			this._addToSubSpace(leaf);
 		}
 		catch(error) {
@@ -66,7 +66,7 @@ OctalTreeNode.prototype._addToSubSpace = function(leaf) {
 		}
 		catch(error) {
 			if(foundSubSpace) {
-				console.log("found Spot!");
+				//console.log("found Spot!");
 				break;
 			}
 			else {
@@ -137,7 +137,7 @@ OctalTreeNode.prototype._setSubSpaces = function() {
 //Current Issue... key value pair is not removed. The AssociativeArray class need to fixed so the remove function actually removes
 
 OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
-	console.log("addLeavesToSubSpaces");
+	//console.log("addLeavesToSubSpaces");
 	var nodeCenter = this._boundingBox.getPosition();
 	var keySet = this._spacialObjectBin.getKeys();
 	//console.log(nodeCenter);
@@ -152,45 +152,45 @@ OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
 		//console.log(boundingBoxCenter);
 		try {
 			if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2] ) {
-				console.log("+++");
+				//console.log("+++");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("+++").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-				console.log("-++");
+				//console.log("-++");
 				this._spacialObjectBin.remove(key);
-				console.log("HELLLO " + this._subSpaces.get("-++"));
+				//console.log("HELLLO " + this._subSpaces.get("-++"));
 				this._subSpaces.get("-++").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-				console.log("+-+");
+				//console.log("+-+");
 				this._spacialObjectBin.remove(key);
-				console.log(this._subSpaces.get("+-+"));
+				//console.log(this._subSpaces.get("+-+"));
 				this._subSpaces.get("+-+").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-				console.log("--+");
+				//console.log("--+");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("--+").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-				console.log("++-");
+				//console.log("++-");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("++-").addToLimb(value);
 				//console.log("value: " + value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-				console.log("-+-");
+				//console.log("-+-");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("-+-").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-				console.log("+--");
+				//console.log("+--");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("+--").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-				console.log("---");
+				//console.log("---");
 				//console.log(key);
 				this._spacialObjectBin.remove(key);
 				//console.log(this._spacialObjectBin);
@@ -214,7 +214,7 @@ OctalTreeNode.prototype._hasSubspaces = function() {
 }
 
 OctalTreeNode.prototype._existsInBoundingBox = function(leaf) {
-	console.log(this._boundingBox.contains(leaf.getBoundingBox()));
+	//console.log(this._boundingBox.contains(leaf.getBoundingBox()));
 	return this._boundingBox.contains(leaf.getBoundingBox());
 }
 
