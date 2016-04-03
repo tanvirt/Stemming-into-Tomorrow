@@ -44,7 +44,7 @@ Game.prototype._addReflectiveCubeToCanvas = function() {
 	reflectiveCube.setPosition([0, -0.75, -5]);
 	reflectiveCube.drawSetup = function() {
 		this.rotate(0.01, 0.01, 0.01);
-		reflectiveCube.drawBoundingBox();
+		//reflectiveCube.drawBoundingBox();
 	}
 	reflectiveCube.addToCanvas();
 }

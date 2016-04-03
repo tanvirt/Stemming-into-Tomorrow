@@ -14,7 +14,7 @@ function Driver() {
 	//
 	//
 	
-	var tree = new OctalTree(3, 4, 12);
+	var tree = new OctalTree(4, 3, 12);
 	
 	var drawable = new DrawableObject(my_canvas);
 	drawable.addBoundingBox(0.1, 0.1, 0.1);
@@ -36,11 +36,6 @@ function Driver() {
 	drawable4.setPosition([0.65, 0.65, 0.65]);
 	drawable4._id = "drawable 4 -> [0.65, 0.65, 0.65]";
 	
-	var drawable5 = new DrawableObject(my_canvas);
-	drawable5.addBoundingBox(0.1, 0.1, 0.1);
-	drawable5.setPosition([-0.45, -0.45, -0.45]);
-	drawable5._id = "drawable 5 -> [-0.45, -0.45, -0.45]";
-	
 	var drawable6 = new DrawableObject(my_canvas);
 	drawable6.addBoundingBox(0.1, 0.1, 0.1);
 	drawable6.setPosition([-0.45, 0.45, 0.45]);
@@ -61,6 +56,57 @@ function Driver() {
 	drawable9.setPosition([0.45, 0.45, -0.45]);
 	drawable9._id = "drawable 9 -> [0.45, 0.45, -0.45]";
 	
+	
+	
+	
+	
+	var drawable5 = new DrawableObject(my_canvas);
+	drawable5.addBoundingBox(0.1, 0.1, 0.1);
+	drawable5.setPosition([-1.125, -1.5, -4.5]);
+	drawable5._id = "drawable 5 -> [-1.125, -1.5, -4.5]";
+	
+	/*var drawable10 = new DrawableObject(my_canvas);
+	drawable10.addBoundingBox(0.1, 0.1, 0.1);
+	drawable10.setPosition([-1.125, -1.5, -4.5]);
+	drawable10._id = "drawable 10 -> [-1.125, -1.5, -4.5]";
+	
+	var drawable11 = new DrawableObject(my_canvas);
+	drawable11.addBoundingBox(0.1, 0.1, 0.1);
+	drawable11.setPosition([-0.45, -0.45, -0.45]);
+	drawable11._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	
+	var drawable12 = new DrawableObject(my_canvas);
+	drawable12.addBoundingBox(0.1, 0.1, 0.1);
+	drawable12.setPosition([-0.45, -0.45, -0.45]);
+	drawable12._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	
+	var drawable13 = new DrawableObject(my_canvas);
+	drawable13.addBoundingBox(0.1, 0.1, 0.1);
+	drawable13.setPosition([-0.45, -0.45, -0.45]);
+	drawable13._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	
+	var drawable14 = new DrawableObject(my_canvas);
+	drawable14.addBoundingBox(0.1, 0.1, 0.1);
+	drawable14.setPosition([-0.45, -0.45, -0.45]);
+	drawable14._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	
+	var drawable14 = new DrawableObject(my_canvas);
+	drawable14.addBoundingBox(0.1, 0.1, 0.1);
+	drawable14.setPosition([-0.45, -0.45, -0.45]);
+	drawable14._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	
+	var drawable14 = new DrawableObject(my_canvas);
+	drawable14.addBoundingBox(0.1, 0.1, 0.1);
+	drawable14.setPosition([-0.45, -0.45, -0.45]);
+	drawable14._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	
+	var drawable14 = new DrawableObject(my_canvas);
+	drawable14.addBoundingBox(0.1, 0.1, 0.1);
+	drawable14.setPosition([-0.45, -0.45, -0.45]);
+	drawable14._id = "drawable 9 -> [-0.45, -0.45, -0.45]";
+	*/
+	
+	
 	var leaf = new Leaf(drawable);
 	leaf._key = "leaf of 1 -> [0.25, 0.25, 0.25]";
 	var leaf2 = new Leaf(drawable2);
@@ -69,8 +115,6 @@ function Driver() {
 	leaf3._key = "leaf of 3 -> [0.55, 0.55, 0.55]";
 	var leaf4 = new Leaf(drawable4);
 	leaf4._key = "leaf of 4 -> [0.65, 0.65, 0.65]";
-	var leaf5 = new Leaf(drawable5);
-	leaf5._key = "leaf of 5 -> [-0.45, -0.45, -0.45]";
 	var leaf6 = new Leaf(drawable6);
 	leaf6._key = "leaf of 6 -> [-0.45, 0.45, 0.45]";
 	var leaf7 = new Leaf(drawable7);
@@ -79,6 +123,15 @@ function Driver() {
 	leaf8._key = "leaf of 8 -> [0.45, 0.45, -0.45]";
 	var leaf9 = new Leaf(drawable9);
 	leaf9._key = "leaf of 9 -> [0.45, 0.45, -0.45]";
+	
+	
+	
+	var leaf5 = new Leaf(drawable5);
+	leaf5._key = "leaf of 5 -> [-1.125, -1.5, -4.5]";
+	/*var leaf10 = new Leaf(drawable10);
+	leaf10._key = "leaf of 10 -> [-1.125, -1.5, -4.5]";*/
+	
+	
 	
 	tree.insert(leaf);
 	tree.insert(leaf2);
@@ -89,6 +142,11 @@ function Driver() {
 	tree.insert(leaf7);
 	tree.insert(leaf8);
 	tree.insert(leaf9);
+	
+	
+	//tree.insert(leaf10);
+	
+	
 	console.log(tree);
 	
 	document.body.onkeypress = function(event) {

@@ -46,11 +46,11 @@ BoundingBox.prototype.contains = function(boundingBox) {
 	var position = boundingBox.getPosition();
 	var halfExtents = boundingBox.getHalfExtents();
 	
-	for(var i = 0; i < 3; i++)
+	for(var i = 0; i < 3; i++) {
 		if(position[i] + halfExtents[i] > this._position[i] + this._halfExtents[i] || 
 				position[i] - halfExtents[i] < this._position[i] - this._halfExtents[i])
 			return false;
-	
+	}
 	return true;
 }
 
