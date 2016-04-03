@@ -150,12 +150,12 @@ OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
 				this._subSpaces.get("+++").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-				console.log("+-+");
-				this._spacialObjectBin.romve(key);
+				console.log("-++");
+				this._spacialObjectBin.remove(key);
+				console.log("HELLLO " + this._subSpaces.get("-++"));
 				this._subSpaces.get("-++").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-				console.log("")
 				console.log("+-+");
 				this._spacialObjectBin.remove(key);
 				console.log(this._subSpaces.get("+-+"));
