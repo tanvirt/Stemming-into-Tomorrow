@@ -10,10 +10,6 @@ function Driver() {
 	
 	
 	
-	//Things get put in +++ subspace but not the other ones... run the code and see.
-	//
-	//
-	
 	var tree = new OctalTree(4, 3, 12);
 	
 	var drawable = new DrawableObject(my_canvas);

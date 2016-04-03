@@ -58,6 +58,30 @@ CanvasMath.getVec3Magnitude = function(vec) {
 	);
 }
 
+// DEV: the rotated coordinates seem to be closer to the origin than previously
+// Angles must be in radians.
+CanvasMath.getRotatedXYZ = function(xyz, originXYZ, thetaX, thetaY, thetaZ) {
+	var rotatedXYZ = [xyz[0] - originXYZ[0], xyz[1] - originXYZ[1], xyz[2] - originXYZ[2]];
+	if(thetaX != 0) {
+		rotatedXYZ[1] = Math.cos(thetaX)*rotatedXYZ[1] - Math.sin(thetaX)*rotatedXYZ[2];
+		rotatedXYZ[2] = Math.sin(thetaX)*rotatedXYZ[1] + Math.cos(thetaX)*rotatedXYZ[2];
+	}
+	if(thetaY != 0) {
+		rotatedXYZ[0] = Math.cos(thetaY)*rotatedXYZ[0] + Math.sin(thetaY)*rotatedXYZ[2];
+		rotatedXYZ[2] = -Math.sin(thetaY)*rotatedXYZ[0] + Math.cos(thetaY)*rotatedXYZ[2];
+	}
+	if(thetaZ != 0) {
+		rotatedXYZ[0] = Math.cos(thetaZ)*rotatedXYZ[0] - Math.sin(thetaZ)*rotatedXYZ[1];
+		rotatedXYZ[1] = Math.sin(thetaZ)*rotatedXYZ[0] + Math.cos(thetaZ)*rotatedXYZ[1];
+	}
+	rotatedXYZ = [rotatedXYZ[0] + originXYZ[0], rotatedXYZ[1] + originXYZ[1], rotatedXYZ[2] + originXYZ[2]];
+	return rotatedXYZ;
+}
+
+CanvasMath.distanceFromPointToPoint3D = function(x1, y1, z1, x2, y2, z2) {
+	return Math.sqrt( Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2) + Math.pow((z2 - z1), 2) );
+}
+
 CanvasMath.multiplyMat4Vec4 = function(mat, vec) {
 	return [
 		mat[0]*vec[0] 	+ mat[4]*vec[1] 	+ mat[8]*vec[2] 	+ mat[12]*vec[3],

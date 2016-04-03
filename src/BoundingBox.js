@@ -26,6 +26,7 @@ BoundingBox.prototype._createHalfExtents = function(width, height, depth) {
 }
 
 BoundingBox.prototype.recalculate = function(rotation) {
+	// TODO: fix this
 	// TODO: update half extents
 	/*
 	var xyz = this.getXYZ();
@@ -33,7 +34,18 @@ BoundingBox.prototype.recalculate = function(rotation) {
 	var point1 = [xyz[3], xyz[4], xyz[5]];
 	var point2 = [xyz[6], xyz[7], xyz[8]];
 	var point3 = [xyz[13], xyz[14], xyz[15]];
+	
+	var rotatedPoint1 = CanvasMath.getRotatedXYZ(point1, this._position, rotation[0], rotation[1], rotation[2]);
+	var rotatedPoint2 = CanvasMath.getRotatedXYZ(point2, this._position, rotation[0], rotation[1], rotation[2]);
+	var rotatedPoint3 = CanvasMath.getRotatedXYZ(point3, this._position, rotation[0], rotation[1], rotation[2]);
+	
+	var maximumX = Math.max(Math.abs(rotatedPoint1[0]), Math.abs(rotatedPoint2[0]), Math.abs(rotatedPoint3[0]));
+	var maximumY = Math.max(Math.abs(rotatedPoint1[1]), Math.abs(rotatedPoint2[1]), Math.abs(rotatedPoint3[1]));
+	var maximumZ = Math.max(Math.abs(rotatedPoint1[2]), Math.abs(rotatedPoint2[2]), Math.abs(rotatedPoint3[2]));
 	*/
+	/*this._halfExtents[0] = Math.abs(this._position[0] - maximumX);
+	this._halfExtents[1] = Math.abs(this._position[1] - maximumY);
+	this._halfExtents[2] = Math.abs(this._position[2] - maximumZ);*/
 }
 
 BoundingBox.prototype.scale = function(scale) {
@@ -63,4 +75,25 @@ BoundingBox.prototype.intersects = function(boundingBox) {
 			return false;
 	
 	return true;
+}
+
+BoundingBox.prototype.getXYZ = function() {
+	var position = this._position;
+	var halfExtents = this._halfExtents;
+	
+	var xyz = [
+ 	    // front face
+ 		position[0] - halfExtents[0], position[1] + halfExtents[1], position[2] + halfExtents[2],
+ 		position[0] + halfExtents[0], position[1] + halfExtents[1], position[2] + halfExtents[2],
+ 		position[0] - halfExtents[0], position[1] - halfExtents[1], position[2] + halfExtents[2],
+ 		position[0] + halfExtents[0], position[1] - halfExtents[1], position[2] + halfExtents[2],
+ 		
+ 		// back face
+ 		position[0] - halfExtents[0], position[1] + halfExtents[1], position[2] - halfExtents[2],
+ 		position[0] + halfExtents[0], position[1] + halfExtents[1], position[2] - halfExtents[2],
+ 		position[0] - halfExtents[0], position[1] - halfExtents[1], position[2] - halfExtents[2],
+ 		position[0] + halfExtents[0], position[1] - halfExtents[1], position[2] - halfExtents[2]
+ 	];
+   	
+   	return xyz;
 }
