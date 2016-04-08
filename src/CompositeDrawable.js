@@ -126,11 +126,14 @@ CompositeDrawable.prototype._createDrawable = function(xyz, triangles, normals, 
 	
 	drawable.setXYZ(xyz);
 	drawable.setTriangles(triangles);
-	drawable.setNormals(normals);
+	drawable.setColors(colors);
+	
+	if(normals != null)
+		drawable.setNormals(normals);
 	if(uv != null)
 		drawable.setUV(uv);
-	drawable.setColors(colors);
-	drawable.setTexture(imageFile);
+	if(imageFile != null)
+		drawable.setTexture(imageFile);
 	
 	return drawable;
 }
