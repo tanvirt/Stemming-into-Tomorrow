@@ -32,6 +32,28 @@ Game.prototype._setup = function() {
 	this._addTextCubeToCanvas("7");
 	this._addRoomToCanvas();
 	this._addQuestionToCanvas();
+	this._addFishToCanvas();
+	//this._addHumanToCanvas();
+}
+
+Game.prototype._addFishToCanvas = function() {
+	var fish = new CompositeDrawable(this._canvas);
+	fish.loadOBJMTL('../data/obj/Model_Fish/', 'Model.mtl', 'Model.obj', 'Model.jpg');
+	fish.translate(0, 0, -1);
+	fish.rotate(0, Math.PI, Math.PI);
+	
+	fish.drawSetup = function() {
+		this.rotate(0.01, 0.01, 0.01);
+	}
+	fish.addToCanvas();
+}
+
+Game.prototype._addHumanToCanvas = function() {
+	var human = new CompositeDrawable(this._canvas);
+	human.loadOBJMTL('../data/obj/Model_Human', 'male02_dds_white.mtl', 'male02.obj', 'white.png');
+	human.translate(0, -150, -150);
+	
+	human.addToCanvas();
 }
 
 Game.prototype._addReflectiveCubeToCanvas = function() {
