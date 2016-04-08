@@ -27,11 +27,12 @@ Game.prototype.onGesture = function(gesture) {
 
 Game.prototype._setup = function() {
 	this._addHandToCanvas();
-	this._addReflectiveCubeToCanvas();
+	//this._addReflectiveCubeToCanvas();
 	this._addVideoCubeToCanvas();
 	this._addTextCubeToCanvas("7");
 	this._addRoomToCanvas();
-	this._addQuestionToCanvas();
+	//this._addQuestionToCanvas();
+	this._addFishWarningToCanvas();
 	this._addFishToCanvas();
 	//this._addHumanToCanvas();
 }
@@ -39,7 +40,7 @@ Game.prototype._setup = function() {
 Game.prototype._addFishToCanvas = function() {
 	var fish = new CompositeDrawable(this._canvas);
 	fish.loadOBJMTL('../data/obj/Model_Fish/', 'Model.mtl', 'Model.obj', 'Model.jpg');
-	fish.translate(0, 0, -1);
+	fish.translate(-0.1, 0, -1.7);
 	fish.rotate(0, Math.PI, Math.PI);
 	
 	fish.drawSetup = function() {
@@ -50,7 +51,7 @@ Game.prototype._addFishToCanvas = function() {
 
 Game.prototype._addHumanToCanvas = function() {
 	var human = new CompositeDrawable(this._canvas);
-	human.loadOBJMTL('../data/obj/Model_Human', 'male02_dds_white.mtl', 'male02.obj', 'white.png');
+	human.loadOBJMTL('../data/obj/Model_Human/', 'male02_dds_white.mtl', 'male02.obj', 'white.png');
 	human.translate(0, -150, -150);
 	
 	human.addToCanvas();
@@ -122,6 +123,22 @@ Game.prototype._getNewRoomColors = function() {
 		}
 	}
 	return colors;
+}
+
+Game.prototype._addFishWarningToCanvas = function() {
+	var text = "BEWARE of the Flying Fish!";
+	var xyz = [-1.25,1.25,0, 1.25,1.25,0, -1.25,-1.25,0, 1.25,-1.25,0];
+	var triangles = [0,2,1, 1,2,3];
+	var uv = [0,1, 1,1, 0,0, 1,0];
+	
+	var question = new DrawableObject(this._canvas);
+	question.setXYZ(xyz);
+	question.setTriangles(triangles);
+	question.setUV(uv);
+	question.setTexture(this._createWhiteText(text, 80).getTexture());
+	question.setPosition([0, 0, -5.9999]);
+	
+	question.addToCanvas();
 }
 
 Game.prototype._addQuestionToCanvas = function() {
