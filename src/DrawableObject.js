@@ -15,6 +15,7 @@ function DrawableObject(canvas) {
 	this._direction = [0, 0, 0];
 	
 	this._boundingBox = new BoundingBox(0); // DEV: consider calculating dimensions based on xyz's
+	this._boundingBoxView = null;
 	
 	this.eventHandlerList = new AssociativeArray();
 } DrawableObject.prototype = new GLObject();
@@ -22,18 +23,10 @@ function DrawableObject(canvas) {
 DrawableObject.prototype.getBoundingBox = function() { return this._boundingBox; }
 
 DrawableObject.prototype.drawBoundingBox = function() {
-	var xyz = this._getBoundingBoxXYZ();
-	var triangles = this._getBoundingBoxTriangles();
-	var colors = this._getBoundingBoxColors();
-	
-	var view = new DrawableObject(this._canvas);
-	
-	view.setXYZ(xyz);
-	view.setTriangles(triangles);
-	view.setColors(colors);
-	view.setDrawModeLines();
-	
-	view.draw();
+	var xyz = this._boundingBox.getXYZ();
+	this._boundingBoxView.setXYZ(xyz);
+	this._boundingBoxView.updateShader();
+	this._boundingBoxView.draw();
 }
 
 DrawableObject.prototype.intersects = function(drawableObject) {
@@ -45,6 +38,15 @@ DrawableObject.prototype.addBoundingBox = function(height, width, depth) {
 	this._boundingBox.setPosition(this._position);
 	this._boundingBox.scale(this._scale);
 	this._boundingBox.recalculate(this._rotation);
+	
+	this._boundingBoxView = new DrawableObject(this._canvas);
+	var xyz = this._boundingBox.getXYZ();
+	var triangles = this._getBoundingBoxTriangles();
+	var colors = this._getBoundingBoxColors();
+	this._boundingBoxView.setXYZ(xyz);
+	this._boundingBoxView.setTriangles(triangles);
+	this._boundingBoxView.setColors(colors);
+	this._boundingBoxView.setDrawModeLines();
 }
 
 DrawableObject.prototype.getId = function() { return this._id; }
@@ -155,27 +157,6 @@ DrawableObject.prototype.scale = function(width, height, depth) {
 	this._scale[2] *= depth;
 	
 	this._boundingBox.scale([width, height, depth]);
-}
-
-DrawableObject.prototype._getBoundingBoxXYZ = function() {
-	var position = this._boundingBox.getPosition();
-	var halfExtents = this._boundingBox.getHalfExtents();
-	
-	var xyz = [
- 	    // front face
- 		position[0] - halfExtents[0], position[1] + halfExtents[1], position[2] + halfExtents[2],
- 		position[0] + halfExtents[0], position[1] + halfExtents[1], position[2] + halfExtents[2],
- 		position[0] - halfExtents[0], position[1] - halfExtents[1], position[2] + halfExtents[2],
- 		position[0] + halfExtents[0], position[1] - halfExtents[1], position[2] + halfExtents[2],
- 		
- 		// back face
- 		position[0] - halfExtents[0], position[1] + halfExtents[1], position[2] - halfExtents[2],
- 		position[0] + halfExtents[0], position[1] + halfExtents[1], position[2] - halfExtents[2],
- 		position[0] - halfExtents[0], position[1] - halfExtents[1], position[2] - halfExtents[2],
- 		position[0] + halfExtents[0], position[1] - halfExtents[1], position[2] - halfExtents[2]
- 	];
-   	
-   	return xyz;
 }
 
 DrawableObject.prototype._getBoundingBoxTriangles = function() {
