@@ -80,6 +80,9 @@ function Driver() {
 	var leaf9 = new Leaf(drawable9);
 	leaf9._key = "leaf of 9 -> [0.45, 0.45, -0.45]";
 	
+	var leaf10 = new Leaf(drawable4);
+	leaf10._key = "leaf of 10 -> [0.65, 0.65, 0.65]";
+	
 	tree.insert(leaf);
 	tree.insert(leaf2);
 	tree.insert(leaf3);
@@ -89,7 +92,11 @@ function Driver() {
 	tree.insert(leaf7);
 	tree.insert(leaf8);
 	tree.insert(leaf9);
+	console.log(leaf9);
 	console.log(tree.getCollidee(leaf9.getBoundingBox()));
+	
+	console.log(leaf10);
+	console.log(tree.getCollidee(leaf10.getBoundingBox()));
 	console.log(tree);
 	
 	document.body.onkeypress = function(event) {
