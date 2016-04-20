@@ -1,5 +1,3 @@
-// DEV: calling super methods in hand constructor does not function properly
-
 function Hand(canvas) { 
     if(arguments.length < 1) return;
     DrawableObject.call(this, canvas);

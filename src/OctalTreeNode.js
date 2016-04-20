@@ -28,17 +28,11 @@ OctalTreeNode.prototype.getChildren = function() {
 }
 
 OctalTreeNode.prototype.addToLimb = function(leaf) {
-	//console.log("addToLimb");
-	//console.log(this._subSpaces.values());
-//	console.log(this._existsInBoundingBox(leaf));
-//	console.log(this._hasSubspaces());
 	if(this._existsInBoundingBox(leaf) && !this._hasSubspaces()) {
-		//console.log("addToLocalBin");
 		this._addToCurrentGraphicBin(leaf);
 	}
 	else if(this._existsInBoundingBox(leaf) && this._hasSubspaces()) {
 		try {
-			//console.log("dumpToSubSpace");
 			this._addToSubSpace(leaf);
 		}
 		catch(error) {
@@ -47,15 +41,13 @@ OctalTreeNode.prototype.addToLimb = function(leaf) {
 	}
 	else if(!this._existsInBoundingBox(leaf)) {
 		throw "Doesn't Exist In SubSpace!";
-	}
-		
+	}		
 }
 
 
 OctalTreeNode.prototype._addToSubSpace = function(leaf) {
 	var foundSubSpace = false;
 	
-	//make switch state if all goes to hell
 	var keySet = this._subSpaces.getKeys();
 	for(var i in keySet) {
 		var key = keySet[i];
@@ -66,21 +58,16 @@ OctalTreeNode.prototype._addToSubSpace = function(leaf) {
 		}
 		catch(error) {
 			if(foundSubSpace) {
-				//console.log("found Spot!");
 				break;
 			}
 			else {
-				console.log("ERORROROROROOROROR");
+				console.log("add to subspace error");
 			}
 		}
 	}
 	
 	if(!foundSubSpace)
 		throw "Doesn't Exist in Single SubSpace!";
-	
-	//for each for associativeArray
-	//catch errors and set var as false accordingly --filter all error throws from no fit nodes
-	//if false at end throw error that it wasn't placed
 }
 
 OctalTreeNode.prototype._addToCurrentGraphicBin = function(leaf) {
@@ -91,7 +78,6 @@ OctalTreeNode.prototype._addToCurrentGraphicBin = function(leaf) {
 		this._addLeavesToSubSpaces();
 		this.addToLimb(leaf);
 	}
-		//make subspaces and add leaves accordingly... including the one in this param
 }
 
 OctalTreeNode.prototype._setSubSpaces = function() {
@@ -134,66 +120,45 @@ OctalTreeNode.prototype._setSubSpaces = function() {
 	}
 }
 
-//Current Issue... key value pair is not removed. The AssociativeArray class need to fixed so the remove function actually removes
-
 OctalTreeNode.prototype._addLeavesToSubSpaces = function() {
-	//console.log("addLeavesToSubSpaces");
 	var nodeCenter = this._boundingBox.getPosition();
 	var keySet = this._spacialObjectBin.getKeys();
-	//console.log(nodeCenter);
-//	console.log(keySet);
 	for(var i in keySet) {
 		var key = keySet[i];
 		var value = this._spacialObjectBin.get(key);
-//		console.log("i: " + i);
-//		console.log("value: " + value);
 		var boundingBox = value.getBoundingBox();
 		var boundingBoxCenter = boundingBox.getPosition();
-		//console.log(boundingBoxCenter);
 		try {
 			if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2] ) {
-				//console.log("+++");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("+++").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-				//console.log("-++");
 				this._spacialObjectBin.remove(key);
-				//console.log("HELLLO " + this._subSpaces.get("-++"));
 				this._subSpaces.get("-++").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-				//console.log("+-+");
 				this._spacialObjectBin.remove(key);
-				//console.log(this._subSpaces.get("+-+"));
 				this._subSpaces.get("+-+").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
-				//console.log("--+");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("--+").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-				//console.log("++-");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("++-").addToLimb(value);
-				//console.log("value: " + value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-				//console.log("-+-");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("-+-").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-				//console.log("+--");
 				this._spacialObjectBin.remove(key);
 				this._subSpaces.get("+--").addToLimb(value);
 			}
 			else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
-				//console.log("---");
-				//console.log(key);
 				this._spacialObjectBin.remove(key);
-				//console.log(this._spacialObjectBin);
 				this._subSpaces.get("---").addToLimb(value);
 			}
 		}
@@ -214,7 +179,6 @@ OctalTreeNode.prototype._hasSubspaces = function() {
 }
 
 OctalTreeNode.prototype._existsInBoundingBox = function(leaf) {
-	//console.log(this._boundingBox.contains(leaf.getBoundingBox()));
 	return this._boundingBox.contains(leaf.getBoundingBox());
 }
 
@@ -235,12 +199,8 @@ OctalTreeNode.prototype.getLeaf = function(leaf) {
 }
 
 OctalTreeNode.prototype.getCollidee = function(boundingBox) {
-	//check my local bin
-	//throw to right subspace if not in local bin
-	
 	if(this._localCollisionOccurred(boundingBox)) {
 		var collidee = this._getLocalCollision(boundingBox);
-		//console.log(collidee);
 		return collidee;
 	}
 	else if(this._hasSubspaces())
@@ -265,7 +225,6 @@ OctalTreeNode.prototype._getLocalCollision = function(boundingBox) {
 		var leafBoundingBox = leaves[i].getBoundingBox();
 		if(boundingBox.intersects(leafBoundingBox)) {
 			var collidee = this._spacialObjectBin.get(leaves[i].getKey()).getData();
-			//console.log(collidee);
 			return collidee;
 		}
 	}
@@ -278,42 +237,34 @@ OctalTreeNode.prototype._dumpToChildren = function(boundingBox) {
 	try {
 		if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2] ) {
 			var collidee = this._subSpaces.get("+++").getCollidee(boundingBox);
-			//console.log(collidee);
 			return collidee;
 		}
 		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
 			var collide = this._subSpaces.get("-++").getCollidee(boundingBox);
-			//console.log(collide);
 			return collidee;
 		}
 		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
 			var collidee = this._subSpaces.get("+-+").getCollidee(boundingBox);
-			//console.log(collidee);
 			return collidee;
 		}
 		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] > nodeCenter[2]) {
 			var collidee = this._subSpaces.get("--+").getCollidee(boundingBox);
-			//console.log(collidee);
 			return collidee;
 		}
 		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
 			var collidee = this._subSpaces.get("++-").getCollidee(boundingBox);
-			//console.log(collidee);
 			return collidee;
 		}
 		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] > nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
 			var collidee = this._subSpaces.get("-+-").getCollidee(boundingBox);
-			//console.log(collidee);
 			return collidee;
 		}
 		else if(boundingBoxCenter[0] > nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
 			var collidee = this._subSpaces.get("+--").getCollidee(boundingBox);
-			//console.log(collidee);
 			return collidee;
 		}
 		else if(boundingBoxCenter[0] < nodeCenter[0] && boundingBoxCenter[1] < nodeCenter[1] && boundingBoxCenter[2] < nodeCenter[2]) {
 			var collidee = this._subSpaces.get("---").getCollidee(boundingBox);
-			//console.log(collidee);
 			return collidee;
 		}
 	}

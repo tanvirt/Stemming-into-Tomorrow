@@ -8,4 +8,3 @@ Tree.prototype.setChildren = function(associativeArray) {
 	else
 		this._children.putAll(associativeArray);
 }
-

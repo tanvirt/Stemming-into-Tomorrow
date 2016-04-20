@@ -12,9 +12,14 @@ function Canvas(inputDevice, elementId) {
     this.start();
 } Canvas.prototype = new GLCanvas();
 
-Canvas.prototype.setRoom = function(filePath) {
+Canvas.prototype.setCGIRoom = function(filePath) {
 	this._room = new WebGLImageComposition(this);
 	this._room.load(filePath);
+}
+
+Canvas.prototype.setHDRIRoom = function(filePath) {
+	this._room = new HDRISphere(this, 35);
+	this._room.setTexture(filePath);
 }
 
 Canvas.prototype.addDrawableObject = function(drawableObject) {

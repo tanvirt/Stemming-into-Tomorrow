@@ -1,14 +1,34 @@
-// Implements the GestureListener interface.
 function Game(canvas, inputDevice) {
 	if(arguments.length < 2) return;
 	
 	this._canvas = canvas;
+
 	this._inputDevice = inputDevice;
 	this._inputDevice.addGestureListener(this);
 	
 	this._selectedObject = null;
 	
+	this._server = new Server("Experiential Learning");
+	this._server.addListener(this);
+	
 	this._setup();
+}
+
+Game.prototype.onConnectionOpened = function() {
+	this._server.createAndJoinNewSession("Session 1", 2, false);
+}
+
+Game.prototype.onSelfJoinedSession = function() {
+	this._server.createSessionVariable("game_score", 2);
+	this._server.createSessionStream("buffer", new Uint8Array([2, 3, 4]));
+}
+
+Game.prototype.onSessionVariableChanged = function(variable, user) {
+	console.log(variable);
+}
+
+Game.prototype.onSessionStreamChanged = function(stream, user) {
+	console.log("session stream changed");
 }
 
 Game.prototype.onGesture = function(gesture) {
@@ -26,153 +46,74 @@ Game.prototype.onGesture = function(gesture) {
 }
 
 Game.prototype._setup = function() {
+	this._setCanvasRoom();
 	this._addHandToCanvas();
-	//this._addReflectiveCubeToCanvas();
-	this._addVideoCubeToCanvas();
-	this._addTextCubeToCanvas("7");
-	this._addRoomToCanvas();
-	//this._addQuestionToCanvas();
-	this._addFishWarningToCanvas();
-	this._addFishToCanvas();
-	//this._addHumanToCanvas();
+	this._addAnswerCubesToCanvas();
+	this._addAnswerAreaToCanvas();
+	this._addTransformingSphereToCanvas();
+	//this._addRocketToCanvas();
 }
 
-Game.prototype._addFishToCanvas = function() {
-	var fish = new CompositeDrawable(this._canvas);
-	fish.loadOBJMTL('../data/obj/Model_Fish/', 'Model.mtl', 'Model.obj', 'Model.jpg');
-	fish.translate(-0.1, 0, -1.7);
-	fish.rotate(0, Math.PI, Math.PI);
-	
-	fish.drawSetup = function() {
-		this.rotate(0.01, 0.01, 0.01);
+Game.prototype._addRocketToCanvas = function() {
+	var rocket = new CompositeDrawable(this._canvas);
+	rocket.loadOBJMTL('../data/obj/Rocket/', 'roket.mtl', 'roket.obj', '');
+	//rocket.translate(-275, 0, -700);
+	rocket.translate(-1400, 0, -700);
+	rocket.rotate(0, Math.PI/2, 0);
+
+	rocket.drawSetup = function() {
+		this.translate(3, 0, 0);
+		if(this.getPosition()[1] > 1400)
+			this.removeFromCanvas();
 	}
-	fish.addToCanvas();
+
+	rocket.addToCanvas();
 }
 
-Game.prototype._addHumanToCanvas = function() {
-	var human = new CompositeDrawable(this._canvas);
-	human.loadOBJMTL('../data/obj/Model_Human/', 'male02_dds_white.mtl', 'male02.obj', 'white.png');
-	human.translate(0, -150, -150);
-	
-	human.addToCanvas();
+Game.prototype._addTransformingSphereToCanvas = function() {
+	var sphere = new TransformingSphere(this._canvas, "Which numbers are prime?");
+	sphere.rotate(Math.PI/4, 0, 0);
+	sphere.setPosition([0, 7.5, -5]);
+	sphere.addToCanvas();
+	sphere.transform();
 }
 
-Game.prototype._addReflectiveCubeToCanvas = function() {
-	var reflectiveCube = new Rectangle(this._canvas, 0.5);
-	reflectiveCube.setTexture("http://www.visineat.com/js/img/textures/wood_tile.jpg");
-	reflectiveCube.enableDefaultReflection("http://www.visineat.com/js/img/hdri/country1.jpg");
-	reflectiveCube.disablePicking(false);
-	reflectiveCube.addBoundingBox(0.5, 0.5, 0.5);
-	
-	reflectiveCube.setPosition([0, -0.75, -5]);
-	reflectiveCube.drawSetup = function() {
-		this.rotate(0.01, 0.01, 0.01);
-		reflectiveCube.drawBoundingBox();
-	}
-	reflectiveCube.addToCanvas();
+Game.prototype._setCanvasRoom = function() {
+	this._canvas.setHDRIRoom("../data/textures/hdri_stars.jpg");
 }
 
-Game.prototype._addVideoCubeToCanvas = function() {
-	var videoCube = new Rectangle(this._canvas, 0.5);
-	videoCube.disablePicking(false);
-	videoCube.setVideoTexture("../data/textures/abstract_light_hd.mp4");
-	videoCube.disableShading();
+Game.prototype._addAnswerCubesToCanvas = function() {
+	this._addAnswerCubeToCanvas("13", [1.25, -0.75, -3]);
+	this._addAnswerCubeToCanvas("4", [1.25, 0.75, -3]);
+	this._addAnswerCubeToCanvas("1", [1.5, 0, -3]);
+
+	this._addAnswerCubeToCanvas("14", [-1.25, -0.75, -3]);
+	this._addAnswerCubeToCanvas("3", [-1.25, 0.75, -3]);
+	this._addAnswerCubeToCanvas("8", [-1.5, 0, -3]);
+}
+
+Game.prototype._addAnswerCubeToCanvas = function(text, position) {
+	var answerCube = new AnswerCube(this._canvas, text, 0.25);
+
+	answerCube.disablePicking(false);
+	answerCube.setPosition(position);
 	
-	videoCube.setPosition([1.5, -0.75, -5]);
-	videoCube.drawSetup = function() {
-		this.getTexture().update();
-		this.rotate(0.01, 0.01, 0.01);
-	}
-	videoCube.addToCanvas();
+	octree_global.addMovingObject(answerCube);
+	answerCube.addToCanvas();
+}
+
+Game.prototype._addAnswerAreaToCanvas = function() {
+	var answerArea = new AnswerArea(this._canvas, 1.5, 1.5, 1.5);
+	var answers = ["1", "2", "3", "5", "7", "11", "13"];
+	answerArea.setCorrectAnswers(answers);
+	answerArea.setPosition([0, 0, -3.5]);
+	
+	answerArea.addToCanvas();
 }
 
 Game.prototype._addHandToCanvas = function() {
 	var hand = new Hand(this._canvas);
 	hand.addToCanvas();
-}
-
-Game.prototype._addRoomToCanvas = function() {
-	var self = this;
-	var center = [0, 0, 0];
-	var room = new Rectangle(this._canvas, 3, 4, 12);
-	room.setTexture("../data/textures/dark_wood.jpg");
-	room.disableShading();
-	
-	var startTime = new Date().getTime();
-	room.drawSetup = function() {
-		var currentTime = new Date().getTime();
-		var elapsedTime = currentTime - startTime;
-		if(elapsedTime%1000 < 20) // entered approximately every 1 second
-			this.setColors(self._getNewRoomColors());
-	}
-	room.addToCanvas();
-}
-
-Game.prototype._getNewRoomColors = function() {
-	var colors = [];
-	for(var i = 0; i < 24; i++) {
-		if(i > 20) {
-			colors.push(Math.random());
-			colors.push(Math.random());
-			colors.push(Math.random());
-		}
-		else {
-			colors.push(1);
-			colors.push(1);
-			colors.push(1);
-		}
-	}
-	return colors;
-}
-
-Game.prototype._addFishWarningToCanvas = function() {
-	var text = "BEWARE of the Flying Fish!";
-	var xyz = [-1.25,1.25,0, 1.25,1.25,0, -1.25,-1.25,0, 1.25,-1.25,0];
-	var triangles = [0,2,1, 1,2,3];
-	var uv = [0,1, 1,1, 0,0, 1,0];
-	
-	var question = new DrawableObject(this._canvas);
-	question.setXYZ(xyz);
-	question.setTriangles(triangles);
-	question.setUV(uv);
-	question.setTexture(this._createWhiteText(text, 80).getTexture());
-	question.setPosition([0, 0, -5.9999]);
-	
-	question.addToCanvas();
-}
-
-Game.prototype._addQuestionToCanvas = function() {
-	var text = "Which numbers are divisible by 3?";
-	var xyz = [-1.25,1.25,0, 1.25,1.25,0, -1.25,-1.25,0, 1.25,-1.25,0];
-	var triangles = [0,2,1, 1,2,3];
-	var uv = [0,1, 1,1, 0,0, 1,0];
-	
-	var question = new DrawableObject(this._canvas);
-	question.setXYZ(xyz);
-	question.setTriangles(triangles);
-	question.setUV(uv);
-	question.setTexture(this._createWhiteText(text, 60).getTexture());
-	question.setPosition([0, 0, -5.9999]);
-	
-	question.addToCanvas();
-}
-
-Game.prototype._addTextCubeToCanvas = function(text) {
-	var self = this;
-	var textCube = new Rectangle(this._canvas, 0.5);
-	textCube.disablePicking(false);
-	textCube.setTexture(self._createBlackText("0", 60).getTexture());
-	textCube.setPosition([-1.5, -0.75, -5], "7");
-	
-	var previousVelocity = textCube.getVelocity();
-	textCube.drawSetup = function() {
-		var currentVelocity = this.getVelocity();
-		if(currentVelocity != previousVelocity)
-			this.setTexture(self._createBlackText(Math.floor(currentVelocity), 60).getTexture());
-		previousVelocity = currentVelocity;
-		this.rotate(0.01, 0.01, 0.01);
-	}
-	textCube.addToCanvas();
 }
 
 Game.prototype._createBlackText = function(string, height) {

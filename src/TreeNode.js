@@ -34,11 +34,3 @@ TreeNode.prototype.addLeaf = function(leaf) {
 TreeNode.prototype.getLeaf = function() {
 	return this._leaf;
 }
-
-//TreeNode.prototype.setDrawable = function(drawableObject) {
-//	this._drawableObject = drawableObject;
-//}
-//
-//TreeNode.prototype.getDrawable = function() {
-//	return this._drawableObject;
-//}

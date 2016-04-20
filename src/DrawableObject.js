@@ -16,8 +16,6 @@ function DrawableObject(canvas) {
 	
 	this._boundingBox = new BoundingBox(0); // DEV: consider calculating dimensions based on xyz's
 	this._boundingBoxView = null;
-	
-	this.eventHandlerList = new AssociativeArray();
 } DrawableObject.prototype = new GLObject();
 
 DrawableObject.prototype.getBoundingBox = function() { return this._boundingBox; }
@@ -33,8 +31,12 @@ DrawableObject.prototype.intersects = function(drawableObject) {
 	return this._boundingBox.intersects(drawableObject.getBoundingBox());
 }
 
-DrawableObject.prototype.addBoundingBox = function(height, width, depth) {
-	this._boundingBox = new BoundingBox(height, width, depth);
+DrawableObject.prototype.contains = function(drawableObject) {
+	return this._boundingBox.contains(drawableObject.getBoundingBox());
+}
+
+DrawableObject.prototype.addBoundingBox = function(width, height, depth) {
+	this._boundingBox = new BoundingBox(width, height, depth);
 	this._boundingBox.setPosition(this._position);
 	this._boundingBox.scale(this._scale);
 	this._boundingBox.recalculate(this._rotation);
@@ -61,7 +63,7 @@ DrawableObject.prototype.enableDefaultReflection = function(reflectionImage) {
 	var material = new GLMaterial(this._canvas);
 	//material.setSpecularColor([1,1,1]);
 	//material.setSpecularExponent(10);
-	material.setMatCap("http://www.visineat.com/js/img/matcap/matcap3.jpg");
+	//material.setMatCap("http://www.visineat.com/js/img/matcap/matcap3.jpg");
 	material.setReflection(reflectionImage);
 	material.setReflectionColor([0.2,0.1,0.1]);
 	
@@ -138,7 +140,7 @@ DrawableObject.prototype.rotate = function(thetaX, thetaY, thetaZ) {
 	if(this._rotation[2] > 2*Math.PI)
 		this._rotation[2] = 2*Math.PI - this._rotation[2];
 	
-	this._boundingBox.recalculate([thetaX, thetaY, thetaZ]);
+	this._boundingBox.recalculate(this._rotation);
 }
 
 DrawableObject.prototype.translate = function(x, y, z) {
@@ -194,40 +196,3 @@ DrawableObject.prototype._getBoundingBoxColors = function() {
 	
 	return colors;
 }
-
-
-
-
-
-
-//TODO add some type of dispatcher for the below to use
-DrawableObject.prototype.addEventListener = function(eventType, eventHandler) {
-	EventDispatcher.register(eventType, this);  //TODO
-	this._addEventHandlerToList(eventType, eventHandler);
-}
-
-//The below is called by the drawable list????
-DrawableObject.prototype.interact = function(event, drawableObject) {
-	this._getEventHandler(event).handle(this, drawableObject);
-	
-	//Maybe... Huh???? what if the above destroys the drawableObject...... Template Method....???
-	drawableObject.interact(eventType, this);
-}
-
-DrawableObject.prototype._getEventHandler = function(eventType) {
-	if(this._eventExists(eventType))
-		return this.eventHandlerList.get(key);
-	else
-		console.log("EventHandler for type: " + key + " does not exist! :(");
-	return null;
-}
-
-DrawableObject.prototype._addEventHandlerToList = function(eventType, eventHandler) {
-	this.eventHandlerList.put(eventType, eventHandler);
-}
-
-DrawableObject.prototype._eventExists = function(eventType) {
-	return this.eventHandlerList.containsKey(eventType);
-}
-
-//drawable.addEventListener(new CollisionEvent(), new EventHandler());

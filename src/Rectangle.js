@@ -1,15 +1,10 @@
-function Rectangle(canvas, height, width, depth) {
-	if(arguments.length < 2) return;
+function Rectangle(canvas, width, height, depth) {
+	if(arguments.length < 4) return;
 	DrawableObject.call(this, canvas);
 	
 	this._height = height;
 	this._width = width;
 	this._depth = depth;
-	
-	if(this._width == undefined)
-		this._width = height;
-	if(this._depth == undefined)
-		this._depth = height;
 	
 	this._makeRectangle();
 } Rectangle.prototype = new DrawableObject();
