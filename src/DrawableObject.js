@@ -20,6 +20,13 @@ function DrawableObject(canvas) {
 	this._animation = new Animation(this, function() {});
 } DrawableObject.prototype = new GLObject();
 
+// DEV: this is temporary
+DrawableObject.prototype.update = function(positionString) {
+	var xyz = positionString.split(",");
+	this.setColorMask([0, 0, 1, 1]);
+	this.setPosition(xyz);
+}
+
 DrawableObject.prototype.drawSetup = function() {
 	this._animation.animate();
 }
