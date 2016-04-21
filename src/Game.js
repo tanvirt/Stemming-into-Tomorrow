@@ -31,16 +31,31 @@ Game.prototype.onConnectionOpened = function() {
 Game.prototype.onSelfJoinedSession = function(session) {
 	if(!this._server.sessionVariableExists("game_score")) {
 		console.log("creating session variable");
+		this._initServerGraphics();
 		this._server.createSessionVariable("game_score", this._gameScore);
 	}
 }
 
 Game.prototype.onSessionVariableChanged = function(variable, user) {
-	if(variable.name == "game_score")
+	if(variable.name == "game_score") {
 		this._setGameScore(variable.value());
-	console.log(variable);
-	console.log(this._gameScore);
+		console.log(variable);
+		console.log(this._gameScore);
+	}
+	else if(this._selectedObject != null && variable.name == this._selectedObject.getId()) {
+		console.log(variable.value());
+	}
+	else if(this._resources.containsKey(variable.name)) {
+		console.log("Somebody is moving some stuff");
+	}
+	
 }
+
+Game.prototype._alertServer = function() {
+	this._server.setSessionVariable(this._selectedObject.getId(), this._selectedObject.getPosition().toString());
+	console.log("BLOOOOOP");
+}
+
 
 Game.prototype._setGameScore = function(stringValue) {
 	this._gameScore = parseInt(stringValue);
@@ -48,6 +63,16 @@ Game.prototype._setGameScore = function(stringValue) {
 
 Game.prototype.onSessionStreamChanged = function(stream, user) {
 	// TODO
+}
+
+Game.prototype._initServerGraphics = function() {
+	console.log(this._resources.get("answerCube13").getPosition().toString());
+	this._server.createSessionVariable("answerCube13", this._resources.get("answerCube13").getPosition().toString());
+	this._server.createSessionVariable("answerCube4", this._resources.get("answerCube4").getPosition().toString());
+	this._server.createSessionVariable("answerCube1", this._resources.get("answerCube1").getPosition().toString());
+	this._server.createSessionVariable("answerCube14", this._resources.get("answerCube14").getPosition().toString());
+	this._server.createSessionVariable("answerCube3", this._resources.get("answerCube3").getPosition().toString());
+	this._server.createSessionVariable("answerCube8", this._resources.get("answerCube8").getPosition().toString());
 }
 
 Game.prototype._loadResources = function() {
@@ -66,13 +91,16 @@ Game.prototype._loadResources = function() {
 
 	this._resources.put("question", this._createTransformingSphere());
 	
+	
 	this._resources.get("answerCube13").setId("answerCube13");
 	this._resources.get("answerCube4").setId("answerCube4");
 	this._resources.get("answerCube1").setId("answerCube1");
 	this._resources.get("answerCube14").setId("answerCube14");
 	this._resources.get("answerCube3").setId("answerCube3");
 	this._resources.get("answerCube8").setId("answerCube8");
+	
 }
+
 
 Game.prototype._setup = function() {
 	this._setCanvasRoom();
@@ -241,6 +269,7 @@ Game.prototype._onPinch = function(gesture) {
 	}
 	else if(gesture.state == "update" && this._selectedObject != null) {
 		this._selectedObject.setPosition(pinchCenter);
+		this._alertServer();
 		//console.log(this._selectedObject);
 	}
 	else if(gesture.state == "stop")
