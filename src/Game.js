@@ -83,18 +83,17 @@ Game.prototype._loadResources = function() {
 	this._resources.put("hand", this._createHand());
 
 	this._resources.put("rocket", this._createRocket());
-
-	this._resources.put("answerCube13", this._createAnswerCube("13", [1.25, -0.75, -3]));
-	this._resources.put("answerCube4", this._createAnswerCube("4", [1.25, 0.75, -3]));
-	this._resources.put("answerCube1", this._createAnswerCube("1", [1.5, 0, -3]));
-	this._resources.put("answerCube14", this._createAnswerCube("14", [-1.25, -0.75, -3]));
-	this._resources.put("answerCube3", this._createAnswerCube("3", [-1.25, 0.75, -3]));
-	this._resources.put("answerCube8", this._createAnswerCube("8", [-1.5, 0, -3]));
-
-	this._resources.put("answerArea", this._createAnswerArea());
+	
+	this._resources.put("answerCube13", this._createAnswerCube("13", [-1, 0, -3]));
+	this._resources.put("answerCube4", this._createAnswerCube("4", [-1, 0.5, -3]));
+	this._resources.put("answerCube1", this._createAnswerCube("1", [-1, -0.5, -3]));
+	this._resources.put("answerCube14", this._createAnswerCube("14", [-0.5, 0, -3]));
+	this._resources.put("answerCube3", this._createAnswerCube("3", [-0.5, 0.5, -3]));
+	this._resources.put("answerCube8", this._createAnswerCube("8", [-0.5, -0.5, -3]));
+	
+	this._resources.put("answerArea", this._createAnswerArea([1.175, 0, -3.5]));
 
 	this._resources.put("question", this._createTransformingSphere());
-	
 	
 	this._resources.get("answerCube13").setId("answerCube13");
 	this._resources.get("answerCube4").setId("answerCube4");
@@ -102,7 +101,6 @@ Game.prototype._loadResources = function() {
 	this._resources.get("answerCube14").setId("answerCube14");
 	this._resources.get("answerCube3").setId("answerCube3");
 	this._resources.get("answerCube8").setId("answerCube8");
-	
 }
 
 
@@ -216,11 +214,11 @@ Game.prototype._createAnswerCube = function(text, position) {
 	return answerCube;
 }
 
-Game.prototype._createAnswerArea = function() {
+Game.prototype._createAnswerArea = function(position) {
 	var answerArea = new AnswerArea(this._canvas, 1.5, 1.5, 1.5);
 	var answers = ["1", "2", "3", "5", "7", "11", "13"];
 	answerArea.setCorrectAnswers(answers);
-	answerArea.setPosition([0, 0, -3.5]);
+	answerArea.setPosition(position);
 
 	return answerArea;
 }
