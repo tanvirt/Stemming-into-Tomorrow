@@ -14,6 +14,11 @@ AnswerCube.prototype.getText = function() {
 	return this._text;
 }
 
+AnswerCube.prototype.setText = function(text) {
+	this._text = text;
+	this.setTexture(this._createBlackText(this._text, 60).getTexture());
+}
+
 AnswerCube.prototype._createBlackText = function(string, height) {
 	var text = new Text(this._canvas, string);
 	text.setBackgroundColor("white");

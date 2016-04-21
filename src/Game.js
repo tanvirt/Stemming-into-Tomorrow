@@ -5,6 +5,9 @@ function Game(canvas, inputDevice) {
 	
 	this._canvas = canvas;
 
+	this._scoreGraphic = this._createAnswerCube(0, [-1, 0, -2]);
+	this._scoreGraphic.addToCanvas();
+	
 	this._inputDevice = inputDevice;
 	this._inputDevice.addGestureListener(this);
 
@@ -74,6 +77,7 @@ Game.prototype._alertServer = function() {
 
 Game.prototype._setGameScore = function(stringValue) {
 	this._gameScore = parseInt(stringValue);
+	this._scoreGraphic.setText(stringValue);
 }
 
 Game.prototype.onSessionStreamChanged = function(stream, user) {
