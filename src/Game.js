@@ -31,6 +31,9 @@ function Game(canvas, inputDevice) {
 	
 	this._server = new Server("Experiential Learning");
 	this._server.addListener(this);	
+
+	var intro = new RocketIntro(this._canvas);
+	intro.start();
 	
 }
 
@@ -140,7 +143,7 @@ Game.prototype._setup = function() {
 	this._addHandToCanvas();
 	this._addAnswerCubesToCanvas();
 	this._addAnswerAreaToCanvas();
-	this._addTransformingSphereToCanvas();
+	//this._addTransformingSphereToCanvas();
 	//this._addRocketToCanvas();
 }
 
