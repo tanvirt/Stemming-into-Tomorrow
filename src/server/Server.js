@@ -40,8 +40,16 @@ Server.prototype._onConnectionOpened = function() {
 }
 
 Server.prototype._onSelfJoinedSession = function() {
+	this._sync();
 	for(var i = 0; i < this._listeners.length; i++)
 		this._listeners[i].onSelfJoinedSession();
+}
+
+Server.prototype._sync = function() {
+	var session = this._server.getSession();
+	for(var variable in session.variables()) {
+		this._variables.put(variable.name, variable.value());
+	}
 }
 
 Server.prototype._onSessionVariableChanged = function(variable, user) {
@@ -78,7 +86,7 @@ Server.prototype._createRemoteSessionVariable = function(variableName, variableV
 }
 
 Server.prototype._setRemoteSessionVariable = function(variableName, variableValue) {
-	if(this._sessionVariableExists(variableName)) {
+	if(this.sessionVariableExists(variableName)) {
 		var variable = this._server.getSession().variable(variableName);
 		variable.set(variableValue);
 		this._addRemoteSessionVariableCallback(variable);
@@ -132,7 +140,7 @@ Server.prototype._onUserStreamChanged = function(user, variable, initiator) {
 	
 }
 
-Server.prototype._sessionVariableExists = function(variableName) {
+Server.prototype.sessionVariableExists = function(variableName) {
 	return this._variables.containsKey(variableName);
 }
 

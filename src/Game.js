@@ -31,7 +31,9 @@ Game.prototype.onConnectionOpened = function() {
 }
 
 Game.prototype.onSelfJoinedSession = function() {
-	this._server.createSessionVariable("game_score", this._gameScore);
+	if(!this._server.sessionVariableExists("game_score"))
+		this._server.createSessionVariable("game_score", this._gameScore);
+	
 }
 
 Game.prototype.onSessionVariableChanged = function(variable, user) {
@@ -39,8 +41,6 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 		this._setGameScore(variable.value());
 	console.log("Variable: ");
 	console.log(variable);
-	console.log("User: ");
-	console.log(user);
 }
 
 Game.prototype._setGameScore = function(stringValue) {
