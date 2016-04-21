@@ -157,16 +157,10 @@ CompositeDrawable.prototype._getDefaultColors = function(xyzLength) {
 	return colors;
 }
 
-CompositeDrawable.prototype.setColor = function(color) {
+CompositeDrawable.prototype.setColorMask = function(rgba) {
 	for(var i = 0; i < this._components.length; i++) {
 		var component = this._components[i];
-		var colors = [];
-		for(var j = 0; j < component.buffers["aXYZ"].data/3; i++) {
-			colors.push(color[0]);
-			colors.push(color[1]);
-			colors.push(color[2]);
-		}
-		component.setColors(colors);
+		component.setColorMask(rgba);
 	}
 }
 

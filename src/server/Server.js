@@ -35,33 +35,19 @@ function Server(serverName) {
 }
 
 Server.prototype._onConnectionOpened = function() {
-	
 	for(var i = 0; i < this._listeners.length; i++)
 		this._listeners[i].onConnectionOpened();
 }
 
-Server.prototype._onSelfJoinedSession = function() {
-	this._sync();
-	console.log("server notifying listeners");
+Server.prototype._onSelfJoinedSession = function(session) {
 	for(var i = 0; i < this._listeners.length; i++)
-		this._listeners[i].onSelfJoinedSession();
-}
-
-// Broken maybe
-//
-
-Server.prototype._sync = function() {
-	var session = this._server.getSession();
-	for(var variable in session.variables()) {
-		this._variables.put(variable.name, variable.value());
-	}
+		this._listeners[i].onSelfJoinedSession(session);
 }
 
 Server.prototype._onSessionVariableChanged = function(variable, user) {
 	for(var i = 0; i < this._listeners.length; i++)
 		this._listeners[i].onSessionVariableChanged(variable, user);
 }
-
 
 Server.prototype._onSessionStreamChanged = function(stream, user) {
 	for(var i = 0; i < this._listeners.length; i++)
@@ -74,14 +60,6 @@ Server.prototype.addListener = function(listener) {
 
 Server.prototype.sessionExists = function(sessionName) {
 	var sessions = this._server.getSessions();
-	var dotSessions = this._server.sessions;
-	console.log(dotSessions);
-	console.log(this._server);
-	console.log(sessions);
-	for(var ses in dotSessions) {
-		console.log(ses.name);
-	}
-	console.log(sessions.hasOwnProperty(sessionName));
 	return sessions.hasOwnProperty(sessionName);
 }
 

@@ -6,14 +6,12 @@ function Game(canvas, inputDevice) {
 	this._server = new Server("Experiential Learning");
 	this._server.addListener(this);	
 	
-	
 	this._canvas = canvas;
 
 	this._inputDevice = inputDevice;
 	this._inputDevice.addGestureListener(this);
 
 	this._selectedObject = null;
-
 
 	this._resources = new AssociativeArray();
 	
@@ -27,43 +25,25 @@ Game.prototype.update = function() {
 }
 
 Game.prototype.onConnectionOpened = function() {
-	
 	this._server.joinFirstAvailableSession(2, false);
-//	console.log("onConnectionOpened");
-//	if(this._server.sessionExists("Prime Number Game")) {
-//		console.log("joining created session Session");
-//		this._server.joinSession("Prime Number Game");
-//	}
-//	else {
-//		console.log("creating Session");
-//		console.log(new Date().getTime())
-//		this._server.createAndJoinNewSession("Prime Number Game", 2, false);
-//	}
 }
 
-Game.prototype.onSelfJoinedSession = function() {
-	console.log("Pleaseee");
-	if(!this._server.sessionVariableExists("game_score"))
+Game.prototype.onSelfJoinedSession = function(session) {
+	if(!this._server.sessionVariableExists("game_score")) {
+		console.log("creating session variable");
 		this._server.createSessionVariable("game_score", this._gameScore);
-	console.log("onSelfJoinedSession");
-	this._server.printServer();
-
+	}
 }
 
 Game.prototype.onSessionVariableChanged = function(variable, user) {
 	if(variable.name == "game_score")
 		this._setGameScore(variable.value());
-	console.log("Variable: ");
 	console.log(variable);
-	this._server.printServer();
 }
 
 Game.prototype._setGameScore = function(stringValue) {
 	this._gameScore = parseInt(stringValue);
 }
-
-
-
 
 Game.prototype.onSessionStreamChanged = function(stream, user) {
 	// TODO
