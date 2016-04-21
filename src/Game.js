@@ -35,11 +35,20 @@ Game.prototype.onSelfJoinedSession = function() {
 }
 
 Game.prototype.onSessionVariableChanged = function(variable, user) {
+	if(variable.name == "game_score")
+		this._setGameScore(variable.value());
 	console.log("Variable: ");
 	console.log(variable);
 	console.log("User: ");
 	console.log(user);
 }
+
+Game.prototype._setGameScore = function(stringValue) {
+	this._gameScore += stringValue;
+}
+
+
+
 
 Game.prototype.onSessionStreamChanged = function(stream, user) {
 	// TODO
