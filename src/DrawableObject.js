@@ -14,9 +14,19 @@ function DrawableObject(canvas) {
 	this._velocity = 0;
 	this._direction = [0, 0, 0];
 	
-	this._boundingBox = new BoundingBox(0); // DEV: consider calculating dimensions based on xyz's
+	this._boundingBox = new BoundingBox(0, 0, 0); // DEV: consider calculating dimensions based on xyz's
 	this._boundingBoxView = null;
+
+	this._animation = new Animation(this, function() {});
 } DrawableObject.prototype = new GLObject();
+
+DrawableObject.prototype.drawSetup = function() {
+	this._animation.animate();
+}
+
+DrawableObject.prototype.setAnimation = function(animation) {
+	this._animation = animation;
+}
 
 DrawableObject.prototype.getBoundingBox = function() { return this._boundingBox; }
 
@@ -106,8 +116,6 @@ DrawableObject.prototype.addToCanvas = function() {
 DrawableObject.prototype.removeFromCanvas = function() {
 	this._canvas.removeDrawableObject(this);
 }
-
-DrawableObject.prototype.drawSetup = function() {} // hook operation
 
 DrawableObject.prototype.getRotation = function() { return this._rotation; }
 DrawableObject.prototype.getPosition = function() { return this._position; }

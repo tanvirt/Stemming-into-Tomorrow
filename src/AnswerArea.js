@@ -9,20 +9,24 @@ function AnswerArea(canvas, size) {
 	this.disableShading();
 	this.disableTexture();
 	this.addBoundingBox(size, size, size);
+	
+	this.setAnimation(new Animation(this, this._createAnimationFunction()));
 } AnswerArea.prototype = new Rectangle();
 
-AnswerArea.prototype.drawSetup = function() {
-	this.rotate(0.01, 0.01, 0.01);
-	this._updateAnswerObjects();
-	try {
-		var collidees = octree_global.getCollidees(this.getBoundingBox());
-		for(var i = 0; i < collidees.length; i++) {
-			var collidee = collidees[i];
-			if(!this.contains(collidee))
-				this._addObject(collidee);
+AnswerArea.prototype._createAnimationFunction = function() {
+	return function(answerArea) {
+		answerArea.rotate(0.01, 0.01, 0.01);
+		answerArea._updateAnswerObjects();
+		try {
+			var collidees = octree_global.getCollidees(answerArea.getBoundingBox());
+			for(var i = 0; i < collidees.length; i++) {
+				var collidee = collidees[i];
+				if(!answerArea.contains(collidee))
+					answerArea._addObject(collidee);
+			}
 		}
+		catch(e) {}
 	}
-	catch(e) {}
 }
 
 AnswerArea.prototype._updateAnswerObjects = function() {

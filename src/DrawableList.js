@@ -59,6 +59,6 @@ DrawableList.prototype._positionGraphic = function(graphic) {
 	this._camera.translate(graphic.getPosition());
 }
 
-DrawableList.prototype.acceptDrawableUpdate = function(DrawableObject) {
-	//Maybe for events
+DrawableList.prototype.clear = function(DrawableObject) {
+	this._graphicList = [];
 }

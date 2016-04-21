@@ -6,6 +6,8 @@ function AnswerCube(canvas, text, size) {
 
 	this.setTexture(this._createBlackText(this._text, 60).getTexture());
 	this.addBoundingBox(size, size, size);
+
+	this.setAnimation(new Animation(this, this._createAnimationFunction()));
 } AnswerCube.prototype = new Rectangle();
 
 AnswerCube.prototype.getText = function() {
@@ -22,6 +24,8 @@ AnswerCube.prototype._createBlackText = function(string, height) {
 	return text;
 }
 
-AnswerCube.prototype.drawSetup = function() {
-	this.rotate(0, 0.01, 0);
+AnswerCube.prototype._createAnimationFunction = function() {
+	return function(answerCube) {
+		answerCube.rotate(0, 0.01, 0);
+	}
 }
