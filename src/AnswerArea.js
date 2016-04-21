@@ -55,9 +55,18 @@ AnswerArea.prototype._updateAnswerObjects = function() {
 		else {
 			drawable.setColorMask([1,1,1,1]);
 			var index = this._answerObjects.indexOf(drawable);
-			if(index != -1)
+			if(index != -1) {
+				if(this.isCorrectAnswer(this._answerObjects[index].getText()))
+					this.notifyCorrectAnswerRemoved();
 				this._answerObjects.splice(index, 1);
+			}
 		}
+	}
+}
+
+AnswerArea.prototype.notifyCorrectAnswerRemoved = function() {
+	for(var i = 0; i < this._listenerList.length; i++) {
+		this._listenerList[i].correctAnswerRemovedFromBin();
 	}
 }
 
@@ -82,5 +91,19 @@ AnswerArea.prototype.contains = function(drawableObject) {
 }
 
 AnswerArea.prototype._addObject = function(drawableObject) {
+	drawableObject.addListenerToDrawableObject(this);
 	this._answerObjects.push(drawableObject);
+}
+
+AnswerArea.prototype._getContainingObject = function(drawable) {
+	
+	for(var i = 0; i < this._answerObjects; i++) {
+		if(drawable.getId() == this._answerObjects[i].getId())
+			return this._answerObjects[i];
+	}
+	return null;
+}
+
+AnswerArea.prototype.update = function(drawable) {
+	
 }

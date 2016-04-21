@@ -3,9 +3,6 @@ function Game(canvas, inputDevice) {
 
 	this._gameScore = 0;
 	
-	this._server = new Server("Experiential Learning");
-	this._server.addListener(this);	
-	
 	this._canvas = canvas;
 
 	this._inputDevice = inputDevice;
@@ -17,6 +14,15 @@ function Game(canvas, inputDevice) {
 	
 	this._loadResources();
 	this._setup();
+	
+	this._server = new Server("Experiential Learning");
+	this._server.addListener(this);	
+	
+}
+
+Game.prototype.correctAnswerRemovedFromBin = function() {
+	this._gameScore -= 1;
+	this._server.setSessionVariable("game_score", this._gameScore);
 }
 
 Game.prototype.update = function() {
@@ -43,20 +49,25 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 		console.log(this._gameScore);
 	}
 	else if(this._selectedObject != null && variable.name == this._selectedObject.getId()) {
-		console.log(variable.value());
+		//this._resetSelectedObjectMask(this._selectedObject);
 	}
 	else if(this._resources.containsKey(variable.name)) {
 		console.log("Somebody is moving some stuff");
 		var drawableInQuestion = this._resources.get(variable.name);
 		if(this._resources.get("answerArea").contains(drawableInQuestion))
 			drawableInQuestion.updateWithoutColorMask(variable.value());
-		else
+		else if(this._objectHasChanged(variable)) {
 			this._resources.get(variable.name).update(variable.value());
+		}
 	}
-	
+}
+
+Game.prototype._objectHasChanged = function(VNvariable) {
+	return this._resources.get(VNvariable.name).hasChanged(VNvariable.value());
 }
 
 Game.prototype._alertServer = function() {
+	//this._selectedObject.setColorMask([1,1,1,1]);
 	this._server.setSessionVariable(this._selectedObject.getId(), this._selectedObject.getPosition().toString());
 }
 
@@ -276,9 +287,22 @@ Game.prototype._onPinch = function(gesture) {
 	}
 	else if(gesture.state == "stop") {
 		this._canvas.updatePickingMap();
+//		if(this._selectedObject != null)
+//			this._resetSelectedObjectMask(this._selectedObject);
+		//this._flushColorMask();
 		this._clearSelectedObject();
 	}
 	
+}
+
+Game.prototype._flushColorMask = function() {
+
+	this._resources.get("answerCube13").setColorMask([1,1,1,1]);
+	this._resources.get("answerCube4").setColorMask([1,1,1,1]);
+	this._resources.get("answerCube1").setColorMask([1,1,1,1]);
+	this._resources.get("answerCube14").setColorMask([1,1,1,1]);
+	this._resources.get("answerCube3").setColorMask([1,1,1,1]);
+	this._resources.get("answerCube8").setColorMask([1,1,1,1]);
 }
 
 Game.prototype._clearSelectedObject = function() {

@@ -16,6 +16,7 @@ function DrawableObject(canvas) {
 	
 	this._boundingBox = new BoundingBox(0, 0, 0); // DEV: consider calculating dimensions based on xyz's
 	this._boundingBoxView = null;
+	this._drawableListenerList = [];
 
 	this._animation = new Animation(this, function() {});
 } DrawableObject.prototype = new GLObject();
@@ -31,6 +32,19 @@ DrawableObject.prototype.updateWithoutColorMask = function(positionString) {
 	var xyz = positionString.split(",");
 	this.setPosition(xyz);
 }
+
+DrawableObject.prototype.hasChanged = function(positionString) {
+	var xyz = positionString.split(",");
+	if(this._position[0] != xyz[0])
+		return true;
+	else if(this._position[1] != xyz[1])
+		return true;
+	else if(this._position[2] != xyz[2])
+		return true;
+	else
+		return false;
+}
+
 
 DrawableObject.prototype.drawSetup = function() {
 	this._animation.animate();
@@ -224,3 +238,9 @@ DrawableObject.prototype._getBoundingBoxColors = function() {
 	
 	return colors;
 }
+
+DrawableObject.prototype.addListenerToDrawableObject = function(listener) {
+	this._drawableListenerList.push(listener);
+}
+
+
