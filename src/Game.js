@@ -5,8 +5,15 @@ function Game(canvas, inputDevice) {
 	
 	this._canvas = canvas;
 
-	this._scoreGraphic = this._createAnswerCube(0, [-1, 0, -2]);
+	this._scoreGraphic = this._createAnswerCube(0, [-2, 0.5, -2.5]);
 	this._scoreGraphic.addToCanvas();
+	this._scoreGraphic.setAnimation(new Animation(this._scoreGraphic, function(scoreGraphic) {
+		scoreGraphic.rotate(0.01, 0.01, 0.01);
+	}));
+	//this._scoreGraphic.getShader().setLightingDirection([1, -1, 1]);
+	this._scoreGraphic.disableShading();
+	this._scoreGraphic.setColorMask([1, 0.9, 0.3, 1]);
+	
 	
 	this._inputDevice = inputDevice;
 	this._inputDevice.addGestureListener(this);
