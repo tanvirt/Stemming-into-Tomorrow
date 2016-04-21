@@ -47,6 +47,7 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 	}
 	else if(this._resources.containsKey(variable.name)) {
 		console.log("Somebody is moving some stuff");
+		this._resources.get(variable.name).update(variable.value());
 	}
 	
 }
