@@ -27,13 +27,25 @@ Game.prototype.update = function() {
 }
 
 Game.prototype.onConnectionOpened = function() {
-	this._server.joinFirstAvailableSession(2, false);
+	console.log("onConnectionOpened");
+	if(this._server.sessionExists("Prime Number Game")) {
+		console.log("joining created session Session");
+		console.log(new Date().getTime())
+		this._server.joinSession("Prime Number Game");
+	}
+	else {
+		console.log("creating Session");
+		console.log(new Date().getTime())
+		this._server.createAndJoinNewSession("Prime Number Game", 2, false);
+	}
 }
 
 Game.prototype.onSelfJoinedSession = function() {
 	if(!this._server.sessionVariableExists("game_score"))
 		this._server.createSessionVariable("game_score", this._gameScore);
-	
+	console.log("onSelfJoinedSession");
+	this._server.printServer();
+
 }
 
 Game.prototype.onSessionVariableChanged = function(variable, user) {
@@ -41,6 +53,7 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 		this._setGameScore(variable.value());
 	console.log("Variable: ");
 	console.log(variable);
+	this._server.printServer();
 }
 
 Game.prototype._setGameScore = function(stringValue) {

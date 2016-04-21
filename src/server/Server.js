@@ -35,15 +35,20 @@ function Server(serverName) {
 }
 
 Server.prototype._onConnectionOpened = function() {
+	
 	for(var i = 0; i < this._listeners.length; i++)
 		this._listeners[i].onConnectionOpened();
 }
 
 Server.prototype._onSelfJoinedSession = function() {
 	this._sync();
+	console.log("server notifying listeners");
 	for(var i = 0; i < this._listeners.length; i++)
 		this._listeners[i].onSelfJoinedSession();
 }
+
+// Broken maybe
+//
 
 Server.prototype._sync = function() {
 	var session = this._server.getSession();
@@ -65,6 +70,11 @@ Server.prototype._onSessionStreamChanged = function(stream, user) {
 
 Server.prototype.addListener = function(listener) {
 	this._listeners.push(listener);
+}
+
+Server.prototype.sessionExists = function(sessionName) {
+	var sessions = this._server.getSessions();
+	return sessions.hasOwnProperty(sessionName);
 }
 
 Server.prototype.createAndJoinNewSession = function(sessionName, capacity, holdPositions) {
@@ -146,4 +156,8 @@ Server.prototype.sessionVariableExists = function(variableName) {
 
 Server.prototype._sessionStreamExists = function(streamName) {
 	return this._streams.containsKey(streamName);
+}
+
+Server.prototype.printServer = function() {
+	console.log(this._server);
 }
