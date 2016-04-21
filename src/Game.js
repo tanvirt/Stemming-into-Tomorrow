@@ -21,6 +21,8 @@ function Game(canvas, inputDevice) {
 	this._inputDevice.addGestureListener(this);
 
 	this._selectedObject = null;
+	
+	this._pinching = false;
 
 	this._resources = new AssociativeArray();
 	
@@ -293,6 +295,7 @@ Game.prototype.onGesture = function(gesture) {
 // DEV: does not work when the canvas projector is changed
 Game.prototype._onPinch = function(gesture) {
 	var pinchCenter = gesture.position;
+	this._pinching = true;
 	if(gesture.state == "start") {
 		var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
 		this._selectedObject = this._canvas.getObjectAt(pixel[0], pixel[1]);
@@ -308,6 +311,7 @@ Game.prototype._onPinch = function(gesture) {
 //		if(this._selectedObject != null)
 //			this._resetSelectedObjectMask(this._selectedObject);
 		//this._flushColorMask();
+		this._pinching = false;
 		this._clearSelectedObject();
 	}
 	
