@@ -34,16 +34,17 @@ Game.prototype.onConnectionOpened = function() {
 	}
 	else {
 		console.log("creating Session");
-		//console.log(new Date().getTime())
+		console.log(new Date().getTime())
 		this._server.createAndJoinNewSession("Prime Number Game", 2, false);
 	}
 }
 
 Game.prototype.onSelfJoinedSession = function() {
+	console.log("Pleaseee");
 	if(!this._server.sessionVariableExists("game_score"))
 		this._server.createSessionVariable("game_score", this._gameScore);
-	//console.log("onSelfJoinedSession");
-	//this._server.printServer();
+	console.log("onSelfJoinedSession");
+	this._server.printServer();
 
 }
 
