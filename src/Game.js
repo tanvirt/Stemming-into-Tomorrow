@@ -1,6 +1,12 @@
 function Game(canvas, inputDevice) {
 	if(arguments.length < 2) return;
 
+	this._gameScore = 0;
+	
+	this._server = new Server("Experiential Learning");
+	this._server.addListener(this);	
+	
+	
 	this._canvas = canvas;
 
 	this._inputDevice = inputDevice;
@@ -8,8 +14,6 @@ function Game(canvas, inputDevice) {
 
 	this._selectedObject = null;
 
-	this._server = new Server("Experiential Learning");
-	this._server.addListener(this);
 
 	this._resources = new AssociativeArray();
 	
@@ -17,16 +21,24 @@ function Game(canvas, inputDevice) {
 	this._setup();
 }
 
+Game.prototype.update = function() {
+	this._gameScore += 1;
+	this._server.setSessionVariable("game_score", this._gameScore);
+}
+
 Game.prototype.onConnectionOpened = function() {
-	this._server.createAndJoinNewSession("Session 1", 2, false);
+	this._server.joinFirstAvailableSession(2, false);
 }
 
 Game.prototype.onSelfJoinedSession = function() {
-	this._server.createSessionVariable("game_score", 2);
+	this._server.createSessionVariable("game_score", this._gameScore);
 }
 
 Game.prototype.onSessionVariableChanged = function(variable, user) {
-	// TODO
+	console.log("Variable: ");
+	console.log(variable);
+	console.log("User: ");
+	console.log(user);
 }
 
 Game.prototype.onSessionStreamChanged = function(stream, user) {
@@ -56,6 +68,10 @@ Game.prototype._setup = function() {
 	this._addAnswerCubesToCanvas();
 	this._addAnswerAreaToCanvas();
 	this._addTransformingSphereToCanvas();
+	//this._addRocketToCanvas();
+}
+
+Game.prototype.makeTimedGame = function() {
 	this._addRocketToCanvas();
 }
 
@@ -93,6 +109,7 @@ Game.prototype._addAnswerCubeToCanvas = function(text) {
 Game.prototype._addAnswerAreaToCanvas = function() {
 	var answerArea = this._resources.get("answerArea");
 	answerArea.addToCanvas();
+	answerArea.addListener(this);
 }
 
 Game.prototype._addHandToCanvas = function() {
@@ -134,7 +151,7 @@ Game.prototype._createRocketAnimateFunction = function() {
 
 	return function(rocket) {
 		rocket.translate(3, 0, 0);
-		if(rocket.getPosition()[0] > 1400) {
+		if(rocket.getPosition()[0] > 19000) {
 			rocket.removeFromCanvas();
 			startTime = new Date().getTime();
 			var drawables = self._resources.values();

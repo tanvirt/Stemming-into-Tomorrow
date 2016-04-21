@@ -105,6 +105,10 @@ DrawableObject.prototype.disableColors = function() {
 	this.getShader().useColors(false);
 }
 
+/*
+ * percentages 0-1
+ */
+
 DrawableObject.prototype.setColorMask = function(rgba) {
 	this.getShader().setColorMask(rgba);
 }

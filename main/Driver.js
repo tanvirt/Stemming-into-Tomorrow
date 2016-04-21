@@ -7,6 +7,7 @@ function Driver() {
 	}
 	
 	var game = new Game(my_canvas, my_inputDevice);
+	game.makeTimedGame();
 	
 	document.body.onkeypress = function(event) {
 		if(event.keyCode === 49)

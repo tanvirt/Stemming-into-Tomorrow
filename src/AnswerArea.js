@@ -4,6 +4,7 @@ function AnswerArea(canvas, size) {
 	
 	this._answers = [];
 	this._answerObjects = [];
+	this._listenerList = [];
 	
 	this.setColorMask([1, 1, 1, 0.5]);
 	this.disableShading();
@@ -21,13 +22,26 @@ AnswerArea.prototype._createAnimationFunction = function() {
 			var collidees = octree_global.getCollidees(answerArea.getBoundingBox());
 			for(var i = 0; i < collidees.length; i++) {
 				var collidee = collidees[i];
-				if(!answerArea.contains(collidee))
+				if(!answerArea.contains(collidee)) {
 					answerArea._addObject(collidee);
+					if(answerArea.isCorrectAnswer(collidee.getText()))
+						answerArea.notify();
+				}
 			}
 		}
 		catch(e) {}
 	}
 }
+
+AnswerArea.prototype.addListener = function(answerListener) {
+	this._listenerList.push(answerListener);
+}
+
+AnswerArea.prototype.notify = function() {
+	for(var i = 0; i < this._listenerList.length; i++) {
+		this._listenerList[i].update();
+	}
+} 
 
 AnswerArea.prototype._updateAnswerObjects = function() {
 	for(var i = 0; i < this._answerObjects.length; i++) {
@@ -53,8 +67,9 @@ AnswerArea.prototype.setCorrectAnswers = function(answers) {
 
 AnswerArea.prototype.isCorrectAnswer = function(answer) {
 	for(var i = 0; i < this._answers.length; i++) {
-		if(answer == this._answers[i])
+		if(answer == this._answers[i]) {
 			return true;
+		}
 	}
 	return false;
 }

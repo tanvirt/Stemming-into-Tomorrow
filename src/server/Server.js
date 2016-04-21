@@ -95,6 +95,10 @@ Server.prototype._onUserVariableChanged = function(user, variable, initiator) {
 	
 }
 
+Server.prototype.joinFirstAvailableSession = function(numPlayers, holdPositions) {
+	this._server.joinFirstAvailableSession(numPlayers, holdPositions);
+}
+
 Server.prototype.setSessionStream = function(streamName) {
 	
 }
