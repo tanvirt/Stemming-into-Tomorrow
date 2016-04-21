@@ -27,6 +27,11 @@ DrawableObject.prototype.update = function(positionString) {
 	this.setPosition(xyz);
 }
 
+DrawableObject.prototype.updateWithoutColorMask = function(positionString) {
+	var xyz = positionString.split(",");
+	this.setPosition(xyz);
+}
+
 DrawableObject.prototype.drawSetup = function() {
 	this._animation.animate();
 }

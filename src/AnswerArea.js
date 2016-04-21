@@ -76,7 +76,7 @@ AnswerArea.prototype.isCorrectAnswer = function(answer) {
 
 AnswerArea.prototype.contains = function(drawableObject) {
 	for(var i = 0; i < this._answerObjects.length; i++)
-		if(this._answerObjects[i] == drawableObject)
+		if(this._answerObjects[i].getId() == drawableObject.getId())
 			return true;
 	return false;
 }
