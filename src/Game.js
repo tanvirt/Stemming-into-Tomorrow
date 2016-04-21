@@ -27,16 +27,18 @@ Game.prototype.update = function() {
 }
 
 Game.prototype.onConnectionOpened = function() {
-	console.log("onConnectionOpened");
-	if(this._server.sessionExists("Prime Number Game")) {
-		 console.log("joining created session Session");
-		this._server.joinSession("Prime Number Game");
-	}
-	else {
-		console.log("creating Session");
-		console.log(new Date().getTime())
-		this._server.createAndJoinNewSession("Prime Number Game", 2, false);
-	}
+	
+	this._server.joinFirstAvailableSession(2, false);
+//	console.log("onConnectionOpened");
+//	if(this._server.sessionExists("Prime Number Game")) {
+//		console.log("joining created session Session");
+//		this._server.joinSession("Prime Number Game");
+//	}
+//	else {
+//		console.log("creating Session");
+//		console.log(new Date().getTime())
+//		this._server.createAndJoinNewSession("Prime Number Game", 2, false);
+//	}
 }
 
 Game.prototype.onSelfJoinedSession = function() {

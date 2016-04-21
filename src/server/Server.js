@@ -74,6 +74,14 @@ Server.prototype.addListener = function(listener) {
 
 Server.prototype.sessionExists = function(sessionName) {
 	var sessions = this._server.getSessions();
+	var dotSessions = this._server.sessions;
+	console.log(dotSessions);
+	console.log(this._server);
+	console.log(sessions);
+	for(var ses in dotSessions) {
+		console.log(ses.name);
+	}
+	console.log(sessions.hasOwnProperty(sessionName));
 	return sessions.hasOwnProperty(sessionName);
 }
 
