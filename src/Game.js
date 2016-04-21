@@ -4,8 +4,10 @@ function Game(canvas, inputDevice) {
 	this._gameScore = 0;
 	
 	this._canvas = canvas;
+	
+	this._connectionSyncNum = 0;
 
-	this._scoreGraphic = this._createAnswerCube(0, [-2, 0.5, -2.5]);
+	this._scoreGraphic = this._createAnswerCube(0, [-1.7, 0.9, -3]);
 	this._scoreGraphic.addToCanvas();
 	this._scoreGraphic.setAnimation(new Animation(this._scoreGraphic, function(scoreGraphic) {
 		scoreGraphic.rotate(0.01, 0.01, 0.01);
@@ -27,6 +29,7 @@ function Game(canvas, inputDevice) {
 	
 	this._server = new Server("Experiential Learning");
 	this._server.addListener(this);	
+	this._previousServerEditedObject = "";
 	
 }
 
@@ -41,7 +44,7 @@ Game.prototype.update = function() {
 }
 
 Game.prototype.onConnectionOpened = function() {
-	this._server.joinFirstAvailableSession(2, false);
+	this._server.joinFirstAvailableSession(2, true);
 }
 
 Game.prototype.onSelfJoinedSession = function(session) {
@@ -54,9 +57,14 @@ Game.prototype.onSelfJoinedSession = function(session) {
 
 Game.prototype.onSessionVariableChanged = function(variable, user) {
 	if(variable.name == "game_score") {
-		this._setGameScore(variable.value());
-		console.log(variable);
-		console.log(this._gameScore);
+		if(this._previousServerEditedObject == variable.name) {
+			console.log("HERRRRRREEE");
+		}
+		else {
+			this._setGameScore(variable.value());
+			console.log(variable);
+			console.log(this._gameScore);
+		}
 	}
 	else if(this._selectedObject != null && variable.name == this._selectedObject.getId()) {
 		//this._resetSelectedObjectMask(this._selectedObject);
@@ -64,10 +72,13 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 	else if(this._resources.containsKey(variable.name)) {
 		console.log("Somebody is moving some stuff");
 		var drawableInQuestion = this._resources.get(variable.name);
-		if(this._resources.get("answerArea").contains(drawableInQuestion))
+		if(this._resources.get("answerArea").contains(drawableInQuestion)) {
 			drawableInQuestion.updateWithoutColorMask(variable.value());
+			this._previousServerEditedObject = variabe.name;
+		}
 		else if(this._objectHasChanged(variable)) {
 			this._resources.get(variable.name).update(variable.value());
+			this._previousServerEditedObject = variabe.name;
 		}
 	}
 }
