@@ -39,6 +39,7 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 	if(variable.name == "game_score")
 		this._setGameScore(variable.value());
 	console.log(variable);
+	console.log(this._gameScore);
 }
 
 Game.prototype._setGameScore = function(stringValue) {
@@ -64,6 +65,13 @@ Game.prototype._loadResources = function() {
 	this._resources.put("answerArea", this._createAnswerArea());
 
 	this._resources.put("question", this._createTransformingSphere());
+	
+	this._resources.get("answerCube13").setId("answerCube13");
+	this._resources.get("answerCube4").setId("answerCube4");
+	this._resources.get("answerCube1").setId("answerCube1");
+	this._resources.get("answerCube14").setId("answerCube14");
+	this._resources.get("answerCube3").setId("answerCube3");
+	this._resources.get("answerCube8").setId("answerCube8");
 }
 
 Game.prototype._setup = function() {

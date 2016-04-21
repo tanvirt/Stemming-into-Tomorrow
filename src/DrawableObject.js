@@ -63,6 +63,10 @@ DrawableObject.prototype.addBoundingBox = function(width, height, depth) {
 
 DrawableObject.prototype.getId = function() { return this._id; }
 
+DrawableObject.prototype.setId = function(id) {
+	this._id = id;
+}
+
 // DEV: should "ready to draw" be determined only by xyz coordinates?
 DrawableObject.prototype.readyToDraw = function() {
 	return 	this.buffers["aXYZ"] != undefined &&
