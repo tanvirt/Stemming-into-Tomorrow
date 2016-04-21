@@ -54,7 +54,6 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 
 Game.prototype._alertServer = function() {
 	this._server.setSessionVariable(this._selectedObject.getId(), this._selectedObject.getPosition().toString());
-	console.log("BLOOOOOP");
 }
 
 
@@ -273,9 +272,15 @@ Game.prototype._onPinch = function(gesture) {
 		this._alertServer();
 		//console.log(this._selectedObject);
 	}
-	else if(gesture.state == "stop")
+	else if(gesture.state == "stop") {
 		this._canvas.updatePickingMap();
+		this._clearSelectedObject();
+	}
 	
+}
+
+Game.prototype._clearSelectedObject = function() {
+	this._selectedObject = null;
 }
 
 Game.prototype._onCircle = function(gesture) {}
