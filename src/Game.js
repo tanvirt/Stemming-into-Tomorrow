@@ -34,7 +34,7 @@ Game.prototype.onConnectionOpened = function() {
 	}
 	else {
 		console.log("creating Session");
-		console.log(new Date().getTime())
+		//console.log(new Date().getTime())
 		this._server.createAndJoinNewSession("Prime Number Game", 2, false);
 	}
 }
