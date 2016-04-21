@@ -61,6 +61,7 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 			console.log("HERRRRRREEE");
 		}
 		else {
+			this._previousServerEditedObject = variable.name;
 			this._setGameScore(variable.value());
 			console.log(variable);
 			console.log(this._gameScore);
