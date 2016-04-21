@@ -29,7 +29,6 @@ function Game(canvas, inputDevice) {
 	
 	this._server = new Server("Experiential Learning");
 	this._server.addListener(this);	
-	this._previousServerEditedObject = "";
 	
 }
 
@@ -61,7 +60,6 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 			console.log("HERRRRRREEE");
 		}
 		else {
-			this._previousServerEditedObject = variable.name;
 			this._setGameScore(variable.value());
 			console.log(variable);
 			console.log(this._gameScore);
@@ -75,12 +73,9 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 		var drawableInQuestion = this._resources.get(variable.name);
 		if(this._resources.get("answerArea").contains(drawableInQuestion)) {
 			drawableInQuestion.updateWithoutColorMask(variable.value());
-			this._previousServerEditedObject = variabe.name;
 		}
 		else if(this._objectHasChanged(variable)) {
-			this._resources.get(variable.name).update(variable.value());
-			this._previousServerEditedObject = variabe.name;
-		}
+			this._resources.get(variable.name).update(variable.value());		}
 	}
 }
 
