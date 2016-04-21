@@ -44,7 +44,7 @@ Game.prototype.onSessionVariableChanged = function(variable, user) {
 }
 
 Game.prototype._setGameScore = function(stringValue) {
-	this._gameScore += stringValue;
+	this._gameScore = parseInt(stringValue);
 }
 
 
@@ -234,11 +234,15 @@ Game.prototype._onPinch = function(gesture) {
 	if(gesture.state == "start") {
 		var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
 		this._selectedObject = this._canvas.getObjectAt(pixel[0], pixel[1]);
+		//console.log(this._selectedObject);
 	}
-	else if(gesture.state == "update" && this._selectedObject != null)
+	else if(gesture.state == "update" && this._selectedObject != null) {
 		this._selectedObject.setPosition(pinchCenter);
+		//console.log(this._selectedObject);
+	}
 	else if(gesture.state == "stop")
 		this._canvas.updatePickingMap();
+	
 }
 
 Game.prototype._onCircle = function(gesture) {}
