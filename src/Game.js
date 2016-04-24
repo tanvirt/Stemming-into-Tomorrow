@@ -1,6 +1,8 @@
 function Game(canvas, inputDevice) {
 	if(arguments.length < 2) return;
 
+	
+	this._movementDirector = new MovementDirector(canvas, this);
 	this._gameScore = 0;
 	
 	this._canvas = canvas;
@@ -12,7 +14,6 @@ function Game(canvas, inputDevice) {
 	this._scoreGraphic.setAnimation(new Animation(this._scoreGraphic, function(scoreGraphic) {
 		scoreGraphic.rotate(0.01, 0.01, 0.01);
 	}));
-	//this._scoreGraphic.getShader().setLightingDirection([1, -1, 1]);
 	this._scoreGraphic.disableShading();
 	this._scoreGraphic.setColorMask([1, 0.9, 0.3, 1]);
 	
@@ -20,10 +21,7 @@ function Game(canvas, inputDevice) {
 	this._inputDevice = inputDevice;
 	this._inputDevice.addGestureListener(this);
 
-	this._selectedObject = null;
 	
-	this._pinching = false;
-
 	this._resources = new AssociativeArray();
 	
 	this._loadResources();
@@ -88,9 +86,8 @@ Game.prototype._objectHasChanged = function(VNvariable) {
 	return this._resources.get(VNvariable.name).hasChanged(VNvariable.value());
 }
 
-Game.prototype._alertServer = function() {
-	//this._selectedObject.setColorMask([1,1,1,1]);
-	this._server.setSessionVariable(this._selectedObject.getId(), this._selectedObject.getPosition().toString());
+Game.prototype._alertServer = function(selectedObjectID, positionAsString) {
+	this._server.setSessionVariable(selectedObjectID, positionAsString);
 }
 
 
@@ -282,43 +279,9 @@ Game.prototype._createWhiteText = function(string, height) {
 }
 
 Game.prototype.onGesture = function(gesture) {
-	var gestureType = gesture.type;
-	if(gestureType == "pinch")
-		this._onPinch(gesture);
-	else if(gestureType == "circle")
-		this._onCircle(gesture);
-	else if(gestureType == "keyTap")
-		this._onKeyTap(gesture);
-	else if(gestureType == "screenTap")
-		this._onScreenTap(gesture);
-	else if(gestureType == "swipe")
-		this._onSwipe(gesture);
+	this._movementDirector.onGesture(gesture);
 }
 
-// DEV: does not work when the canvas projector is changed
-Game.prototype._onPinch = function(gesture) {
-	var pinchCenter = gesture.position;
-	this._pinching = true;
-	if(gesture.state == "start") {
-		var pixel = CanvasMath.getProjectedPixelPoint(this._canvas, pinchCenter);
-		this._selectedObject = this._canvas.getObjectAt(pixel[0], pixel[1]);
-		//console.log(this._selectedObject);
-	}
-	else if(gesture.state == "update" && this._selectedObject != null) {
-		this._selectedObject.setPosition(pinchCenter);
-		this._alertServer();
-		//console.log(this._selectedObject);
-	}
-	else if(gesture.state == "stop") {
-		this._canvas.updatePickingMap();
-//		if(this._selectedObject != null)
-//			this._resetSelectedObjectMask(this._selectedObject);
-		//this._flushColorMask();
-		this._pinching = false;
-		this._clearSelectedObject();
-	}
-	
-}
 
 Game.prototype._flushColorMask = function() {
 
@@ -330,26 +293,3 @@ Game.prototype._flushColorMask = function() {
 	this._resources.get("answerCube8").setColorMask([1,1,1,1]);
 }
 
-Game.prototype._clearSelectedObject = function() {
-	this._selectedObject = null;
-}
-
-Game.prototype._onCircle = function(gesture) {}
-Game.prototype._onKeyTap = function(gesture) {
-	console.log("onKeyTap: [" + gesture.position + "]");
-	if(gesture.state == "stop") {
-		if(this._canvas.current_projector == this._canvas.projectors[0]) {
-			this._canvas.useRedCyanProjector();
-		}
-		else if(this._canvas.current_projector == this._canvas.projectors[1]) {
-			this._canvas.useRegularProjector();
-		}
-		else if(this._canvas.current_projector == this._canvas.projectors[3]) {
-			this._canvas.useOculusProjector();
-		}
-	}
-}
-Game.prototype._onScreenTap = function(gesture) {
-	console.log("onScreenTap: [" + gesture.position +"]");
-}
-Game.prototype._onSwipe = function(gesture) {}
